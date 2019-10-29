@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+    <meta charset="UTF-8">
+    <title>扔FLAG</title>
+    <link rel="stylesheet" type="text/css" href="/resources/admin/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="/resources/admin/css/main.css?aae=iiuu">
+</head>
+<body >
+<div class="container">
+    <div class="left">
+        <ul class="menu-ul">
+            <li class="menu-li">
+                <a href="#" onclick="goto('video')" id="song_menu">歌曲管理</a>
+            </li>
+            <li class="menu-li">
+                <a href="#" onclick="goto('dictionary')">主题管理</a>
+            </li>
+            <li class="menu-li">
+                <a href="#" onclick="goto('user')">用户管理</a>
+            </li>
+            <li class="menu-li">
+                <a href="#" onclick="goto('share')">分享管理</a>
+            </li>
+            <li class="menu-li">
+                <a href="#" onclick="goto('config')">基础配置</a>
+            </li>
+            </ul>
+
+    </div>
+    <div class="right" id="right">
+
+    </div>
+</div>
+<script type="text/javascript" src="/resources/admin/js/jquery.min.js"></script>
+<script type="text/javascript" src="/resources/admin/bootstrap/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="/resources/admin/js/jquery.validate.min.js"></script>
+<script type="text/javascript" src="/resources/admin/js/main.js?th=9"></script>
+<script type="text/javascript">
+$("#song_menu").trigger('click');
+</script>
+</body>
+</html>

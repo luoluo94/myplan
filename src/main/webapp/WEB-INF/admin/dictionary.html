@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+</head>
+<body>
+<input type="hidden" class="form-control" name="edit_id" id="edit_id">
+<div class="list">
+<div class="search">
+    <form class="form-inline" role="form" id="list_form">
+    <label class="inline">
+        字典名称：<input type="text" class="form-control" name="name">
+    </label>
+    <label>
+        背景音乐：
+        <select class="form-control" id="background" name="background">
+            <option value="0">是</option>
+            <option value="1">否</option>
+    </select></label>
+        <button type="button" class="btn btn-default -btn search-btn" onclick="search()" style="margin-left: 100px;">查询</button>
+        <button type="button" class="btn btn-default -btn add-btn" onclick="add()">新增</button>
+        </form>
+</div>
+<div class="panel panel-default table-div">
+<table class="table table-striped table-hover data-table" >
+    <thead>
+    <tr>
+        <th width="150px">字典名称</th>
+        <th>序号</th>
+        <th>操作</th>
+    </tr>
+    </thead>
+    <tbody id="dataTable">
+    <tr>
+        <td colspan="10">暂无数据</td>
+    </tr>
+    </tbody>
+</table>
+    </div>
+</div>
+<div class="edit" style="display: none;">
+</div>
+</body>
+<script type="text/javascript">
+    function list(){
+        $.ajax({
+            url: adminPath+"/dictionary/list",
+            type:"POST",
+            data:$("#list_form").serialize()+'&type=music_theme',
+            dataType:"json",
+            error:function(){alert("出错了，请稍后再试")},
+            success:function(result){
+                $("#dataTable").empty();
+                $.each(result.data, function (idx, val) {
+                    $("#dataTable").append("<tr>"+"<td>"+val["name"]+"</td>"
+                            +"<td>"+val["sort_idx"]+"</td>"
+                            +"<td width='80px'>"+'<a href="#" onclick="edit(\''+val["id"]+'\')">编辑</a>'
+                                    +'&nbsp;&nbsp;&nbsp;&nbsp;'
+                            +'<a href="#" onclick="remove(\''+val["id"]+'\')">删除</a>'+'</td>'
+                    );
+                });
+                if(result.data.length==0){
+                    $("#dataTable").append('<tr><td colspan="10">暂无数据</td></tr>');
+                }
+            }
+        });
+    }
+
+    function edit(id){
+        setId(id);
+        gotoEdit("edit_dictionary");
+    }
+
+    function add(){
+        setId("");
+        gotoEdit("edit_dictionary");
+    }
+
+    function remove(id){
+        if(confirm("确认删除吗，删除后不可恢复")){
+            $.ajax({
+                url: adminPath+"/dictionary/delete",
+                data:{
+                    "id":id
+                },
+                dataType:"json",
+                error:function(){alert("出错了，请稍后再试")},
+                success:function(result){
+                    if(result.issuccess) {
+                        list();
+                    }else{
+                        alert("出错了，请稍后再试");
+                    }
+                }
+            });
+        }
+
+    }
+
+    list();
+
+</script>
+</html>

@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+</head>
+<body>
+<div>
+    <form  role="form" id="edit-form" style="margin-top: 55px;margin-left: 45px;">
+        是否播放音乐：<span id="text"></span>
+        <button type="button" class="btn btn-default -btn add-btn" onclick="save()">切换播放</button>
+    </form>
+</div>
+</body>
+<script type="text/javascript">
+
+    get();
+
+    function get(){
+        $.ajax({
+            url: adminPath+"/config/getPlayVideo",
+            data:"",
+            dataType:"json",
+            error:function(){alert("出错了，请稍后再试")},
+            success:function(result){
+                if(result.issuccess) {
+                    $("#text").html(result.data.text);
+                }else{
+                    alert("出错了，请稍后再试")
+                }
+            }
+        });
+    }
+
+    function save(){
+        $.ajax({
+            url: adminPath+"/config/switchPlayVideo",
+            data:"",
+            dataType:"json",
+            error:function(){alert("出错了，请稍后再试")},
+            success:function(result){
+                if(result.issuccess) {
+                    get();
+                }else {
+                    alert("出错了，请稍后再试")
+                }
+
+            }
+        });
+    }
+
+</script>
+</html>

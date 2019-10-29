@@ -1,0 +1,7 @@
+GET_ALL_TABLE_METADATA=select * from information_schema.`COLUMNS` where TABLE_SCHEMA = ? order by TABLE_NAME,ORDINAL_POSITION
+
+GET_TREE_NODE_CODE=select * from %s where code=?
+GET_ROOT_TREE_NODE_MAX_CODE=select max(code) as maxCode from %s where LENGTH(code)=2
+GET_CHILD_TREE_NODE_MAX_CODE=select max(code) as maxCode from %s where code like ? and code != ?
+
+QUERY_DIC_TYPE=select type,type_desc from dictionary where type!='area' and type!='speciality' group by type order by type_desc

@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+    <meta charset="UTF-8">
+    <title>扔FLAG登录</title>
+    <link rel="stylesheet" type="text/css" href="/resources/admin/css/style.css?ww=1">
+</head>
+<body class="login-bg">
+<div class="login-box">
+    <div class="login-name">扔FLAG后台管理系统</div>
+    <div class="login-form">
+        <div class="login-row">
+            <div class="login-row-label">用户名</div>
+            <div class="login-row-input"><input type="text" name="user_name" id="user_name" value="" placeholder="">
+            </div>
+        </div>
+        <div class="login-row">
+            <div class="login-row-label">密　码</div>
+            <div class="login-row-input"><input type="password" name="password" id="password" value="" placeholder="">
+            </div>
+        </div>
+        <div class="yangzhengma">
+            <div class="login-row code-yzm">
+                <div class="login-row-label">验证码</div>
+                <div class="login-row-input"><input type="text" name="code" id="code" value="" placeholder=""></div>
+            </div>
+            <div class="code-box"><img src="" alt="" id="captcha"></div>
+            <div class="clear"></div>
+        </div>
+        <div class="login-btn"><input type="button" name="" class="login-btns" value="登    录" id="login-btn"></div>
+    </div>
+</div>
+<script type="text/javascript" src="/resources/admin/js/jquery.min.js"></script>
+<script type="text/javascript">
+    $(document).ready(function () {
+        $(document).ready(function () {
+            load_img();
+            $(document).keyup(function (event) {
+                if (event.keyCode == 13) {
+                    login();
+                }
+            });
+            $("#login-btn").click(function () {
+                login();
+            });
+            $("#captcha").click(function () {
+                load_img();
+            });
+        });
+        function login() {
+            $.ajax({
+                url: "/login/adminLogin",
+                type:"POST",
+                data:{
+                    "user_name": $("#user_name").val(),
+                    "password": $("#password").val(),
+                    "captcha": $("#code").val()
+                },
+                dataType:"json",
+                error:function(){return false;},
+                success:function(data){
+                    if (data.is_success) {
+                        window.location.href = "/admin/v?p=main";
+                    } else {
+                        alert(data.message);
+                        load_img();
+                    }
+                }
+            });
+        }
+    });
+
+    function load_img() {
+        $("#captcha").attr("src", "/login/captcha?" + Math.random());
+    }
+</script>
+</body>
+</html>

@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+</head>
+<body>
+<div>
+    <form  role="form" id="edit-form" style="margin-top: 55px;margin-left: 45px;">
+        <input type="hidden" class="form-control" name="id" id="id">
+        <label class="inline">
+            分享文本：<input type="text" class="form-control" name="text" id="text">
+        </label>
+        <label class="inline">
+            分享图片：<button type="button" class="btn btn-default xiugaibtn">点击上传</button>
+            图片比列为5:4
+        </label>
+        <label class="inline">
+            图片地址：<input type="text" class="form-control" name="image" id="image" style="width: 650px;">
+        </label>
+        <button type="button" class="btn btn-default -btn add-btn top20" onclick="save()">保存</button>
+    </form>
+    <form id="file-form">
+        <input type="file" class="files" style="opacity: 0;display: none;" accept="image/jpeg,image/png" id="file"/>
+    </form>
+</div>
+</body>
+<script type="text/javascript">
+
+    get();
+
+    function get(){
+        $.ajax({
+            url: adminPath+"/config/getShare",
+            data:"",
+            dataType:"json",
+            error:function(){alert("出错了，请稍后再试")},
+            success:function(result){
+                if(result.issuccess) {
+                    $("#text").val(result.data.text);
+                    $("#image").val(result.data.image);
+                }else{
+                    alert("出错了，请稍后再试")
+                }
+            }
+        });
+    }
+
+    function save(){
+        $.ajax({
+            url: adminPath+"/config/configShare",
+            data:$("#edit-form").serialize(),
+            dataType:"json",
+            error:function(){alert("出错了，请稍后再试")},
+            success:function(result){
+                if(result.issuccess) {
+                    alert("操作成功");
+                }else {
+                    alert("出错了，请稍后再试")
+                }
+
+            }
+        });
+    }
+
+
+    $(".xiugaibtn").click(function () {
+        $(".files").click();
+    });
+
+    $(".files").change(function(){
+        var form = document.getElementById("file-form");//获取到form表单
+        var formData = new FormData(form);//创建一个formData对象,将表单中的数据放进去
+        for(var i=0; i<$('#file')[0].files.length;i++){//使用for循环将选择的文件一个一个添加(append)到formData对象中
+            formData.append('img'+i, $('#file')[0].files[i]);//注意:如果你使用的是jfinal框架这里的key(img)必须是不同的,如果相同的话文件能上传但是拿上传文件名的时候只能拿到一个
+        }
+        $.ajax({
+            url: adminPath+"/upload/uploadImage",
+            type: "POST",
+            processData : false,//不处理数据,必须为false
+            contentType : false,//不设置内容类型,必须为false
+            data: formData,
+            success: function(result){
+                if(result.issuccess) {
+                    $("#image").val(result.data);
+                }else{
+                    alert("出现错误，请稍后再试！");
+                }
+            },
+            dataType:"json",
+            error:function(e){
+                alert("出现错误，请稍后再试！");
+            }
+
+        });
+    });
+</script>
+</html>

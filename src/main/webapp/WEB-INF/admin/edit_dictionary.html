@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+</head>
+<body>
+<div>
+    <form  role="form" id="edit-form" style="margin-top: 55px;margin-left: 45px;">
+        <input type="hidden" class="form-control" name="id" id="id">
+        <input type="hidden" class="form-control" name="type" id="type" value="music_theme">
+        <label class="inline">
+            主题名称：<input type="text" class="form-control" name="name" id="name">
+        </label>
+        <label class="inline">
+           序号：<input type="text" class="form-control" name="sort_idx" id="sort_idx">
+        </label>
+        <label class="inline">
+            是否是背景音乐：<select class="form-control" id="is_background" name="is_background">
+            <option value="">未选择</option>
+            <option value="0">是</option>
+            <option value="1">否</option>
+        </select>
+        </label>
+            <button type="button" class="btn btn-default -btn add-btn top20" onclick="save()">保存</button>
+            <button type="button" class="btn btn-default -btn back-btn top20" onclick="back()">返回</button>
+    </form>
+    <form id="file-form">
+        <input type="file" class="files" style="opacity: 0;display: none;" accept="audio/mpeg" id="file"/>
+    </form>
+</div>
+</body>
+<script type="text/javascript">
+    $("#id").val($("#edit_id").val());
+
+    function get(){
+        document.getElementById("edit-form").reset();
+
+        $.ajax({
+            url: adminPath+"/dictionary/viewById",
+            data:{
+                id:$("#edit_id").val()
+            },
+            dataType:"json",
+            error:function(){alert("出错了，请稍后再试")},
+            success:function(result){
+                if(result.issuccess){
+                    $("#name").val(result.data.name);
+                    $("#sort_idx").val(result.data.sort_idx);
+                    $("#is_background").val(result.data.is_background);
+                }else{
+                    alert("出错了，请稍后再试")
+                }
+            }
+        });
+    }
+
+    function save(){
+        if($("#edit-form").valid()){
+            $.ajax({
+                url: adminPath+"/dictionary/saveOrUpdate",
+                data:$("#edit-form").serialize(),
+                dataType:"json",
+                error:function(){alert("出错了，请稍后再试")},
+                success:function(result){
+                    if(result.issuccess){
+                        back();
+                    }else{
+                        alert("出错了，请稍后再试");
+                    }
+                }
+            });
+        }
+    }
+
+    if($("#edit_id").val()!='' &&  $("#edit_id").val()!=null){
+        get();
+    }
+
+
+    $(function(){
+
+        $("#edit-form").validate({
+            rules: {
+                name: {
+                    required: true,
+                },
+                sort_idx: {
+                    required: true,
+                },
+                is_background: {
+                    required: true,
+                }
+            },
+            messages: {
+                name: {
+                    required: "请填写主题名称",
+                },
+                sort_idx: {
+                    required: "请填写序号",
+                },
+                is_background: {
+                    required: "请选择是否是背景音乐",
+                }
+            }
+        });
+
+    });
+
+
+</script>
+</html>

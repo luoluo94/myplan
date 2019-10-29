@@ -1,0 +1,152 @@
+html{ min-width: 1000px; overflow-x: hidden; }
+body{
+	margin: 0;
+	padding: 0;
+	min-width: 1000px;
+	font-family: Helvetica Neue,Helvetica,PingFang SC,Hiragino Sans GB,Microsoft YaHei,SimSun,sans-serif;
+	font-size: 14px;
+	background: #fff;
+}
+p,h1,h2,h3,h4,h5{ margin: 0; padding: 0; }
+img{ border: 0;}
+a{ text-decoration: none; }
+.clear{ clear:both; }
+.container{ width: 1000px; margin: 0 auto;}
+.scrollov{ overflow: hidden; }
+/*login*/
+.login-bg{
+	background-size: cover;
+	background-attachment: fixed;
+    background-position: center;
+}
+.login-box{
+	width: 325px;
+	height: 430px;
+	position: absolute;
+	top:50%;
+	left:50%;
+	margin-top: -215px;
+	margin-left: -162px;
+}
+.login-logo,.login-logo img{
+	width: 325px;
+	height: 100px;
+}
+.login-name{
+	height: 22px;
+	text-align: center;
+	font-size: 23px;
+	color: #1d9d87;
+	margin-top: 20px;
+	margin-bottom: 30px;
+}
+.login-form{
+	height: auto;
+	padding-top: 20px;
+}
+.login-row{
+	width: 322px;
+	height: 35px;
+	border: 1px solid #1d9d87;
+	margin-top: 15px;
+	overflow: hidden;
+	padding-top: 4px;
+}
+.login-row-label,.login-row-input{
+	float: left;
+}
+.login-row-label{
+	padding-left: 17px;
+	height: 30px;
+	line-height: 30px;
+	color: #757f8a;
+}
+.login-row-input{
+	padding-left: 5px;
+}
+.login-row-input input{
+	padding:7px 4px;
+	width: 240px;
+	border: 0;
+	outline: none;
+	color: #757f8a;
+	font-size: 14px;
+}
+.code-yzm{
+	width: 195px;
+	float: left;
+}
+.code-yzm .login-row-input input{
+	width: 100px;
+}
+.code-box{
+	float: right;
+	width: 112px;
+	height: 38px;
+	border: 1px solid #e6e7e8;
+	background: #f8f9fb;
+	overflow: hidden;
+	margin-top: 15px;
+}
+.code-box img{
+	width: 112px;
+	height: 38px;
+}
+.login-btn{
+	height: 39px;
+	padding-top: 17px;
+}
+.login-btns{
+	height: 47px;
+	width: 100%;
+	border: 1px solid #1d9d87;
+	color: #666;
+	outline: none;
+	font-size: 16px;
+	cursor: pointer;
+	margin-top: 20px;
+	background-color: #1d9d87;
+}
+.login-btns:hover{
+	background: #409eff;
+}
+.remember{
+	height: 28px;
+	margin-top: 15px;
+	line-height: 28px;
+}
+.checkbox-group{
+	float: left;
+	color: #bdd8ee;
+}
+.checkbox-group .icr-label{
+	margin: 0;
+}
+.checkbox-group .icr-item{
+	position: relative;
+	bottom: 2px;
+}
+.remember-tz{
+	float: right;
+	padding-left: 20px;
+	background:0 6px url(../images/tz-icon.png) no-repeat;
+}
+.remember-tz a{
+	color: #f76913;
+	text-decoration: underline;
+}
+.remember-tz a:hover{
+	color: #fff;
+}
+.login-footer{
+	height: 80px;
+	position: absolute;
+	left: 0;
+	bottom: 0;
+	width: 100%;
+	text-align: center;
+	font-size: 12px;
+	color: #abcce3;
+	line-height: 80px;
+	background: url(../images/zhezhao.png);
+}
