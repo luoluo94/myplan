@@ -40,6 +40,13 @@ public class PlanCommentService extends BaseService_<PlanComment>
         return super.pageList(param,pageNumberStr+"", pageSizeStr+"");
     }
 
+    public List<PlanComment> list(String planId){
+        QueryParam param=QueryParam.Builder();
+        param.equalsTo("plan_id", planId);
+        param.ascBy("create_time");
+        return super.list(param);
+    }
+
 
 
 }

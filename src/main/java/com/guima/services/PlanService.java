@@ -35,10 +35,17 @@ public class PlanService extends BaseService_<Plan>
         return Plan.dao;
     }
 
-    public Page<Plan> listPublicPlans(String category, int pageNumberStr, int pageSizeStr){
+    public Page<Plan> listPublicPlans(int pageNumberStr, int pageSizeStr){
         QueryParam param=QueryParam.Builder();
+        param.gt("create_time", DateKit.getStartTime());
         param.equalsTo("privacy", ConstantEnum.PRIVACY_PUBLIC.getValue());
-        param.equalsTo("category",category);
+        param.equalsTo(Constant.IS_DELETED_MARK,Constant.ACTIVE);
+        param.descBy("create_time");
+        return super.pageList(param,pageNumberStr+"", pageSizeStr+"");
+    }
+
+    public Page<Plan> listAllPlans(int pageNumberStr, int pageSizeStr){
+        QueryParam param=QueryParam.Builder();
         param.descBy("create_time");
         return super.pageList(param,pageNumberStr+"", pageSizeStr+"");
     }

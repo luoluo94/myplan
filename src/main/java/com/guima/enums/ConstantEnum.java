@@ -17,8 +17,8 @@ public enum ConstantEnum {
     STATUS_ONGOING("进行中","1"),
     STATUS_FINISH("已完成","2"),
     STATUS_DRAFT("草稿箱","0"),
-    STATUS_NOT_FINISH("未完成","2"),
-    STATUS_END("已结束","3"),;
+    STATUS_NOT_FINISH("未完成","4"),
+    STATUS_END("已结束","3");
 
     private String desc;
     private String value;

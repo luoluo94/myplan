@@ -5,8 +5,11 @@ import com.guima.base.kits.QueryParam;
 import com.guima.base.service.BaseService_;
 import com.guima.domain.Plan;
 import com.guima.domain.PlanDetail;
+import com.guima.domain.PlanDetailAnnex;
 import com.guima.enums.ConstantEnum;
+import com.guima.enums.ScoreTypeEnum;
 import com.guima.kits.Constant;
+import com.guima.kits.Kit;
 import com.guima.kits.NumberConstant;
 import com.jfinal.plugin.activerecord.Db;
 import com.jfinal.plugin.activerecord.Page;
@@ -97,6 +100,19 @@ public class PlanDetailService extends BaseService_<PlanDetail>
         return true;
     }
 
+    /**
+     * 给某个计划事项添加附件
+     */
+    public boolean addPlanAnnex(String planDetailId, PlanDetailAnnex annex){
+
+        PlanDetail planDetail=findById(planDetailId);
+        planDetail.setHasAnnex(Constant.MARK_ONE);
+        return Db.tx(()->{
+            return planDetail.update() && annex.save();
+        });
+
+
+    }
 
 
 

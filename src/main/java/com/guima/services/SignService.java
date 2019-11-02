@@ -6,7 +6,10 @@ import com.guima.base.service.BaseService_;
 import com.guima.domain.Sign;
 import com.guima.domain.User;
 import com.guima.kits.Constant;
+import com.guima.kits.DateKit;
 import com.jfinal.plugin.activerecord.Page;
+
+import java.util.Calendar;
 
 public class SignService extends BaseService_<Sign>
 {
@@ -31,6 +34,7 @@ public class SignService extends BaseService_<Sign>
 
     public Page<Sign> listPublicSigns(int pageNumberStr, int pageSizeStr){
         QueryParam param=QueryParam.Builder();
+        param.lt("create_time", DateKit.getStartTime());
         param.equalsTo(Constant.IS_DELETED_MARK,Constant.ACTIVE);
         param.descBy("create_time");
         return super.pageList(param,pageNumberStr+"", pageSizeStr+"");
@@ -44,5 +48,10 @@ public class SignService extends BaseService_<Sign>
         return super.pageList(param,pageNumberStr+"", pageSizeStr+"");
     }
 
+    public Page<Sign> listAllSigns(int pageNumberStr, int pageSizeStr){
+        QueryParam param=QueryParam.Builder();
+        param.descBy("create_time");
+        return super.pageList(param,pageNumberStr+"", pageSizeStr+"");
+    }
 
 }

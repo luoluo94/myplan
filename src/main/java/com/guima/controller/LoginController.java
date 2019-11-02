@@ -95,7 +95,7 @@ public class LoginController extends BaseController
             user.init(openid,name,getPara("header_url"),getPara("city")
                     ,getPara("country"),getPara("lanuage"),getPara("gender"),
                     getPara("province"),accessToken.getSessionKey(),accessToken.getUnionid());
-            user.save();
+            user.superSave();
         }
         Map<String,String> map=new HashMap<>();
         map.put("user_id",user.getId());

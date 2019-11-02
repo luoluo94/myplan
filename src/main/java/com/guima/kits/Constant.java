@@ -28,6 +28,10 @@ public class Constant {
     //已删除
     public static String DELETED="1";
 
+    public static Integer MARK_ZERO=0;
+
+    public static Integer MARK_ONE=1;
+
     //未删除
     public static String IS_DELETED_MARK="is_deleted";
 

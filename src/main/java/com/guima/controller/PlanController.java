@@ -3,10 +3,7 @@ package com.guima.controller;
 import com.guima.base.controller.BaseController;
 import com.guima.base.kits.SysMsg;
 import com.guima.base.service.ServiceManager;
-import com.guima.domain.Plan;
-import com.guima.domain.PlanComment;
-import com.guima.domain.PlanDetail;
-import com.guima.domain.User;
+import com.guima.domain.*;
 import com.guima.enums.ConstantEnum;
 import com.guima.kits.Constant;
 import com.guima.kits.DateKit;
@@ -16,8 +13,7 @@ import com.jfinal.kit.StrKit;
 import com.jfinal.plugin.activerecord.Page;
 import com.jfinal.plugin.activerecord.Record;
 
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 /**
  * Created by Ran on 2019/8/30.
@@ -31,6 +27,7 @@ public class PlanController extends BaseController{
     private PlanDetailService planDetailService;
     private PlanCommentService planCommentService;
     private ScoreRecordService scoreRecordService;
+    private PlanDetailAnnexService planDetailAnnexService;
 
     public PlanController()
     {
@@ -42,6 +39,7 @@ public class PlanController extends BaseController{
         planDetailService=((PlanDetailService)ServiceManager.instance().getService("plandetail"));
         planCommentService=((PlanCommentService)ServiceManager.instance().getService("plancomment"));
         scoreRecordService=((ScoreRecordService) ServiceManager.instance().getService("scorerecord"));
+        planDetailAnnexService=((PlanDetailAnnexService) ServiceManager.instance().getService("plandetailannex"));
     }
 
     /**
@@ -49,24 +47,7 @@ public class PlanController extends BaseController{
      */
     public void savePlan(){
         User user=getMyUser();
-        String id=getPara("id");
         Plan plan=new Plan();
-        if(Kit.isNotNull(id)){
-            plan=planService.findById(id);
-            if(plan==null){
-                doRenderError("该计划不存在");
-                return;
-            }
-            if(!plan.getStatus().equals(ConstantEnum.STATUS_DRAFT.getValue())){
-                doRenderError("该计划不允许更改");
-                return;
-            }
-            if(plan.getIsDeleted().equals(Constant.DELETED)){
-                doRenderError("该计划已删除，无法更改");
-                return;
-            }
-        }
-
         String title=getPara("title");
         String category=getPara("category");
         String endDate=getPara("endDate");
@@ -95,8 +76,7 @@ public class PlanController extends BaseController{
      * 获取公开的计划列表 时间倒序
      */
     public void listPublicPlan(){
-        String category=getPara("category");
-        Page<Plan> page=planService.listPublicPlans(category,getPageNumber(),getPageSize());
+        Page<Plan> page=planService.listPublicPlans(getPageNumber(),getPageSize());
         doRenderPageRecord(page);
     }
 
@@ -108,14 +88,27 @@ public class PlanController extends BaseController{
         String status=getPara("status");
         Page<Plan> page=planService.listMyPlans(user,status,getPageNumber(),getPageSize());
 //        List<Plan> planList=page.getList();
-//        for (Record plan:planList){
-//            plan.set("endDateDesc",DateKit.getDateDesc(plan.getEndDate()));
+//        for (Plan plan:planList){
 //            plan.setEndDateDesc(DateKit.getDateDesc(plan.getEndDate()));
 //            if(plan.getStatus().equals(ConstantEnum.STATUS_ONGOING.getValue())){
 //                plan.setOverdue(DateKit.isOverdueIncludeDay(DateKit.now(),DateKit.dateToString(plan.getEndDate())));
 //            }
+//            plan.setStatusDesc(getStatusDesc(plan.getStatus()));
 //        }
         doRenderPageRecord(page);
+    }
+
+    private String getStatusDesc(String planStatus){
+        if (planStatus.equals(ConstantEnum.STATUS_ONGOING.getValue())){
+            return ConstantEnum.STATUS_ONGOING.getDesc();
+        }
+        if (planStatus.equals(ConstantEnum.STATUS_FINISH.getValue())){
+            return ConstantEnum.STATUS_FINISH.getDesc();
+        }
+        if (planStatus.equals(ConstantEnum.STATUS_NOT_FINISH.getValue())){
+            return ConstantEnum.STATUS_NOT_FINISH.getDesc();
+        }
+        return "";
     }
 
     /**
@@ -133,7 +126,11 @@ public class PlanController extends BaseController{
     public void getPlan(){
         String planId=getPara("plan_id");
         Plan plan=planService.findById(planId);
-        doRenderSuccess(plan);
+        List<PlanDetail> details=planDetailService.list(planId);
+        Map renderData=new HashMap<>();
+        renderData.put("plan",plan);
+        renderData.put("details",details);
+        doRenderSuccess(renderData);
     }
 
     /**
@@ -181,30 +178,23 @@ public class PlanController extends BaseController{
     }
 
     /**
-     * 标记完成
+     * 标记完成／未完成
      */
-    public void markFinish(){
+    public void markStatus(){
         User user=getMyUser();
         String planId=getPara("plan_id");
         Plan plan=planService.findById(planId);
         if(!plan.getCreator().equals(user.getId())){
             doRenderError();
         }
-        doRender(planService.markFinish(plan));
-    }
-
-    /**
-     * 标记未完成
-     */
-    public void markNotFinish(){
-        User user=getMyUser();
-        String planId=getPara("plan_id");
-        Plan plan=planService.findById(planId);
-        if(!plan.getCreator().equals(user.getId())){
-            doRenderError();
+        String isFinishStr=getPara("is_finish");
+        Boolean isFinish=isFinishStr.equals(Constant.ACTIVE)?true:false;
+        if(isFinish){
+            doRender(planService.markFinish(plan));
+        }else{
+            plan.setStatus(ConstantEnum.STATUS_NOT_FINISH.getValue());
+            doRender(plan.update());
         }
-        plan.setStatus(ConstantEnum.STATUS_NOT_FINISH.getValue());
-        doRender(plan.update());
     }
 
     /**
@@ -215,6 +205,28 @@ public class PlanController extends BaseController{
         Plan plan=planService.findById(planId);
         String newPlanId=planService.copyPlan(plan);
         doRender("plan_id",newPlanId,StrKit.notBlank(newPlanId));
+    }
+
+    /**
+     * 获取某个计划详情的附件
+     */
+    public void listPlanAnnex(){
+        String planDetailId=getPara("plan_detail_id");
+        List<PlanDetailAnnex> list=planDetailAnnexService.list(planDetailId);
+        doRenderSuccess(list);
+    }
+
+    /**
+     * 添加某个计划详情的附件
+     */
+    public void addPlanAnnex(){
+        String planDetailId=getPara("plan_detail_id");
+        String annexUrl=getPara("annex_url");
+        PlanDetailAnnex planAnnex=new PlanDetailAnnex();
+        planAnnex.setPlanDetailId(planDetailId);
+        planAnnex.setAnnexUrl(annexUrl);
+        doRender(planDetailService.addPlanAnnex(planDetailId,planAnnex));
+
     }
 
     private void comment(String comment){

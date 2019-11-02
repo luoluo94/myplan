@@ -13,10 +13,14 @@
         </label>
         <label class="inline">
             分享图片：<button type="button" class="btn btn-default xiugaibtn">点击上传</button>
-            图片比列为5:4
+            图片比例为5:4
         </label>
         <label class="inline">
             图片地址：<input type="text" class="form-control" name="image" id="image" style="width: 650px;">
+        </label>
+        <label class="inline">
+            图片展示：
+            <img src="" width="200px" id="share_image">
         </label>
         <button type="button" class="btn btn-default -btn add-btn top20" onclick="save()">保存</button>
     </form>
@@ -36,9 +40,10 @@
             dataType:"json",
             error:function(){alert("出错了，请稍后再试")},
             success:function(result){
-                if(result.issuccess) {
+                if(result.is_success) {
                     $("#text").val(result.data.text);
                     $("#image").val(result.data.image);
+                    $("#share_image").attr("src",result.data.image);
                 }else{
                     alert("出错了，请稍后再试")
                 }

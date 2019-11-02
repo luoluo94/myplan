@@ -16,40 +16,38 @@ import java.util.List;
 public class GlobalSessionInterceptor implements Interceptor {
 
     public void intercept(Invocation inv) {
-//		String key = inv.getActionKey();
-//		List<String> ignoreList = Arrays.asList(SysMsg.Config.get("IGNORE_SESSION_CTL").split(","));
-//		Controller c = inv.getController();
-//		boolean admin = key.startsWith("/admin");
-//		//需要登录验证
-//		if (!ignoreList.contains(key)){
-//			//前台用户
-//			if(!admin){
-//				if(c.getSessionAttr(SysMsg.OsMsg.get("SESSION_KEY"))!=null || key.equals("/")){
-//					inv.invoke();
-//				}else{
-//					String token=c.getPara("token");
-//					if(Kit.isNotNull(token) && checkToken(c,token)){
-//						inv.invoke();
-//					}else{
-//						c.renderText(JsonKit.toJson(ShowInfoKit.getErrorMap("",false,"登录验证失败")));
-//					}
-//
-//				}
-//			}else {
-//				//后台用户
-//				if(c.getSessionAttr(SysMsg.OsMsg.get("SESSION_KEY_ADMIN"))==null){
-//					c.redirect("/admin");
-//				}else {
-//					if(key.equals("/")){
-//						c.redirect("/admin/main");
-//					}else{
-//						inv.invoke();
-//					}
-//				}
-//			}
-//		}else
-//			inv.invoke();
-		inv.invoke();
+		String key = inv.getActionKey();
+		List<String> ignoreList = Arrays.asList(SysMsg.Config.get("IGNORE_SESSION_CTL").split(","));
+		Controller c = inv.getController();
+		boolean admin = key.startsWith("/admin");
+		//需要登录验证
+		if (!ignoreList.contains(key)){
+			//前台用户
+			if(!admin){
+				if(key.equals("/")){
+					inv.invoke();
+				}else{
+					String token=c.getPara("token");
+					if(Kit.isNotNull(token) && checkToken(c,token)){
+						inv.invoke();
+					}else{
+						c.renderText(JsonKit.toJson(ShowInfoKit.getErrorMap("",false,"登录验证失败")));
+					}
+				}
+			}else {
+				//后台用户
+				if(c.getSessionAttr(SysMsg.OsMsg.get("SESSION_KEY_ADMIN"))==null){
+					c.redirect("/admin");
+				}else {
+					if(key.equals("/")){
+						c.redirect("/admin/main");
+					}else{
+						inv.invoke();
+					}
+				}
+			}
+		}else
+			inv.invoke();
     }
     
     public boolean checkToken(Controller c, String token){

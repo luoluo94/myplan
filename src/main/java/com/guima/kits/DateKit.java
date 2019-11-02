@@ -362,7 +362,15 @@ public class DateKit
 //        String sNewNum=String.format("%0" + 3 + "d", newNum);
 //        System.out.println("R"+DateKit.getFormatDate("yyMMdd")+"-"+sNewNum);
 
-        System.out.println(new java.math.BigDecimal("100000").add(new java.math.BigDecimal("100")).toString());
+//        System.out.println(new java.math.BigDecimal("100000").add(new java.math.BigDecimal("100")).toString());
+        long a=new Date().getTime();
+        System.out.println(a);
+        for (int i=0;i<10000;i++){
+            System.out.println(getDate(Calendar.DATE,-2,DATE_PATTERN));
+        }
+        long b=new Date().getTime();
+        System.out.println(b);
+        System.out.println(b-a);
     }
 
     public static String getFormatDate(String formatStr)
@@ -414,6 +422,10 @@ public class DateKit
         calendar.setTime(date);
         calendar.add(Calendar.SECOND, 1);
         return calendar.getTime();
+    }
+
+    public static String getStartTime(){
+        return DateKit.getDate(Calendar.DATE,-10,DATE_PATTERN)+" 00:00:00";
     }
 
 }
