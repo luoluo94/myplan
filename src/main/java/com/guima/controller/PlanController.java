@@ -171,6 +171,24 @@ public class PlanController extends BaseController{
     }
 
     /**
+     * 删除评论
+     */
+    public void removeComment(){
+        User user=getMyUser();
+        String planId=getPara("plan_comment_id");
+        PlanComment planComment=planCommentService.findById(planId);
+        if(planComment==null){
+            doRenderError("该条评论不存在");
+            return;
+        }
+        if(!planComment.getCreatorId().equals(user.getId())){
+            doRenderError();
+        }
+        planComment.setIsDeleted(Constant.IS_DELETED_YES);
+        doRender(planComment.update());
+    }
+
+    /**
      * 点赞
      */
     public void doLike(){

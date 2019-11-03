@@ -58,6 +58,7 @@ public class PlanService extends BaseService_<Plan>
         }else {
             param.equalsTo("status",status);
         }
+        param.equalsTo(Constant.IS_DELETED_MARK,Constant.ACTIVE);
         param.descBy("create_time");
         return super.pageList(param,pageNumberStr+"", pageSizeStr+"");
     }
