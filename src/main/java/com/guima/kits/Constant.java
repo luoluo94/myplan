@@ -43,4 +43,15 @@ public class Constant {
 
     //分享类型
     public static String SHARE="share";
+
+
+    //后台图片文件夹
+    public static String FILE_DICTIONARY_ADMIN="admin_images";
+
+    //计划附件文件夹
+    public static String FILE_DICTIONARY_ANNEX="annex_images";
+
+    //打卡附件文件夹
+    public static String FILE_DICTIONARY_SIGN="sign_images";
+
 }

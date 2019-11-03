@@ -3,6 +3,7 @@ package com.guima.kits;
 import com.guima.base.kits.SysMsg;
 import com.jfinal.kit.LogKit;
 import com.jfinal.kit.StrKit;
+import com.jfinal.upload.UploadFile;
 import com.oreilly.servlet.multipart.FilePart;
 import com.oreilly.servlet.multipart.MultipartParser;
 import com.oreilly.servlet.multipart.Part;
@@ -101,7 +102,38 @@ public class FileKit
         if (cloudPath.equals("ERROR")){
             throw new Exception("上传失败！");
         }
-        return FileKit.getResUrl(cloudPath);
+        return cloudPath;
+    }
+
+    /**
+     * 自定义文件夹名称
+     * @param file
+     * @param dictionaryName
+     * @return
+     * @throws Exception
+     */
+    public static String upload(FilePart file,String dictionaryName) throws Exception
+    {
+        String type =getFileSuffix(file.getFileName());
+        String newName= dictionaryName + "/" +  DateKit.getSerialNumber() + "_" + new Random().nextInt(10000);
+        String key = newName + type;
+        String cloudPath = OssKit.init().upload(key, file.getInputStream());
+        if (cloudPath.equals("ERROR")){
+            throw new Exception("上传失败！");
+        }
+        return cloudPath;
+    }
+
+    public static String upload(UploadFile file,String dictionaryName) throws Exception
+    {
+        String type =getFileSuffix(file.getFileName());
+        String newName= dictionaryName + "/" +  DateKit.getSerialNumber() + "_" + new Random().nextInt(10000);
+        String key = newName + type;
+        String cloudPath = OssKit.init().upload(key, new FileInputStream(file.getFile()));
+        if (cloudPath.equals("ERROR")){
+            throw new Exception("上传失败！");
+        }
+        return cloudPath;
     }
 
     public static String uploadByte(byte[] fileByte,String type) throws Exception

@@ -10,6 +10,7 @@ import com.guima.kits.FileKit;
 import com.guima.kits.MapKit;
 import com.guima.services.*;
 import com.jfinal.aop.Before;
+import com.jfinal.upload.UploadFile;
 import com.oreilly.servlet.multipart.FilePart;
 
 import java.io.File;
@@ -37,15 +38,15 @@ public class UploadController extends BaseController {
     {
         try
         {
-            FilePart file=FileKit.uploadOss(getRequest());
-            if(FileKit.isAcceptImg(FileKit.getFileSuffix(file.getFileName()))){
-                doRenderSuccess(FileKit.upload(file));
-            }else{
+            UploadFile uploadFile=getFile();
+            String filePath=getPara("type");
+            if(!FileKit.isAcceptImg(FileKit.getFileSuffix(uploadFile.getFileName()))){
                 doRenderError("图片格式不正确，允许的格式为"+ SysMsg.Config.get("IMAGE_SUFFIX"));
             }
+            doRenderSuccess(FileKit.upload(uploadFile,filePath));
         } catch (Exception e)
         {
-            doRenderError();
+            doRenderError(e);
         }
     }
 
@@ -58,7 +59,7 @@ public class UploadController extends BaseController {
             byte[] bytes = Base64.getDecoder().decode(fileByteArr[1]);
             String fileName=((((fileByteArr[0].split(":"))[1].split("/"))[1]).split(";"))[0];
             if(FileKit.isAcceptImg(fileName)){
-                doRenderSuccess(FileKit.getResUrl(FileKit.uploadByte(bytes,fileName)));
+                doRenderSuccess(FileKit.uploadByte(bytes,fileName));
             }else{
                 doRenderError("图片格式不正确，允许的格式为"+ SysMsg.Config.get("IMAGE_SUFFIX"));
             }

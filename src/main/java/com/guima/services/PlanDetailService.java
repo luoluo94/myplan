@@ -3,6 +3,7 @@ package com.guima.services;
 import com.guima.base.kits.ModelWrapper;
 import com.guima.base.kits.QueryParam;
 import com.guima.base.service.BaseService_;
+import com.guima.base.service.ServiceManager;
 import com.guima.domain.Plan;
 import com.guima.domain.PlanDetail;
 import com.guima.domain.PlanDetailAnnex;
@@ -110,8 +111,18 @@ public class PlanDetailService extends BaseService_<PlanDetail>
         return Db.tx(()->{
             return planDetail.update() && annex.save();
         });
+    }
 
+    /**
+     * 删除某个计划事项的附件
+     */
+    public boolean removePlanAnnex(PlanDetailAnnex annex){
 
+        PlanDetail planDetail=findById(annex.getPlanDetailId());
+        planDetail.setHasAnnex(Constant.MARK_ZERO);
+        return Db.tx(()->{
+            return planDetail.update() && annex.delete();
+        });
     }
 
 

@@ -14,6 +14,7 @@ ERROR=网络繁忙，请稍后再试
 PARAM_ERROR=请填写所有必填项
 PARAM_TYPE_ERROR=参数类型错误
 PARAM_TYPE_ERROR1=参数中不允许含有特殊字符
+PARAM_NULL=获取的对象不存在
 
 
 HELP=扫描二维码加官方微信客服获取帮助

@@ -49,19 +49,22 @@ public class UploadController extends BaseController {
         }
     }
 
+    /**
+     * admin后台管理上传图片
+     */
     public void uploadImage()
     {
         try
         {
             FilePart file=FileKit.uploadOss(getRequest());
             if(FileKit.isAcceptImg(FileKit.getFileSuffix(file.getFileName()))){
-                doRenderSuccess(FileKit.upload(file));
-            }else{
                 doRenderError("图片格式不正确，允许的格式为"+ SysMsg.Config.get("IMAGE_SUFFIX"));
             }
+            doRenderSuccess(FileKit.upload(file,Constant.FILE_DICTIONARY_ADMIN));
         } catch (Exception e)
         {
-            doRenderError();
+            doRenderError(e);
         }
     }
+
 }

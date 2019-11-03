@@ -226,7 +226,19 @@ public class PlanController extends BaseController{
         planAnnex.setPlanDetailId(planDetailId);
         planAnnex.setAnnexUrl(annexUrl);
         doRender(planDetailService.addPlanAnnex(planDetailId,planAnnex));
+    }
 
+    /**
+     * 删除某个计划详情的附件
+     */
+    public void removePlanAnnex(){
+        String planDetailAnnexId=getPara("plan_detail_annex_id");
+        PlanDetailAnnex planDetailAnnex=planDetailAnnexService.findById(planDetailAnnexId);
+        if(planDetailAnnex==null){
+            doRenderError(SysMsg.OsMsg.get("PARAM_NULL"));
+            return;
+        }
+        doRender(planDetailService.removePlanAnnex(planDetailAnnex));
     }
 
     private void comment(String comment){
