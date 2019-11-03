@@ -240,6 +240,7 @@ public class PlanController extends BaseController{
         planComment.setCreatorId(user.getId());
         planComment.setIsDeleted(Constant.IS_DELETED_NO);
         planComment.setPlanId(planId);
+        planComment.setMarkDeleted(Constant.MARK_ZERO);
         doRender(planComment.save());
     }
 

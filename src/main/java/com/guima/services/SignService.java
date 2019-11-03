@@ -34,7 +34,7 @@ public class SignService extends BaseService_<Sign>
 
     public Page<Sign> listPublicSigns(int pageNumberStr, int pageSizeStr){
         QueryParam param=QueryParam.Builder();
-        param.lt("create_time", DateKit.getStartTime());
+        param.gt("create_time", DateKit.getStartTime());
         param.equalsTo(Constant.IS_DELETED_MARK,Constant.ACTIVE);
         param.descBy("create_time");
         return super.pageList(param,pageNumberStr+"", pageSizeStr+"");

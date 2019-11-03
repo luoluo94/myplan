@@ -74,4 +74,21 @@ public abstract class BasePlanComment<M extends BasePlanComment<M>> extends Base
 		return get("plan_id");
 	}
 
+	public void setRemark(java.lang.String remark) {
+		set("remark", remark);
+	}
+
+	public java.lang.String getRemark() {
+		return get("remark");
+	}
+
+	public void setMarkDeleted(java.lang.Integer markDeleted) {
+		set("mark_deleted", markDeleted);
+	}
+
+	public java.lang.Integer getMarkDeleted() {
+		return get("mark_deleted");
+	}
+
+
 }

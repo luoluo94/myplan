@@ -1,0 +1,43 @@
+package com.guima.controller.admin;
+
+import com.guima.base.controller.BaseController;
+import com.guima.base.service.ServiceManager;
+import com.guima.domain.PlanComment;
+import com.guima.services.*;
+import com.jfinal.plugin.activerecord.Page;
+
+/**
+ * Created by Ran on 2019/8/30.
+ */
+public class CommentController extends BaseController{
+
+    private DictionaryService dictionaryService;
+    private PlanService planService;
+    private UserService userService;
+    private PlanAnnexService planAnnexService;
+    private PlanDetailService planDetailService;
+    private PlanCommentService planCommentService;
+    private ScoreRecordService scoreRecordService;
+
+    public CommentController()
+    {
+        dictionaryService = ((DictionaryService) ServiceManager.instance().getService("dictionary"));
+        planService=((PlanService)ServiceManager.instance().getService("plan"));
+        s=planService;
+        userService=((UserService) ServiceManager.instance().getService("user"));
+        planAnnexService=((PlanAnnexService)ServiceManager.instance().getService("planannex"));
+        planDetailService=((PlanDetailService)ServiceManager.instance().getService("plandetail"));
+        planCommentService=((PlanCommentService)ServiceManager.instance().getService("plancomment"));
+        scoreRecordService=((ScoreRecordService) ServiceManager.instance().getService("scorerecord"));
+    }
+
+    /**
+     * 获取评论列表 时间倒序
+     */
+    public void listAllComments(){
+        String isMarkDeleted=getPara("mark_deleted");
+        Page<PlanComment> page=planCommentService.pageList(getPageNumber(),getPageSize(),isMarkDeleted);
+        doRenderPageRecord(page);
+    }
+
+}
