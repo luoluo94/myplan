@@ -29,6 +29,7 @@ public class _MappingKit {
 		arp.addMapping("score_record", "id", ScoreRecord.class);
 		arp.addMapping("sign", "id", Sign.class);
 		arp.addMapping("user", "id", User.class);
+		arp.addMapping("advice", "id", Advice.class);
 	}
 }
 

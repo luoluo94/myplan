@@ -120,8 +120,9 @@ public class PlanDetailService extends BaseService_<PlanDetail>
 
         PlanDetail planDetail=findById(annex.getPlanDetailId());
         planDetail.setHasAnnex(Constant.MARK_ZERO);
+        annex.setIsDeleted(Constant.IS_DELETED_YES);
         return Db.tx(()->{
-            return planDetail.update() && annex.delete();
+            return planDetail.update() && annex.update();
         });
     }
 

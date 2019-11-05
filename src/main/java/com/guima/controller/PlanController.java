@@ -57,13 +57,13 @@ public class PlanController extends BaseController{
         //计划的具体事项
         String[] planDetails=getParaValues("details");
         if(planDetails.length==0){
-            doRenderError(SysMsg.OsMsg.get("PARAM_ERROR"));
+            doRenderParamError();
             return;
         }
         if(StrKit.isBlank(title)||Kit.isNull(category)
                 || StrKit.isBlank(endDate)|| StrKit.isBlank(privacy)
                 || StrKit.isBlank(startDate)|| StrKit.isBlank(status)){
-            doRenderError(SysMsg.OsMsg.get("PARAM_ERROR"));
+            doRenderParamError();
             return;
         }
         plan.init(title,category,user.getId(),user.getHeaderUrl(),user.getName(),new Date(),DateKit.stringToDate(endDate),
@@ -175,15 +175,18 @@ public class PlanController extends BaseController{
      */
     public void removeComment(){
         User user=getMyUser();
-        String planId=getPara("plan_comment_id");
-        PlanComment planComment=planCommentService.findById(planId);
+        String planCommentId=getPara("plan_comment_id");
+        PlanComment planComment=planCommentService.findById(planCommentId);
         if(planComment==null){
             doRenderError("该条评论不存在");
             return;
         }
-        if(!planComment.getCreatorId().equals(user.getId())){
-            doRenderError();
+        Plan plan=planService.findById(planComment.getPlanId());
+        if(plan==null){
+            doRenderParamNull();
+            return;
         }
+        checkCreator(user,plan.getCreator());
         planComment.setIsDeleted(Constant.IS_DELETED_YES);
         doRender(planComment.update());
     }
@@ -243,6 +246,7 @@ public class PlanController extends BaseController{
         PlanDetailAnnex planAnnex=new PlanDetailAnnex();
         planAnnex.setPlanDetailId(planDetailId);
         planAnnex.setAnnexUrl(annexUrl);
+        planAnnex.setIsDeleted(Constant.IS_DELETED_YES);
         doRender(planDetailService.addPlanAnnex(planDetailId,planAnnex));
     }
 
@@ -250,12 +254,16 @@ public class PlanController extends BaseController{
      * 删除某个计划详情的附件
      */
     public void removePlanAnnex(){
+        User user=getMyUser();
         String planDetailAnnexId=getPara("plan_detail_annex_id");
         PlanDetailAnnex planDetailAnnex=planDetailAnnexService.findById(planDetailAnnexId);
-        if(planDetailAnnex==null){
-            doRenderError(SysMsg.OsMsg.get("PARAM_NULL"));
+        if(planDetailAnnex==null || Constant.IS_DELETED_YES==planDetailAnnex.getIsDeleted()){
+            doRenderParamNull();
             return;
         }
+        PlanDetail planDetail=planDetailService.findById(planDetailAnnex.getPlanDetailId());
+        Plan plan=planService.findById(planDetail.getPlanId());
+        checkCreator(user,plan.getCreator());
         doRender(planDetailService.removePlanAnnex(planDetailAnnex));
     }
 

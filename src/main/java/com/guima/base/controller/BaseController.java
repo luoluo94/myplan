@@ -4,6 +4,7 @@ package com.guima.base.controller;
  * Created by Ran on 2018/1/25.
  */
 
+import com.alibaba.druid.util.StringUtils;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
@@ -23,6 +24,7 @@ import com.guima.base.kits.SysMsg;
 import com.guima.base.service.BaseService_;
 import com.guima.kits.Kit;
 import com.guima.kits.ShowInfoKit;
+import com.taobao.api.internal.toplink.embedded.websocket.util.StringUtil;
 
 import java.util.HashMap;
 import java.util.LinkedHashMap;
@@ -172,6 +174,14 @@ public class BaseController<M extends BaseModule<M>> extends Controller
         doRender("",false,message);
     }
 
+    protected void doRenderParamError() {
+        doRenderError(SysMsg.OsMsg.get("PARAM_ERROR"));
+    }
+
+    protected void doRenderParamNull() {
+        doRenderError(SysMsg.OsMsg.get("PARAM_NULL"));
+    }
+
     protected void doRenderError() {
         doRender("",false,SysMsg.OsMsg.get("ERROR"));
     }
@@ -259,11 +269,22 @@ public class BaseController<M extends BaseModule<M>> extends Controller
     }
 
     public void checkUser(User user){
-        if(user==null){
+        if(user==null || StringUtils.isEmpty(user.getId())){
             doRenderError(SysMsg.OsMsg.get("NO_USER"));
             return;
         }
     }
+
+    public void checkCreator(User user,String userId){
+        checkUser(user);
+        if(!userId.equals(user.getId())){
+            doRenderError(SysMsg.OsMsg.get("NO_USER"));
+            return;
+        }
+
+    }
+
+
 
 
 }

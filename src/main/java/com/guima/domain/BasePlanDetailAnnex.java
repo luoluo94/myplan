@@ -34,4 +34,12 @@ public abstract class BasePlanDetailAnnex<M extends BasePlanDetailAnnex<M>> exte
 		return get("annex_url");
 	}
 
+	public void setIsDeleted(java.lang.Integer isDeleted) {
+		set("is_deleted", isDeleted);
+	}
+
+	public java.lang.Integer getIsDeleted() {
+		return get("is_deleted");
+	}
+
 }
