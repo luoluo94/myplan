@@ -26,7 +26,7 @@ public class ConfigController extends BaseController {
         s=configService;
     }
 
-    public void get(){
+    public void getShare(){
         Config config=configService.getShareConfig();
         Map<String,String> map=new HashMap<>();
         map.put("text",config.getText()==null?"":config.getText());
