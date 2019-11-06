@@ -84,6 +84,19 @@ public class DateKit
     }
 
     /**
+     * 获取当前时间，格式为yyyy-MM-dd 00:00:00
+     *
+     * @return
+     */
+    public static String getDaytime()
+    {
+        Calendar c = Calendar.getInstance();
+        Date date = c.getTime();
+        SimpleDateFormat format = new SimpleDateFormat(DATE_PATTERN);
+        return format.format(date)+" 00:00:00";
+    }
+
+    /**
      * 转换日期格式
      *
      * @param source       源日期字符串
@@ -218,6 +231,10 @@ public class DateKit
         dBefore = c.getTime();
 
         return format(dBefore, format);
+    }
+
+    public static String getDateOfDay(int differenceDays){
+        return DateKit.getDate(Calendar.DATE,differenceDays,DATE_PATTERN)+" 00:00:00";
     }
 
     /**
@@ -425,7 +442,7 @@ public class DateKit
     }
 
     public static String getStartTime(){
-        return DateKit.getDate(Calendar.DATE,-10,DATE_PATTERN)+" 00:00:00";
+        return getDateOfDay(-10);
     }
 
 }

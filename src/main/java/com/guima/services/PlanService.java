@@ -12,6 +12,8 @@ import com.jfinal.plugin.activerecord.Db;
 import com.jfinal.plugin.activerecord.Page;
 
 import java.math.BigDecimal;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 public class PlanService extends BaseService_<Plan>
@@ -142,6 +144,15 @@ public class PlanService extends BaseService_<Plan>
         });
 
         return isSuccess?newPlan.getId():null;
+    }
+
+    /**
+     * 计算每天新增的计划数量
+     */
+    public int countPlanNum(){
+        String startDatetime=DateKit.getDateOfDay(-1);
+        String endDatetime=DateKit.getDaytime();
+        return Db.queryInt("select count(*) as num from plan where create_time>= "+startDatetime+" and create_time<"+endDatetime);
     }
 
 

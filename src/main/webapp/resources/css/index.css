@@ -47,3 +47,15 @@ a:link,a:active{
 	margin-left: 40px;
 	margin-top: 36px;
 }
+
+.program-div{
+	float: left;
+	margin-top: 10px;
+	margin-right: 20px;
+	width: 300px;
+	height: 450px;
+}
+.mini-program{
+	width: 1200px;
+	height: 500px;
+}

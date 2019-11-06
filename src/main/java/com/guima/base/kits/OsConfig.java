@@ -4,6 +4,7 @@ import com.guima.base.interceptor.*;
 import com.guima.controller.AdminController;
 import com.guima.controller.IndexController;
 import com.guima.domain._MappingKit;
+import com.guima.jobs.QuartzPlugin;
 import com.guima.kits.Constant;
 import com.jfinal.config.*;
 import com.jfinal.ext.handler.UrlSkipHandler;
@@ -107,6 +108,10 @@ public class OsConfig extends JFinalConfig
 		ActiveRecordPlugin arp = new ActiveRecordPlugin(druidPlugin);
 		_MappingKit.mapping(arp);
 		me.add(arp);
+
+        //定时任务
+        QuartzPlugin quartz = new QuartzPlugin();
+        me.add(quartz);
     }
 
     @Override
