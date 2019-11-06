@@ -30,6 +30,8 @@ public class _MappingKit {
 		arp.addMapping("sign", "id", Sign.class);
 		arp.addMapping("user", "id", User.class);
 		arp.addMapping("advice", "id", Advice.class);
+		arp.addMapping("plan_calendar", "id", PlanCalendar.class);
+		arp.addMapping("plan_create_num", "id", PlanCreateNum.class);
 	}
 }
 
