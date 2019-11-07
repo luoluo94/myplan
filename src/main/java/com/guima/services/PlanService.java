@@ -72,18 +72,17 @@ public class PlanService extends BaseService_<Plan>
      */
     public boolean createPlan(Plan plan,String[] details){
         PlanDetailService planDetailService=((PlanDetailService)ServiceManager.instance().getService("plandetail"));
-        ScoreRecordService scoreRecordService=((ScoreRecordService)ServiceManager.instance().getService("scorerecord"));
+        PlanCalendarService planCalendarService=((PlanCalendarService)ServiceManager.instance().getService("plancalendar"));
         return Db.tx(()->{
+            boolean isSuccess=false;
             //创建计划
             if(Kit.isNull(plan.getId())){
-                plan.save();
-                //记录得分
-                scoreRecordService.createScore(ScoreTypeEnum.CREATE_PLAN,plan.getCreator());
+                isSuccess=plan.save() && planCalendarService.updateCreatePlanNum(plan.getCreator());
             }else {
-                plan.update();
+                isSuccess=plan.update();
             }
             //创建计划的具体事项
-            return planDetailService.createPlanDetail(plan,details);
+            return isSuccess && planDetailService.createPlanDetail(plan,details);
         });
     }
 
@@ -107,7 +106,7 @@ public class PlanService extends BaseService_<Plan>
      */
     public boolean markFinish(Plan plan){
         PlanDetailService planDetailService=((PlanDetailService)ServiceManager.instance().getService("plandetail"));
-        ScoreRecordService scoreRecordService=((ScoreRecordService)ServiceManager.instance().getService("scorerecord"));
+        PlanCalendarService planCalendarService=((PlanCalendarService) ServiceManager.instance().getService("plancalendar"));
         return Db.tx(()->{
             //将各事项标记为完成
             boolean isDetailFinish=planDetailService.markFinish(plan.getId());
@@ -115,7 +114,19 @@ public class PlanService extends BaseService_<Plan>
             plan.setStatus(ConstantEnum.STATUS_FINISH.getValue());
             boolean isPlanFinish=plan.update();
             //增加得分
-            return isDetailFinish && isPlanFinish && scoreRecordService.createScore(ScoreTypeEnum.FINISH_PLAN,plan.getCreator());
+            return isDetailFinish && isPlanFinish && planCalendarService.updateFinishPlanNum(plan.getCreator());
+        });
+    }
+
+    /**
+     * 标记未完成
+     * @return
+     */
+    public boolean markUnFinish(Plan plan){
+        PlanCalendarService planCalendarService=((PlanCalendarService) ServiceManager.instance().getService("plancalendar"));
+        return Db.tx(()->{
+            plan.setStatus(ConstantEnum.STATUS_NOT_FINISH.getValue());
+            return plan.update() && planCalendarService.updateUnFinishPlanNum(plan.getCreator());
         });
     }
 

@@ -65,4 +65,13 @@ public abstract class BasePlanCalendar<M extends BasePlanCalendar<M>> extends Mo
 		return get("unfinished_num");
 	}
 
+	public void setFinishRate(java.lang.Integer finishRate) {
+		set("finish_rate", finishRate);
+	}
+
+	public java.lang.Integer getFinishRate() {
+		return get("finish_rate");
+	}
+
+
 }

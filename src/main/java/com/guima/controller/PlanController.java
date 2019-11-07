@@ -205,16 +205,13 @@ public class PlanController extends BaseController{
         User user=getMyUser();
         String planId=getPara("plan_id");
         Plan plan=planService.findById(planId);
-        if(!plan.getCreator().equals(user.getId())){
-            doRenderError();
-        }
+        checkCreator(user,plan.getCreator());
         String isFinishStr=getPara("is_finish");
         Boolean isFinish=isFinishStr.equals(Constant.ACTIVE)?true:false;
         if(isFinish){
             doRender(planService.markFinish(plan));
         }else{
-            plan.setStatus(ConstantEnum.STATUS_NOT_FINISH.getValue());
-            doRender(plan.update());
+            doRender(planService.markUnFinish(plan));
         }
     }
 

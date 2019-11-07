@@ -30,7 +30,7 @@ public class NumberKit
 
     public static void main(String[] args)
     {
-        System.out.println(getIntPercent(1,10));
+        System.out.println(getIntPercent(1,3));
 
     }
 }

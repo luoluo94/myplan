@@ -84,18 +84,26 @@ public class LoginController extends BaseController
             doRenderError("无法获取openid");
             return;
         }
+        String name=getPara("name");
+        String headerUrl=getPara("header_url");
         User user=s.findByOpenid(openid);
         if(user==null){
             user=new User();
-            String name=getPara("name");
             if(StrKit.isBlank(name)){
                 doRenderError(SysMsg.OsMsg.get("PARAM_ERROR"));
                 return;
             }
-            user.init(openid,name,getPara("header_url"),getPara("city")
+            user.init(openid,name,headerUrl,getPara("city")
                     ,getPara("country"),getPara("lanuage"),getPara("gender"),
                     getPara("province"),accessToken.getSessionKey(),accessToken.getUnionid());
-            user.superSave();
+            s.createUser(user);
+        }else{
+            //检验图像和名称是否做了变更
+            if(!user.getName().equals(name) || !user.getHeaderUrl().equals(headerUrl)){
+                user.setName(name);
+                user.setHeaderUrl(headerUrl);
+                user.update();
+            }
         }
         Map<String,String> map=new HashMap<>();
         map.put("user_id",user.getId());

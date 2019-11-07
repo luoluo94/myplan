@@ -3,6 +3,7 @@ package com.guima.services;
 import com.guima.base.kits.ModelWrapper;
 import com.guima.base.kits.QueryParam;
 import com.guima.base.service.BaseService_;
+import com.guima.base.service.ServiceManager;
 import com.guima.domain.User;
 import com.guima.kits.Constant;
 import com.guima.kits.Kit;
@@ -32,6 +33,13 @@ public class UserService extends BaseService_<User>
     public User getDao()
     {
         return User.dao;
+    }
+
+    public boolean createUser(User user){
+        PlanCalendarService planCalendarService=((PlanCalendarService) ServiceManager.instance().getService("plancalendar"));
+        return Db.tx(()->{
+            return user.superSave() && planCalendarService.savePlanCalendar(user.getId());
+        });
     }
 
     public Page<User> pageList(String name,int pageNumberStr, int pageSizeStr){
