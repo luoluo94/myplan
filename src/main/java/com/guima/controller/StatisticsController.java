@@ -12,7 +12,7 @@ import java.util.Map;
 /**
  * Created by Ran on 2019/11/7.
  */
-public class StatistcsController extends BaseController {
+public class StatisticsController extends BaseController {
 
     private DictionaryService dictionaryService;
     private PlanService planService;
@@ -23,7 +23,7 @@ public class StatistcsController extends BaseController {
     private PlanCalendarService planCalendarService;
     private PlanDetailAnnexService planDetailAnnexService;
 
-    public StatistcsController()
+    public StatisticsController()
     {
         dictionaryService = ((DictionaryService) ServiceManager.instance().getService("dictionary"));
         planService=((PlanService)ServiceManager.instance().getService("plan"));
@@ -39,10 +39,7 @@ public class StatistcsController extends BaseController {
     public void getUserStatistics(){
         User user=getMyUser();
         //获取用户计划数
-        PlanCalendar planCalendar=planCalendarService.findByCreator(user.getId());
-        Map<String,Object> data=new HashMap<>();
-        data.put("finish_num",planCalendar.getFinishedNum());
-        data.put("finish_rate",planCalendar.getFinishRate());
+        doRenderSuccess(planCalendarService.getStatics(user.getId()));
     }
 
 

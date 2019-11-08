@@ -90,23 +90,23 @@ public class PlanCalendarService extends BaseService_<PlanCalendar>
         return planCalendar.save();
     }
 
-    public Integer getFinishRate(Integer rate){
-        return Db.queryInt("SELECT COUNT(*) from plan_calendar WHERE finish_rate < ?",new Object[]{rate});
+    public Long getFinishRate(Integer rate){
+        return Db.queryLong("SELECT COUNT(*) from plan_calendar WHERE finish_rate < ?",new Object[]{rate});
     }
 
-    public Integer getMyFinishNum(Integer num){
-        return Db.queryInt("SELECT COUNT(*) from plan_calendar WHERE finish_num < ?",new Object[]{num});
+    public Long getMyFinishNum(Integer num){
+        return Db.queryLong("SELECT COUNT(*) from plan_calendar WHERE finished_num < ?",new Object[]{num});
     }
 
-    public Integer getTotalNum(){
-        return Db.queryInt("SELECT COUNT(*) from plan_calendar");
+    public Long getTotalNum(){
+        return Db.queryLong("SELECT COUNT(*) from plan_calendar");
     }
 
 
 
     public Map getStatics(String creator){
         PlanCalendar planCalendar=findByCreator(creator);
-        Integer total=getTotalNum();
+        Integer total=getTotalNum().intValue();
         Integer totalFinishRate=NumberKit.getIntPercent(getFinishRate(planCalendar.getFinishRate()),total);
         Integer totalFinishNumRate=NumberKit.getIntPercent(getMyFinishNum(planCalendar.getFinishRate()),total);
         Map<String,Object> data=new HashMap<>();
