@@ -29,5 +29,6 @@ public class User extends BaseUser<User> {
 		this.setSessionKey(sessionKey);
 		this.setUnionid(unionId);
 		this.setStatus(Constant.ACTIVE);
+		this.setBanned(Constant.MARK_ZERO);
 	}
 }

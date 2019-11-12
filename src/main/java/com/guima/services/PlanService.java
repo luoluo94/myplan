@@ -87,19 +87,6 @@ public class PlanService extends BaseService_<Plan>
     }
 
     /**
-     * 增加热度
-     * 创建一个活动 + 100
-     * 每个好友进入 + 100
-     * 好友点一首歌 + 200
-     */
-    public synchronized boolean addHot(String userId,String hot){
-        UserService userService=(UserService) ServiceManager.instance().getService("user");
-        User user=userService.findById(userId);
-        user.setHotPoint(new BigDecimal(user.getHotPoint()).add(new BigDecimal(hot)).toString());
-        return user.update();
-    }
-
-    /**
      * 全部标记完成
      * @param plan
      * @return

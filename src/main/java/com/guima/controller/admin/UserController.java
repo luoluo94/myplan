@@ -37,5 +37,11 @@ public class UserController extends BaseController {
         doRenderSuccess(dictionaryService.listType(Constant.MUSIC_THEME,null));
     }
 
+    /**
+     * 禁用用户
+     */
+    public void forbidden(){
+
+    }
 
 }

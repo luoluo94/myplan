@@ -64,18 +64,4 @@ public class UserService extends BaseService_<User>
         return findFirst(param);
     }
 
-    public String getHotPointPercentage(User user){
-        StringBuffer sql=new StringBuffer();
-        sql.append(" select count(*) as num from user u")
-                .append(" where 1=1 ")
-                .append(" and u.province=?")
-                .append(" and u.hot_point<").append(Integer.parseInt(user.getHotPoint()))
-                .append(" union all ")
-                .append(" select count(*) as num from user u")
-                .append(" where u.province=? ");
-        List<Long> result=Db.query(sql.toString(),new String[]{user.getProvince(),user.getProvince() });
-        return Kit.getPercentage(String.valueOf(result.get(0)),String.valueOf(result.get(1)),0);
-    }
-
-
 }

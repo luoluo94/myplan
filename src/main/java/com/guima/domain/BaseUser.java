@@ -50,12 +50,12 @@ public abstract class BaseUser<M extends BaseUser<M>> extends BaseModule<M> impl
 		return get("status");
 	}
 
-	public void setHotPoint(java.lang.String hotPoint) {
-		set("hot_point", hotPoint);
+	public void setBanned(java.lang.Integer banned) {
+		set("banned", banned);
 	}
 
-	public java.lang.String getHotPoint() {
-		return get("hot_point");
+	public java.lang.Integer getBanned() {
+		return get("banned");
 	}
 
 	public void setCreateTime(java.util.Date createTime) {

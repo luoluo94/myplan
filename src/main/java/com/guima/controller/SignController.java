@@ -36,6 +36,7 @@ public class SignController extends BaseController{
     public void saveSign(){
         User user=getMyUser();
         checkUser(user);
+        checkBanned(user);
         Sign sign=new Sign();
         String describer=getPara("describer");
         String photoUrl=getPara("photoUrl");

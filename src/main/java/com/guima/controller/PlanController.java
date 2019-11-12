@@ -47,6 +47,8 @@ public class PlanController extends BaseController{
      */
     public void savePlan(){
         User user=getMyUser();
+        checkUser(user);
+        checkBanned(user);
         Plan plan=new Plan();
         String title=getPara("title");
         String category=getPara("category");

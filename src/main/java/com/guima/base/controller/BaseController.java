@@ -275,6 +275,14 @@ public class BaseController<M extends BaseModule<M>> extends Controller
         }
     }
 
+    public void checkBanned(User user){
+        //违规用户
+        if(user.getBanned()!=Constant.MARK_ZERO){
+            doRenderError(SysMsg.OsMsg.get("USER_BANNED"));
+            return;
+        }
+    }
+
     public void checkCreator(User user,String userId){
         checkUser(user);
         if(!userId.equals(user.getId())){

@@ -31,17 +31,6 @@ public class UserController extends BaseController {
         configService = ((ConfigService) ServiceManager.instance().getService("config"));
     }
 
-    /**
-     * 获取用户热度及地区比例
-     */
-    public void getMyHot(){
-        User user=getMyUser();
-        String percentage=userService.getHotPointPercentage(user);
-        Map map=new HashMap<>();
-        map.put("hot_point",user.getHotPoint());
-        map.put("percentage",percentage);
-        doRenderSuccess(map);
-    }
 
     public void getHelpInfo(){
         Map<String,String> map=new HashMap<>();
