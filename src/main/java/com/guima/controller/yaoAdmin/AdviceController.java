@@ -1,4 +1,4 @@
-package com.guima.controller.admin;
+package com.guima.controller.yaoAdmin;
 
 import com.guima.base.controller.BaseController;
 import com.guima.base.service.ServiceManager;

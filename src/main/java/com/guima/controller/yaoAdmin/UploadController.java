@@ -1,22 +1,14 @@
-package com.guima.controller.admin;
+package com.guima.controller.yaoAdmin;
 
 import com.guima.base.controller.BaseController;
 import com.guima.base.interceptor.AppInterceptor;
 import com.guima.base.kits.SysMsg;
 import com.guima.base.service.ServiceManager;
-import com.guima.domain.Dictionary;
 import com.guima.kits.Constant;
 import com.guima.kits.FileKit;
-import com.guima.kits.MapKit;
 import com.guima.services.*;
 import com.jfinal.aop.Before;
 import com.oreilly.servlet.multipart.FilePart;
-
-import java.io.File;
-import java.io.FileInputStream;
-import java.util.Base64;
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * Created by Ran on 2018/3/28.

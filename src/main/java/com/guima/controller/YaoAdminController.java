@@ -6,7 +6,7 @@ import com.jfinal.core.Controller;
 import com.jfinal.kit.PropKit;
 
 
-public class AdminController extends Controller
+public class YaoAdminController extends Controller
 {
     private String adminPath = PropKit.use("controller.properties").get("adminPath");
     private String index = PropKit.use("controller.properties").get("index");
@@ -26,7 +26,7 @@ public class AdminController extends Controller
     }
 
     /**
-     * 后台页面转跳服务，调用方式/admin/v?p=xxx
+     * 后台页面转跳服务，调用方式/yaoAdmin/v?p=xxx
      */
     public void v()
     {

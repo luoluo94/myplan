@@ -1,7 +1,7 @@
 package com.guima.base.kits;
 
 import com.guima.base.interceptor.*;
-import com.guima.controller.AdminController;
+import com.guima.controller.YaoAdminController;
 import com.guima.controller.IndexController;
 import com.guima.domain._MappingKit;
 import com.guima.jobs.QuartzPlugin;
@@ -41,7 +41,7 @@ public class OsConfig extends JFinalConfig
     public void configRoute(Routes me)
     {
     	me.add("/", IndexController.class);
-        me.add("/admin", AdminController.class);
+        me.add("/yaoAdmin", YaoAdminController.class);
     	
         String cPath = PathKit.getRootClassPath() + "/com/guima/controller";
         String packageName = "com.guima.controller";

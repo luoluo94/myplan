@@ -1,16 +1,11 @@
-package com.guima.controller.admin;
+package com.guima.controller.yaoAdmin;
 
 import com.guima.base.controller.BaseController;
-import com.guima.base.kits.SysMsg;
 import com.guima.base.service.ServiceManager;
 import com.guima.domain.Sign;
-import com.guima.domain.User;
-import com.guima.enums.ConstantEnum;
-import com.guima.kits.Constant;
 import com.guima.services.ScoreRecordService;
 import com.guima.services.SignService;
 import com.guima.services.UserService;
-import com.jfinal.kit.StrKit;
 import com.jfinal.plugin.activerecord.Page;
 
 /**

@@ -20,7 +20,7 @@
     <thead>
     <tr>
         <th width="150px">用户名称</th>
-        <th>热度</th>
+        <th>是否禁用</th>
     </tr>
     </thead>
     <tbody id="dataTable">
@@ -54,7 +54,7 @@
                 $.each(result.data, function (idx, val) {
                     $("#dataTable").append("<tr>"
                             +"<td width='200px'>"+val["name"]+"</td>"
-                            +"<td width='200px'>"+val["hot_point"]+"</td>"
+                            +"<td width='200px'>"+val["banned"]+"</td>"
                     );
                 });
                 if(result.data.length==0){

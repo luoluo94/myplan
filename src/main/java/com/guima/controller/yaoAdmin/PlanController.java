@@ -1,15 +1,15 @@
-package com.guima.controller.admin;
+package com.guima.controller.yaoAdmin;
 
 import com.guima.base.controller.BaseController;
 import com.guima.base.service.ServiceManager;
-import com.guima.domain.PlanComment;
+import com.guima.domain.Plan;
 import com.guima.services.*;
 import com.jfinal.plugin.activerecord.Page;
 
 /**
- * Created by Ran on 2019/8/30.
+ * Created by Ran on 2019/11/2.
  */
-public class CommentController extends BaseController{
+public class PlanController extends BaseController {
 
     private DictionaryService dictionaryService;
     private PlanService planService;
@@ -19,11 +19,10 @@ public class CommentController extends BaseController{
     private PlanCommentService planCommentService;
     private ScoreRecordService scoreRecordService;
 
-    public CommentController()
+    public PlanController()
     {
         dictionaryService = ((DictionaryService) ServiceManager.instance().getService("dictionary"));
         planService=((PlanService)ServiceManager.instance().getService("plan"));
-        s=planService;
         userService=((UserService) ServiceManager.instance().getService("user"));
         planAnnexService=((PlanAnnexService)ServiceManager.instance().getService("planannex"));
         planDetailService=((PlanDetailService)ServiceManager.instance().getService("plandetail"));
@@ -32,12 +31,10 @@ public class CommentController extends BaseController{
     }
 
     /**
-     * 获取评论列表 时间倒序
+     * 获取公开的计划列表 时间倒序
      */
-    public void listAllComments(){
-        String isMarkDeleted=getPara("mark_deleted");
-        Page<PlanComment> page=planCommentService.pageList(getPageNumber(),getPageSize(),isMarkDeleted);
+    public void listAllPlans(){
+        Page<Plan> page=planService.listAllPlans(getPageNumber(),getPageSize());
         doRenderPageRecord(page);
     }
-
 }

@@ -19,7 +19,7 @@ public class GlobalSessionInterceptor implements Interceptor {
 		String key = inv.getActionKey();
 		List<String> ignoreList = Arrays.asList(SysMsg.Config.get("IGNORE_SESSION_CTL").split(","));
 		Controller c = inv.getController();
-		boolean admin = key.startsWith("/admin");
+		boolean admin = key.startsWith("/yaoAdmin");
 		//需要登录验证
 		if (!ignoreList.contains(key)){
 			//前台用户
@@ -37,10 +37,10 @@ public class GlobalSessionInterceptor implements Interceptor {
 			}else {
 				//后台用户
 				if(c.getSessionAttr(SysMsg.OsMsg.get("SESSION_KEY_ADMIN"))==null){
-					c.redirect("/admin");
+					c.redirect("/yaoAdmin");
 				}else {
 					if(key.equals("/")){
-						c.redirect("/admin/main");
+						c.redirect("/yaoAdmin/main");
 					}else{
 						inv.invoke();
 					}

@@ -16,7 +16,7 @@ public class CheckAdminPermitInterceptor implements Interceptor
         String key = inv.getActionKey();
         List<String> ignoreList = Arrays.asList(SysMsg.Config.get("IGNORE_SESSION_CTL").split(","));
         if (ignoreList.contains(key))
-//        if (!key.startsWith("/admin") || ignoreList.contains(key))
+//        if (!key.startsWith("/yaoAdmin") || ignoreList.contains(key))
             inv.invoke();
 //        else
 //        {

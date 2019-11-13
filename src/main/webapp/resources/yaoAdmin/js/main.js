@@ -1,17 +1,17 @@
-var adminPath="/admin";
+var adminPath="/yaoAdmin";
 var pageSize=20;
 var pageNum=1;
 var totalPage=1;
 var page='?page_size='+pageSize+'&page_num=';
 
 function goto(page){
-    $.get("/admin/v?p="+page+'&ran='+Math.random(),function(data){
+    $.get("/yaoAdmin/v?p="+page+'&ran='+Math.random(),function(data){
         $("#right").html(data);
     });
 }
 
 function gotoEdit(page){
-    $.get("/admin/v?p="+page+'&ran='+Math.random(),function(data){
+    $.get("/yaoAdmin/v?p="+page+'&ran='+Math.random(),function(data){
         $(".list").hide();
         $(".edit").show();
         $(".edit").html(data);

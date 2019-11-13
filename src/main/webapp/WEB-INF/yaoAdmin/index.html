@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>扔FLAG登录</title>
-    <link rel="stylesheet" type="text/css" href="/resources/admin/css/style.css?ww=1">
+    <link rel="stylesheet" type="text/css" href="/resources/yaoAdmin/css/style.css?ww=1">
 </head>
 <body class="login-bg">
 <div class="login-box">
@@ -30,7 +30,7 @@
         <div class="login-btn"><input type="button" name="" class="login-btns" value="登    录" id="login-btn"></div>
     </div>
 </div>
-<script type="text/javascript" src="/resources/admin/js/jquery.min.js"></script>
+<script type="text/javascript" src="/resources/yaoAdmin/js/jquery.min.js"></script>
 <script type="text/javascript">
     $(document).ready(function () {
         $(document).ready(function () {
@@ -60,7 +60,7 @@
                 error:function(){return false;},
                 success:function(data){
                     if (data.is_success) {
-                        window.location.href = "/admin/v?p=main";
+                        window.location.href = "/yaoAdmin/v?p=main";
                     } else {
                         alert(data.message);
                         load_img();

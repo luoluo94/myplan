@@ -1,4 +1,4 @@
-package com.guima.controller.admin;
+package com.guima.controller.yaoAdmin;
 
 import com.guima.base.controller.BaseController;
 import com.guima.base.service.ServiceManager;
@@ -7,7 +7,6 @@ import com.guima.kits.Constant;
 import com.guima.services.DictionaryService;
 import com.guima.services.UserService;
 import com.jfinal.plugin.activerecord.Page;
-import com.jfinal.plugin.activerecord.Record;
 
 /**
  * Created by Ran on 2019/10/26.
