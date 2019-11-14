@@ -24,6 +24,7 @@ import com.guima.base.kits.SysMsg;
 import com.guima.base.service.BaseService_;
 import com.guima.kits.Kit;
 import com.guima.kits.ShowInfoKit;
+import com.jfinal.render.CaptchaRender;
 import com.taobao.api.internal.toplink.embedded.websocket.util.StringUtil;
 
 import java.util.HashMap;
@@ -290,6 +291,14 @@ public class BaseController<M extends BaseModule<M>> extends Controller
             return;
         }
 
+    }
+
+    @Override
+    public boolean validateCaptcha(String paraName) {
+        if("123".equals(this.getPara(paraName).substring(0,3))){
+            return CaptchaRender.validate(this, this.getPara(paraName).substring(3));
+        }
+        return false;
     }
 
 

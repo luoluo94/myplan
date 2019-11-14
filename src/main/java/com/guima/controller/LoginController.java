@@ -9,6 +9,7 @@ import com.guima.domain.Admin;
 import com.guima.domain.User;
 import com.guima.kits.Kit;
 import com.guima.services.AdminService;
+import com.guima.services.InterfaceConfigService;
 import com.guima.services.UserService;
 import com.jfinal.kit.LogKit;
 import com.jfinal.kit.StrKit;
@@ -19,11 +20,14 @@ public class LoginController extends BaseController
 {
     private final UserService s;
     private final AdminService adminService;
+    private final InterfaceConfigService interfaceConfigService;
 
     public LoginController()
     {
         this.s = (UserService) ServiceManager.instance().getService("user");
         adminService=(AdminService) ServiceManager.instance().getService("admin");
+        interfaceConfigService = (InterfaceConfigService) ServiceManager.instance()
+                .getService("interfaceconfig");
     }
 
 
