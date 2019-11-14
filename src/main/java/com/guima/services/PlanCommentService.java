@@ -35,21 +35,17 @@ public class PlanCommentService extends BaseService_<PlanComment>
         return PlanComment.dao;
     }
 
-    public Page<PlanComment> pageList(String planId, int pageNumberStr, int pageSizeStr){
+    public Page<PlanComment> pageList(String planId,String isMarkDeleted, String pageNumberStr, String pageSizeStr){
         QueryParam param=QueryParam.Builder();
-        param.equalsTo("plan_id", planId);
-        param.equalsTo(Constant.IS_DELETED_MARK,Constant.ACTIVE);
-        param.descBy("create_time");
-        return super.pageList(param,pageNumberStr+"", pageSizeStr+"");
-    }
-
-    public Page<PlanComment> pageList(int pageNumberStr, int pageSizeStr,String isMarkDeleted){
-        QueryParam param=QueryParam.Builder();
+        if(StringUtils.isNotEmpty(isMarkDeleted)){
+            param.equalsTo("plan_id", planId);
+            param.equalsTo(Constant.IS_DELETED_MARK,Constant.ACTIVE);
+        }
         if(StringUtils.isNotEmpty(isMarkDeleted)){
             param.equalsTo("mark_deleted",isMarkDeleted);
         }
         param.descBy("create_time");
-        return super.pageList(param,pageNumberStr+"", pageSizeStr+"");
+        return super.pageList(param,pageNumberStr, pageSizeStr);
     }
 
     public List<PlanComment> list(String planId){

@@ -688,4 +688,19 @@ public class Kit
         return ip;
     }
 
+    /**
+     * 验证数组里是否完全包含某个字符串
+     * @param array 数组
+     * @param validateStr 要验证的字符串
+     * @return
+     */
+    public static boolean validateArray(String[] array,String validateStr){
+        for (String s:array){
+            if(s.equals(validateStr)){
+                return true;
+            }
+        }
+        return false;
+    }
+
 }

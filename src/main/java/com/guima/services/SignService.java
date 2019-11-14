@@ -32,26 +32,26 @@ public class SignService extends BaseService_<Sign>
         return Sign.dao;
     }
 
-    public Page<Sign> listPublicSigns(int pageNumberStr, int pageSizeStr){
+    public Page<Sign> listPublicSigns(String pageNumberStr, String pageSizeStr){
         QueryParam param=QueryParam.Builder();
         param.gt("create_time", DateKit.getStartTime());
         param.equalsTo(Constant.IS_DELETED_MARK,Constant.ACTIVE);
         param.descBy("create_time");
-        return super.pageList(param,pageNumberStr+"", pageSizeStr+"");
+        return super.pageList(param,pageNumberStr, pageSizeStr);
     }
 
-    public Page<Sign> listMySigns(User user,int pageNumberStr, int pageSizeStr){
+    public Page<Sign> listMySigns(User user,String pageNumberStr, String pageSizeStr){
         QueryParam param=QueryParam.Builder();
         param.equalsTo("creator", user.getId());
         param.equalsTo(Constant.IS_DELETED_MARK,Constant.ACTIVE);
         param.descBy("create_time");
-        return super.pageList(param,pageNumberStr+"", pageSizeStr+"");
+        return super.pageList(param,pageNumberStr, pageSizeStr);
     }
 
-    public Page<Sign> listAllSigns(int pageNumberStr, int pageSizeStr){
+    public Page<Sign> listAllSigns(String pageNumberStr, String pageSizeStr){
         QueryParam param=QueryParam.Builder();
         param.descBy("create_time");
-        return super.pageList(param,pageNumberStr+"", pageSizeStr+"");
+        return super.pageList(param,pageNumberStr, pageSizeStr);
     }
 
 }

@@ -42,14 +42,14 @@ public class UserService extends BaseService_<User>
         });
     }
 
-    public Page<User> pageList(String name,int pageNumberStr, int pageSizeStr){
+    public Page<User> pageList(String name,String pageNumberStr, String pageSizeStr){
         QueryParam param=QueryParam.Builder();
         param.equalsTo("status", Constant.ACTIVE);
         if(StrKit.notBlank(name)){
             param.like("name","%"+name+"%");
         }
         param.descBy("create_time");
-        return super.pageList(param,pageNumberStr+"", pageSizeStr+"");
+        return super.pageList(param,pageNumberStr, pageSizeStr);
     }
 
     public User findByOpenid(String openid)

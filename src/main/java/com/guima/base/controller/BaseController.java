@@ -195,16 +195,16 @@ public class BaseController<M extends BaseModule<M>> extends Controller
         }
     }
 
-    public int getPageNumber(){
-        return Kit.isNull(getPara("page_num")) ? 1 : Integer.parseInt(getPara("page_num"));
+    public String getPageNumber(){
+        return Kit.isNull(getPara("page_num")) ? "" : getPara("page_num");
     }
 
-    public int getPageSize(){
+    public String getPageSize(){
         String pageSizeStr=getPara("page_size");
         if(Kit.isNotNull(pageSizeStr) && Integer.parseInt(getPara("page_size"))<200){
-            return Integer.parseInt(getPara("page_size"));
+            return getPara("page_size");
         }
-        return 200;
+        return "200";
     }
 
 

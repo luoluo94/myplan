@@ -43,14 +43,16 @@ public class InterfaceConfigService extends BaseService_<InterfaceConfig>
         return InterfaceConfig.dao;
     }
 
-    @Override
-    public List<InterfaceConfig> list(QueryParam param)
+    public List<InterfaceConfig> list(String type)
     {
-        param = param == null ? QueryParam.Builder() : param;
-        if (!param.hasQueryItem("type"))
-            return new ArrayList<>();
-        param.ascBy("sort_idx");
+        QueryParam param = QueryParam.Builder().equalsTo("type", type);
         return super.list(param);
+    }
+
+    public String getAdminSpecifiedIp(){
+        QueryParam param = QueryParam.Builder().equalsTo("type", "admin_specified_ip");
+        InterfaceConfig interfaceConfig=findFirst(param);
+        return interfaceConfig.getConfigValue();
     }
 
     @Override
@@ -61,6 +63,11 @@ public class InterfaceConfigService extends BaseService_<InterfaceConfig>
             return new Page<>(new ArrayList<>(), 0, 0, 0, 0);
         param.ascBy("sort_idx");
         return super.pageList(param, pageNumberStr, pageSizeStr);
+    }
+
+    public Page<InterfaceConfig> pageList(String pageNumberStr, String pageSizeStr)
+    {
+        return super.pageList(QueryParam.Builder(), pageNumberStr, pageSizeStr);
     }
 
     @SuppressWarnings("unchecked")

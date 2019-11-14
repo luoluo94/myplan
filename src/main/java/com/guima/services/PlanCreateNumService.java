@@ -30,26 +30,10 @@ public class PlanCreateNumService extends BaseService_<PlanCreateNum>
         return PlanCreateNum.dao;
     }
 
-    public Page<PlanCreateNum> listPublicPlanCreateNums(int pageNumberStr, int pageSizeStr){
-        QueryParam param=QueryParam.Builder();
-        param.gt("create_time", DateKit.getStartTime());
-        param.equalsTo(Constant.IS_DELETED_MARK,Constant.ACTIVE);
-        param.descBy("create_time");
-        return super.pageList(param,pageNumberStr+"", pageSizeStr+"");
-    }
-
-    public Page<PlanCreateNum> listMyPlanCreateNums(User user,int pageNumberStr, int pageSizeStr){
-        QueryParam param=QueryParam.Builder();
-        param.equalsTo("creator", user.getId());
-        param.equalsTo(Constant.IS_DELETED_MARK,Constant.ACTIVE);
-        param.descBy("create_time");
-        return super.pageList(param,pageNumberStr+"", pageSizeStr+"");
-    }
-
-    public Page<PlanCreateNum> listAllPlanCreateNums(int pageNumberStr, int pageSizeStr){
+    public Page<PlanCreateNum> listAllPlanCreateNums(String pageNumberStr, String pageSizeStr){
         QueryParam param=QueryParam.Builder();
         param.descBy("create_time");
-        return super.pageList(param,pageNumberStr+"", pageSizeStr+"");
+        return super.pageList(param,pageNumberStr, pageSizeStr);
     }
 
 }

@@ -21,13 +21,13 @@ public class OssKit
     private final String accessKeyId;
     private final String accessKeySecret;
     private final String bucketName;
+    private final InterfaceConfigService service;
 
     private OssKit()
     {
-        InterfaceConfigService service = (InterfaceConfigService) ServiceManager.instance()
+        service = (InterfaceConfigService) ServiceManager.instance()
                 .getService("interfaceconfig");
-        QueryParam param = QueryParam.Builder().equalsTo("type", "aliyun_oss");
-        List<InterfaceConfig> configs = service.list(param);
+        List<InterfaceConfig> configs = service.list("aliyun_oss");
         this.endPoint = service.getConfigValue(configs, "end_point");
         this.accessKeyId = service.getConfigValue(configs, "access_key_id");
         this.accessKeySecret = service.getConfigValue(configs, "access_key_secret");

@@ -1,5 +1,6 @@
 package com.guima.base.kits.miniProgram;
 
+import com.guima.kits.EncryptionKit;
 import com.jfinal.kit.Prop;
 import com.jfinal.kit.PropKit;
 import com.jfinal.weixin.sdk.api.ApiConfig;
@@ -39,8 +40,8 @@ public class MiniProgramKit {
     private static ApiConfig getApiConfig() {
         ApiConfig ac = new ApiConfig();
         Prop prop=PropKit.use("miniProgramConfig.properties");
-        ac.setAppId(prop.get("appId"));
-        ac.setAppSecret(prop.get("appSecret"));
+        ac.setAppId(EncryptionKit.decryptByAES(prop.get("appId")));
+        ac.setAppSecret(EncryptionKit.decryptByAES(prop.get("appSecret")));
         return ac;
     }
 

@@ -6,13 +6,17 @@ import com.guima.base.kits.miniProgram.MiniProgramKit;
 import com.guima.base.kits.miniProgram.MiniProgramLoginInfo;
 import com.guima.base.service.ServiceManager;
 import com.guima.domain.Admin;
+import com.guima.domain.AdminExceptionRecord;
 import com.guima.domain.User;
+import com.guima.kits.Constant;
 import com.guima.kits.Kit;
 import com.guima.services.AdminService;
 import com.guima.services.InterfaceConfigService;
 import com.guima.services.UserService;
 import com.jfinal.kit.LogKit;
 import com.jfinal.kit.StrKit;
+
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -53,6 +57,16 @@ public class LoginController extends BaseController
     public void adminLogin(){
         String userName = this.getPara("user_name");
         String password = this.getPara("password");
+        String ip=Kit.getIpAddress(getRequest());
+        String[] configIps=interfaceConfigService.getAdminSpecifiedIp().split(Constant.SEPARATE_SIGN);
+        if(!Kit.validateArray(configIps,ip)){
+            AdminExceptionRecord adminExceptionRecord=new AdminExceptionRecord();
+            adminExceptionRecord.setCreateTime(new Date());
+            adminExceptionRecord.setLoginIp(ip);
+            adminExceptionRecord.save();
+            doRenderError("无效的登录ip!");
+            return;
+        }
         if (Kit.isNotNull(userName) && Kit.isNotNull(password)&& validateCaptcha("captcha"))
         {
             Admin admin = adminService.get(userName,Kit.MD5(password));

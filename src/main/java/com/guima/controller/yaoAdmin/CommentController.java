@@ -36,7 +36,7 @@ public class CommentController extends BaseController{
      */
     public void listAllComments(){
         String isMarkDeleted=getPara("mark_deleted");
-        Page<PlanComment> page=planCommentService.pageList(getPageNumber(),getPageSize(),isMarkDeleted);
+        Page<PlanComment> page=planCommentService.pageList(null,isMarkDeleted,getPageNumber(),getPageSize());
         doRenderPageRecord(page);
     }
 

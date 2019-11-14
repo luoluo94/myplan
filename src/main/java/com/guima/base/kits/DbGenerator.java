@@ -38,7 +38,8 @@ public class DbGenerator
         gernerator.setDialect(new MysqlDialect());
         // 添加不需要生成的表名
 		gernerator.addExcludedTable("ad","admin","config","dictionary","interface_config","plan","plan_annex",
-                "plan_comment","plan_detail","plan_detail_annex","score_record","user","sign","advice");
+                "plan_comment","plan_detail","plan_detail_annex","score_record","user","sign","advice","plan_calendar"
+        ,"plan_create_num","admin_exception_record","user_record");
         // 设置是否在 Model 中生成 dao 对象
         gernerator.setGenerateDaoInModel(true);
         // 设置是否生成字典文件
@@ -46,7 +47,6 @@ public class DbGenerator
         // 设置需要被移除的表名前缀用于生成modelName。例如表名 "osc_user"，移除前缀 "osc_"后生成的model名为
         // "User"而非 OscUser
 //         gernerator.setRemovedTableNamePrefixes("s_");
-        // 生成
         gernerator.generate();
     }
 }

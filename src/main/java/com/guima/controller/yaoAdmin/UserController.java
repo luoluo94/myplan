@@ -76,4 +76,12 @@ public class UserController extends BaseController {
         doRenderSuccess(userRecordList);
     }
 
+    /**
+     * 列出所有用户记录
+     */
+    public void listAllUserRecords(){
+        Page<UserRecord> userRecordList=userRecordService.pageList(getPageNumber(),getPageSize());
+        doRenderSuccess(userRecordList);
+    }
+
 }

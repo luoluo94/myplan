@@ -46,7 +46,7 @@ public class CommentController extends BaseController{
      * 获取评论列表 时间正序
      */
     public void listComment(){
-        Page<PlanComment> page=planCommentService.pageList(getPara("plan_id"),getPageNumber(),getPageSize());
+        Page<PlanComment> page=planCommentService.pageList(getPara("plan_id"),null,getPageNumber(),getPageSize());
         doRenderPageRecord(page);
     }
 

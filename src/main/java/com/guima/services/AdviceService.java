@@ -29,13 +29,13 @@ public class AdviceService extends BaseService_<Advice>
         return Advice.dao;
     }
 
-    public Page<Advice> listAdvices(User user,int pageNumberStr, int pageSizeStr){
+    public Page<Advice> listAdvices(User user,String pageNumberStr, String pageSizeStr){
         QueryParam param=QueryParam.Builder();
         if(user!=null && StringUtils.isNotEmpty(user.getId())){
             param.equalsTo("creator", user.getId());
         }
         param.descBy("create_time");
-        return super.pageList(param,pageNumberStr+"", pageSizeStr+"");
+        return super.pageList(param,pageNumberStr, pageSizeStr);
     }
 
 }
