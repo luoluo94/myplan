@@ -9,14 +9,6 @@
 <div class="list">
 <div class="search">
     <form class="form-inline" role="form" id="list_form">
-    <label class="inline">
-        是否后台删除：
-        <select name="mark_deleted" id="mark_deleted">
-            <option value="">请选择</option>
-            <option value="1">是</option>
-            <option value="0">否</option>
-        </select>
-    </label>
         <button type="button" class="btn btn-default -btn search-btn" onclick="search()" style="margin-left: 100px;">查询</button>
         </form>
 </div>
@@ -24,11 +16,8 @@
 <table class="table table-striped table-hover data-table" >
     <thead>
     <tr>
-        <th>创建者</th>
         <th>创建时间</th>
-        <th>评论内容</th>
-        <th>是否删除</th>
-        <th>备注</th>
+        <th>登录ip</th>
     </tr>
     </thead>
     <tbody id="dataTable">
@@ -52,7 +41,7 @@
 
     function list(){
         $.ajax({
-            url: adminPath+"/comment/listAllComments"+page+pageNum,
+            url: adminPath+"/user/listAdminRecords"+page+pageNum,
             type:"POST",
             data:$("#list_form").serialize(),
             dataType:"json",
@@ -60,13 +49,9 @@
             success:function(result){
                 $("#dataTable").empty();
                 $.each(result.data, function (idx, val) {
-                    var is_deleted=val["mark_deleted"]=='0'?"正常":"已删除";
                     $("#dataTable").append("<tr>"
-                            +"<td width='50px'>"+val["creator_name"]+"</td>"
-                            +"<td width='100px'>"+val["create_time"]+"</td>"
-                            +"<td width='120px'>"+val["comment"]+"</td>"
-                            +"<td width='60px'>"+is_deleted+"</td>"
-                            +"<td width='50px'>"+val["remark"]+"</td>"
+                            +"<td width='50px'>"+val["create_time"]+"</td>"
+                            +"<td width='100px'>"+val["login_ip"]+"</td>"
                     );
                 });
                 if(result.data.length==0){

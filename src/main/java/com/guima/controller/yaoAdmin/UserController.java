@@ -3,13 +3,11 @@ package com.guima.controller.yaoAdmin;
 import com.guima.base.controller.BaseController;
 import com.guima.base.service.ServiceManager;
 import com.guima.domain.Admin;
+import com.guima.domain.AdminExceptionRecord;
 import com.guima.domain.User;
 import com.guima.domain.UserRecord;
 import com.guima.kits.Constant;
-import com.guima.services.DictionaryService;
-import com.guima.services.InterfaceConfigService;
-import com.guima.services.UserRecordService;
-import com.guima.services.UserService;
+import com.guima.services.*;
 import com.jfinal.plugin.activerecord.Page;
 
 import java.util.Date;
@@ -23,12 +21,14 @@ public class UserController extends BaseController {
     private final DictionaryService dictionaryService;
     private final UserRecordService userRecordService;
     private final UserService userService;
+    private final AdminExceptionRecordService exceptionRecordService;
 
     public UserController()
     {
         dictionaryService = ((DictionaryService) ServiceManager.instance().getService("dictionary"));
         userService=((UserService) ServiceManager.instance().getService("user"));
         userRecordService = ((UserRecordService) ServiceManager.instance().getService("userrecord"));
+        exceptionRecordService = ((AdminExceptionRecordService) ServiceManager.instance().getService("adminexceptionrecord"));
     }
 
     public void listUser(){
@@ -81,7 +81,16 @@ public class UserController extends BaseController {
      */
     public void listAllUserRecords(){
         Page<UserRecord> userRecordList=userRecordService.pageList(getPageNumber(),getPageSize());
-        doRenderSuccess(userRecordList);
+        doRenderPageRecord(userRecordList);
     }
+
+    /**
+     * 列出异常登录记录
+     */
+    public void listAdminRecords(){
+        Page<AdminExceptionRecord> userRecordList=exceptionRecordService.pageList(getPageNumber(),getPageSize());
+        doRenderPageRecord(userRecordList);
+    }
+
 
 }

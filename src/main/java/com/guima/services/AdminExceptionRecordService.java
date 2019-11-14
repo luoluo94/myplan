@@ -35,13 +35,6 @@ public class AdminExceptionRecordService extends BaseService_<AdminExceptionReco
         return AdminExceptionRecord.dao;
     }
 
-    public List<AdminExceptionRecord> list(String creator)
-    {
-        QueryParam param = QueryParam.Builder()
-                .equalsTo("creator", creator);
-        return list(param);
-    }
-
     public Page<AdminExceptionRecord> pageList(String pageNumberStr, String pageSizeStr){
         QueryParam param=QueryParam.Builder();
         param.descBy("create_time");
