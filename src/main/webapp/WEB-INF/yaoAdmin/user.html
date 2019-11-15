@@ -5,7 +5,7 @@
     <title></title>
 </head>
 <body>
-<input type="hidden" class="form-control" name="edit_id" id="edit_id">
+<input type="hidden" class="form-control" name="user_id" id="user_id">
 <div class="list">
 <div class="search">
     <form class="form-inline" role="form" id="list_form">
@@ -21,6 +21,7 @@
     <tr>
         <th width="150px">用户名称</th>
         <th>是否禁用</th>
+        <th>操作</th>
     </tr>
     </thead>
     <tbody id="dataTable">
@@ -38,6 +39,24 @@
     </nav>
     </div>
 </div>
+<div class="modal fade" tabindex="-1" role="dialog" id="myModal" style="display: none;">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">禁用／解禁理由</h4>
+            </div>
+            <div class="modal-body">
+                禁用:  <input type="radio" value="true" name="is_banned">   解禁:  <input type="radio" value="false" name="is_banned">
+                <textarea id="record_content" rows="10" cols="200" autofocus maxlength="250" required style="width: 500px;margin-top: 15px;"></textarea>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal" onclick="close()">关闭</button>
+                <button type="button" class="btn btn-primary" onclick="save_ban()">确认</button>
+            </div>
+        </div>
+    </div>
+</div>
 </body>
 <script type="text/javascript">
     pageNum=1;
@@ -52,9 +71,11 @@
             success:function(result){
                 $("#dataTable").empty();
                 $.each(result.data, function (idx, val) {
+                    var banned=val["banned"]=='0'?"正常":"已禁用";
                     $("#dataTable").append("<tr>"
                             +"<td width='200px'>"+val["name"]+"</td>"
-                            +"<td width='200px'>"+val["banned"]+"</td>"
+                            +"<td width='200px'>"+banned+"</td>"
+                            +"<td><button type='button' onclick=ban(\'"+val['id']+"\')>禁用</button>"+"</td>"
                     );
                 });
                 if(result.data.length==0){
@@ -70,6 +91,37 @@
     }
 
     list();
+
+    function ban(id){
+        $("#user_id").val(id);
+        $('#myModal').modal('show');
+    }
+
+    function close(){
+        $('#myModal').modal('hide');
+    }
+    function save_ban(){
+        $.ajax({
+            url: adminPath+"/user/ban",
+            type:"POST",
+            data:{
+                "creator":$("#user_id").val(),
+                "recordContent":$("#record_content").val(),
+                "isBanned":$('input[name="is_banned"]:checked ').val()
+            },
+            dataType:"json",
+            error:function(){alert("出错了，请稍后再试")},
+            success:function(result){
+                if(result.is_success) {
+                    list();
+                    $("#record_content").html('');
+                    $('#myModal').modal('hide');
+                }else{
+                    alert("出错了，请稍后再试");
+                }
+            }
+        });
+    }
 
 </script>
 </html>

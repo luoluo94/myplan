@@ -48,23 +48,22 @@ public class UserController extends BaseController {
     /**
      * 禁用用户/解禁用户
      */
-    public void banned(){
+    public void ban(){
         //被操作用户id/name
-        String creator=getPara("creator");
-        String creatorName=getPara("creatorName");
+        String creatorId=getPara("creator");
+        User creator=userService.findById(creatorId);
         //操作者描述
         String recordContent=getPara("recordContent");
         //true 为禁用 false 为解禁
         Boolean isBanned=Boolean.valueOf(getPara("isBanned"));
         UserRecord userRecord=new UserRecord();
         userRecord.setCreateTime(new Date());
-        userRecord.setCreator(creator);
+        userRecord.setCreator(creatorId);
         userRecord.setRecordContent(isBanned?"禁用理由："+recordContent:"解禁："+recordContent);
-        userRecord.setName(creatorName);
+        userRecord.setName(creator.getName());
         Admin admin=getMyAdmin();
         userRecord.setOperator(admin.getUserName());
-        User user=userService.findById(creator);
-        doRender(userRecordService.banned(userRecord,user,isBanned));
+        doRender(userRecordService.banned(userRecord,creator,isBanned));
     }
 
     /**
