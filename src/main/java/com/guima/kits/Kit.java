@@ -60,7 +60,7 @@ public class Kit
 //        b=b.intern();
 //        System.out.println(a==b);
 //        System.out.println(getPercentage("0","0",0));
-        System.out.println(Kit.MD5("1tingni6"));
+        System.out.println(Kit.MD5("xbbyylovexjh1115"));
 //        System.out.println(new BigDecimal("1").multiply(BigDecimal.TEN).multiply(BigDecimal.TEN).divide(new BigDecimal("3"),0,BigDecimal.ROUND_DOWN).toString()+"%");
     }
 

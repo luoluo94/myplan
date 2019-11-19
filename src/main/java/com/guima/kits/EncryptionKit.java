@@ -106,7 +106,7 @@ public class EncryptionKit {
 
     public static void main(String[] args) throws Exception {
 
-        String encryptByAES = encryptByAES("");
+        String encryptByAES = encryptByAES("COiFhi9XxpMVzjlH3mULIsJyBkopPb");
         System.out.println(encryptByAES);
         String decryptByAES = decryptByAES(encryptByAES);
         System.out.println(decryptByAES);

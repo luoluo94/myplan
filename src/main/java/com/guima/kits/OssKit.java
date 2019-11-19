@@ -29,8 +29,8 @@ public class OssKit
                 .getService("interfaceconfig");
         List<InterfaceConfig> configs = service.list("aliyun_oss");
         this.endPoint = service.getConfigValue(configs, "end_point");
-        this.accessKeyId = service.getConfigValue(configs, "access_key_id");
-        this.accessKeySecret = service.getConfigValue(configs, "access_key_secret");
+        this.accessKeyId = EncryptionKit.decryptByAES(service.getConfigValue(configs, "access_key_id"));
+        this.accessKeySecret = EncryptionKit.decryptByAES(service.getConfigValue(configs, "access_key_secret"));
         this.bucketName = service.getConfigValue(configs, "bucket_name");
     }
 
