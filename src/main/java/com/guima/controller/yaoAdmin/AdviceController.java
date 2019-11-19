@@ -6,6 +6,8 @@ import com.guima.domain.Advice;
 import com.guima.services.AdviceService;
 import com.jfinal.plugin.activerecord.Page;
 
+import java.util.Date;
+
 /**
  * Created by Ran on 2019/11/4.
  */
@@ -34,6 +36,7 @@ public class AdviceController extends BaseController{
         String reply=getPara("reply");
         Advice advice=adviceService.findById(adviceId);
         advice.setReply(reply);
+        advice.setReplyTime(new Date());
         doRender(advice.update());
     }
 

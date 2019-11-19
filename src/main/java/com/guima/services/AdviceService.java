@@ -34,7 +34,7 @@ public class AdviceService extends BaseService_<Advice>
         if(user!=null && StringUtils.isNotEmpty(user.getId())){
             param.equalsTo("creator", user.getId());
         }
-        param.descBy("create_time");
+        param.ascBy("create_time");
         return super.pageList(param,pageNumberStr, pageSizeStr);
     }
 
