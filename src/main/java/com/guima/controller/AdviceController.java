@@ -78,12 +78,6 @@ public class AdviceController extends BaseController{
                 data.add(map);
             }
         }
-//        Map result=new HashMap<>();
-//        result.put("records_total",page.getTotalRow());
-//        result.put("data",data);
-//        result.put("total_page",page.getTotalPage());
-//        result.put("is_success",true);
-//        result.put("message","操作成功");
         doRenderSuccess(data);
     }
 }

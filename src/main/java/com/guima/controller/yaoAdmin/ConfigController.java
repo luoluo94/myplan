@@ -4,6 +4,7 @@ import com.guima.base.controller.BaseController;
 import com.guima.base.interceptor.AppInterceptor;
 import com.guima.base.service.ServiceManager;
 import com.guima.domain.Config;
+import com.guima.kits.Constant;
 import com.guima.services.*;
 import com.jfinal.aop.Before;
 
@@ -29,9 +30,14 @@ public class ConfigController extends BaseController {
         String text=getPara("text");
         String image=getPara("image");
         Config config=configService.getShareConfig();
-        config.setText(text);
-        config.setImage(image);
-        doRender(config.update());
+        if(config==null){
+            config=new Config(text,image, Constant.SHARE);
+            doRender(config.save());
+        }else{
+            config.setText(text);
+            config.setImage(image);
+            doRender(config.update());
+        }
     }
 
     public void getShare(){
