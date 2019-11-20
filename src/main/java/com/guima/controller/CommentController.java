@@ -13,6 +13,8 @@ import com.guima.kits.Kit;
 import com.guima.services.*;
 import com.jfinal.kit.StrKit;
 import com.jfinal.plugin.activerecord.Page;
+import com.taobao.api.internal.toplink.embedded.websocket.util.StringUtil;
+import org.apache.commons.lang3.StringUtils;
 
 import java.util.Date;
 import java.util.List;
@@ -46,7 +48,12 @@ public class CommentController extends BaseController{
      * 获取评论列表 时间正序
      */
     public void listComment(){
-        Page<PlanComment> page=planCommentService.pageList(getPara("plan_id"),null,getPageNumber(),getPageSize());
+        String planId=getPara("plan_id");
+        if(StringUtils.isEmpty(planId)){
+            doRenderParamError();
+            return;
+        }
+        Page<PlanComment> page=planCommentService.pageList(planId,null,getPageNumber(),getPageSize());
         doRenderPageRecord(page);
     }
 

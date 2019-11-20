@@ -37,7 +37,7 @@ public class PlanCommentService extends BaseService_<PlanComment>
 
     public Page<PlanComment> pageList(String planId,String isMarkDeleted, String pageNumberStr, String pageSizeStr){
         QueryParam param=QueryParam.Builder();
-        if(StringUtils.isNotEmpty(isMarkDeleted)){
+        if(StringUtils.isNotEmpty(planId)){
             param.equalsTo("plan_id", planId);
             param.equalsTo(Constant.IS_DELETED_MARK,Constant.ACTIVE);
         }
