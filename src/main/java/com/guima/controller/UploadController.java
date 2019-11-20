@@ -34,7 +34,10 @@ public class UploadController extends BaseController {
         userService=((UserService) ServiceManager.instance().getService("user"));
     }
 
-    public void uploadImage()
+    /**
+     * 可用于后台管理系统，上传速度不重要的情况
+     */
+    public void uploadImage2()
     {
         try
         {
@@ -48,6 +51,30 @@ public class UploadController extends BaseController {
                 doRenderError("图片格式不正确，允许的格式为"+ SysMsg.Config.get("IMAGE_SUFFIX"));
             }
             doRenderSuccess(FileKit.upload(uploadFile,filePath));
+        } catch (Exception e)
+        {
+            doRenderError(e);
+        }
+    }
+
+    /**
+     * 上传速度快
+     */
+    public void uploadImage()
+    {
+        try
+        {
+            if(!FileKit.checkSize(getRequest())){
+                doRenderError("上传附件不允许超过"+SysMsg.Config.get("UPLOAD_MAX_DESC"));
+                return;
+            }
+            String filePath="annex_images";
+            FilePart file=FileKit.uploadOss(getRequest());
+            if(!FileKit.isAcceptImg(FileKit.getFileSuffix(file.getFileName()))){
+                doRenderError("图片格式不正确，允许的格式为"+ SysMsg.Config.get("IMAGE_SUFFIX"));
+                return;
+            }
+            doRenderSuccess(FileKit.upload(file,filePath));
         } catch (Exception e)
         {
             doRenderError(e);
