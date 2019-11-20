@@ -23,7 +23,6 @@ public class ConfigController extends BaseController {
     public ConfigController()
     {
         configService = ((ConfigService) ServiceManager.instance().getService("config"));
-        s=configService;
     }
 
     public void getShare(){

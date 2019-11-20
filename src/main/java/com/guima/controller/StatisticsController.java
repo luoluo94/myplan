@@ -14,26 +14,13 @@ import java.util.Map;
  */
 public class StatisticsController extends BaseController {
 
-    private DictionaryService dictionaryService;
     private PlanService planService;
-    private UserService userService;
-    private PlanAnnexService planAnnexService;
-    private PlanDetailService planDetailService;
-    private PlanCommentService planCommentService;
     private PlanCalendarService planCalendarService;
-    private PlanDetailAnnexService planDetailAnnexService;
 
     public StatisticsController()
     {
-        dictionaryService = ((DictionaryService) ServiceManager.instance().getService("dictionary"));
         planService=((PlanService)ServiceManager.instance().getService("plan"));
-        s=planService;
-        userService=((UserService) ServiceManager.instance().getService("user"));
-        planAnnexService=((PlanAnnexService)ServiceManager.instance().getService("planannex"));
-        planDetailService=((PlanDetailService)ServiceManager.instance().getService("plandetail"));
-        planCommentService=((PlanCommentService)ServiceManager.instance().getService("plancomment"));
         planCalendarService=((PlanCalendarService) ServiceManager.instance().getService("plancalendar"));
-        planDetailAnnexService=((PlanDetailAnnexService) ServiceManager.instance().getService("plandetailannex"));
     }
 
     public void getUserStatistics(){

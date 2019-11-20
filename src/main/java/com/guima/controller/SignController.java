@@ -20,14 +20,10 @@ import java.util.List;
 public class SignController extends BaseController{
 
     private SignService signService;
-    private UserService userService;
-    private ScoreRecordService scoreRecordService;
 
     public SignController()
     {
         signService=((SignService)ServiceManager.instance().getService("sign"));
-        userService=((UserService) ServiceManager.instance().getService("user"));
-        scoreRecordService=((ScoreRecordService) ServiceManager.instance().getService("scorerecord"));
     }
 
     /**

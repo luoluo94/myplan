@@ -16,13 +16,8 @@ import com.oreilly.servlet.multipart.FilePart;
 @Before(AppInterceptor.class)
 public class UploadController extends BaseController {
 
-    private DictionaryService dictionaryService;
-    private UserService userService;
-
     public UploadController()
     {
-        dictionaryService = ((DictionaryService) ServiceManager.instance().getService("dictionary"));
-        userService=((UserService) ServiceManager.instance().getService("user"));
     }
 
     public void uploadVideo()

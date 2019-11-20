@@ -36,15 +36,6 @@ public class UserController extends BaseController {
         doRenderPageRecord(page);
     }
 
-
-    public void listBackgroundMusicTheme(){
-        doRenderSuccess(dictionaryService.listBackgroundMusicTheme());
-    }
-
-    public void listMusicTheme(){
-        doRenderSuccess(dictionaryService.listType(Constant.MUSIC_THEME,null));
-    }
-
     /**
      * 禁用用户/解禁用户
      */
@@ -90,6 +81,5 @@ public class UserController extends BaseController {
         Page<AdminExceptionRecord> userRecordList=exceptionRecordService.pageList(getPageNumber(),getPageSize());
         doRenderPageRecord(userRecordList);
     }
-
 
 }

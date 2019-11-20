@@ -22,7 +22,6 @@ public class _MappingKit {
 		arp.addMapping("dictionary", "id", Dictionary.class);
 		arp.addMapping("interface_config", "id", InterfaceConfig.class);
 		arp.addMapping("plan", "id", Plan.class);
-		arp.addMapping("plan_annex", "id", PlanAnnex.class);
 		arp.addMapping("plan_comment", "id", PlanComment.class);
 		arp.addMapping("plan_detail", "id", PlanDetail.class);
 		arp.addMapping("plan_detail_annex", "id", PlanDetailAnnex.class);

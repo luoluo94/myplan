@@ -22,11 +22,8 @@ public class PlanController extends BaseController{
 
     private DictionaryService dictionaryService;
     private PlanService planService;
-    private UserService userService;
-    private PlanAnnexService planAnnexService;
     private PlanDetailService planDetailService;
     private PlanCommentService planCommentService;
-    private ScoreRecordService scoreRecordService;
     private PlanDetailAnnexService planDetailAnnexService;
 
     public PlanController()
@@ -34,11 +31,8 @@ public class PlanController extends BaseController{
         dictionaryService = ((DictionaryService) ServiceManager.instance().getService("dictionary"));
         planService=((PlanService)ServiceManager.instance().getService("plan"));
         s=planService;
-        userService=((UserService) ServiceManager.instance().getService("user"));
-        planAnnexService=((PlanAnnexService)ServiceManager.instance().getService("planannex"));
         planDetailService=((PlanDetailService)ServiceManager.instance().getService("plandetail"));
         planCommentService=((PlanCommentService)ServiceManager.instance().getService("plancomment"));
-        scoreRecordService=((ScoreRecordService) ServiceManager.instance().getService("scorerecord"));
         planDetailAnnexService=((PlanDetailAnnexService) ServiceManager.instance().getService("plandetailannex"));
     }
 
@@ -244,7 +238,7 @@ public class PlanController extends BaseController{
         PlanDetailAnnex planAnnex=new PlanDetailAnnex();
         planAnnex.setPlanDetailId(planDetailId);
         planAnnex.setAnnexUrl(annexUrl);
-        planAnnex.setIsDeleted(Constant.IS_DELETED_YES);
+        planAnnex.setIsDeleted(Constant.IS_DELETED_NO);
         doRender(planDetailService.addPlanAnnex(planDetailId,planAnnex));
     }
 

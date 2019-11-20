@@ -11,24 +11,11 @@ import com.jfinal.plugin.activerecord.Page;
  */
 public class CommentController extends BaseController{
 
-    private DictionaryService dictionaryService;
-    private PlanService planService;
-    private UserService userService;
-    private PlanAnnexService planAnnexService;
-    private PlanDetailService planDetailService;
     private PlanCommentService planCommentService;
-    private ScoreRecordService scoreRecordService;
 
     public CommentController()
     {
-        dictionaryService = ((DictionaryService) ServiceManager.instance().getService("dictionary"));
-        planService=((PlanService)ServiceManager.instance().getService("plan"));
-        s=planService;
-        userService=((UserService) ServiceManager.instance().getService("user"));
-        planAnnexService=((PlanAnnexService)ServiceManager.instance().getService("planannex"));
-        planDetailService=((PlanDetailService)ServiceManager.instance().getService("plandetail"));
         planCommentService=((PlanCommentService)ServiceManager.instance().getService("plancomment"));
-        scoreRecordService=((ScoreRecordService) ServiceManager.instance().getService("scorerecord"));
     }
 
     /**
