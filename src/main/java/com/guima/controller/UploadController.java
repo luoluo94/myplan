@@ -38,6 +38,10 @@ public class UploadController extends BaseController {
     {
         try
         {
+            if(!FileKit.checkSize(getRequest())){
+                doRenderError("上传附件过大");
+                return;
+            }
             UploadFile uploadFile=getFile();
             String filePath=getPara("type");
             if(!FileKit.isAcceptImg(FileKit.getFileSuffix(uploadFile.getFileName()))){

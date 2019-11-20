@@ -211,4 +211,12 @@ public class FileKit
         }
         return dictionary;
     }
+
+    public static boolean checkSize(HttpServletRequest request){
+        int length=request.getContentLength();
+        if(length>SysMsg.Config.getInt("UPLOAD_MAX")){
+            return false;
+        }
+        return true;
+    }
 }
