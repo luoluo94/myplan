@@ -51,7 +51,6 @@ public class PlanController extends BaseController{
         checkBanned(user);
         Plan plan=new Plan();
         String title=getPara("title");
-        String category=getPara("category");
         String endDate=getPara("endDate");
         String privacy=getPara("privacy");
         String startDate=getPara("startDate");
@@ -62,13 +61,13 @@ public class PlanController extends BaseController{
             doRenderParamError();
             return;
         }
-        if(StrKit.isBlank(title)||Kit.isNull(category)
+        if(StrKit.isBlank(title)
                 || StrKit.isBlank(endDate)|| StrKit.isBlank(privacy)
                 || StrKit.isBlank(startDate)|| StrKit.isBlank(status)){
             doRenderParamError();
             return;
         }
-        plan.init(title,category,user.getId(),user.getHeaderUrl(),user.getName(),new Date(),DateKit.stringToDate(endDate),
+        plan.init(title,user.getId(),user.getHeaderUrl(),user.getName(),new Date(),DateKit.stringToDate(endDate),
                 privacy,DateKit.stringToDate(startDate),status);
         planService.createPlan(plan,planDetails);
         doRender("plan_id",plan.getId(),StrKit.notBlank(plan.getId()));

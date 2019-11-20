@@ -151,7 +151,6 @@ public class BaseController<M extends BaseModule<M>> extends Controller
     public void doRender(String markDesc,String markValue,boolean isSuccess){
         Map map=new HashMap<>();
         map.put(markDesc,markValue);
-        System.out.println("d:"+new Date().getTime());
         doRender(map,isSuccess,isSuccess?"操作成功":"操作失败");
     }
 
@@ -162,7 +161,6 @@ public class BaseController<M extends BaseModule<M>> extends Controller
     }
 
     protected void doRenderSuccess(Object data) {
-        System.out.println("b:"+new Date().getTime());
         doRender(data,true,"操作成功");
     }
 

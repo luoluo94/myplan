@@ -23,10 +23,9 @@ public class Plan extends BasePlan<Plan> {
 	public static final Plan dao = new Plan();
 
 
-	public void init(String title,String category,String creator,String creatorHeaderUrl,String creatorName,Date createTime ,Date endDate,
+	public void init(String title,String creator,String creatorHeaderUrl,String creatorName,Date createTime ,Date endDate,
 			String privacy,Date startDate,String status){
 		this.setTitle(title);
-		setCategory(category);
 		setCreator(creator);
 		setCreatorHeaderUrl(creatorHeaderUrl);
 		setCreatorName(creatorName);

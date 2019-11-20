@@ -68,6 +68,7 @@ public class AdviceController extends BaseController{
             map.put("content",advice.getAdviceContent());
             map.put("creator_header_url",advice.getCreatorHeaderUrl());
             map.put("is_official",false);
+            map.put("creator_name",advice.getCreatorName());
             data.add(map);
             if(!StringUtils.isEmpty(advice.getReply())){
                 map=new HashMap<>();
@@ -75,6 +76,7 @@ public class AdviceController extends BaseController{
                 map.put("content",advice.getReply());
                 map.put("creator_header_url","https://yaoplan.oss-cn-beijing.aliyuncs.com/admin_images/flag_official.jpg");
                 map.put("is_official",true);
+                map.put("creator_name","扔FLAG客服");
                 data.add(map);
             }
         }
