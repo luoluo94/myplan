@@ -300,11 +300,27 @@ public class DateKit
      *
      * @return
      */
+    public static String getSerialNumberDay()
+    {
+        Calendar c = Calendar.getInstance();
+        Date date = c.getTime();
+        SimpleDateFormat format = new SimpleDateFormat("yyyyMMdd");
+        return format.format(date);
+    }
+
     public static String getSerialNumber()
     {
         Calendar c = Calendar.getInstance();
         Date date = c.getTime();
         SimpleDateFormat format = new SimpleDateFormat("yyyyMMddHHmmsss");
+        return format.format(date);
+    }
+
+    public static String getSerialNumberSecond()
+    {
+        Calendar c = Calendar.getInstance();
+        Date date = c.getTime();
+        SimpleDateFormat format = new SimpleDateFormat("HHmmsss");
         return format.format(date);
     }
 

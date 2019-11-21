@@ -4,11 +4,14 @@ import com.aliyun.oss.ClientException;
 import com.aliyun.oss.OSSClient;
 import com.aliyun.oss.OSSException;
 import com.aliyun.oss.model.OSSObject;
+import com.guima.base.kits.SysMsg;
+import com.guima.cache.RedisCacheManager;
 import com.guima.domain.InterfaceConfig;
 import com.guima.services.InterfaceConfigService;
 import com.jfinal.kit.LogKit;
 import com.guima.base.kits.QueryParam;
 import com.guima.base.service.ServiceManager;
+import net.coobird.thumbnailator.Thumbnails;
 
 import java.io.*;
 import java.net.HttpURLConnection;
@@ -21,17 +24,13 @@ public class OssKit
     private final String accessKeyId;
     private final String accessKeySecret;
     private final String bucketName;
-    private final InterfaceConfigService service;
 
     private OssKit()
     {
-        service = (InterfaceConfigService) ServiceManager.instance()
-                .getService("interfaceconfig");
-        List<InterfaceConfig> configs = service.list("aliyun_oss");
-        this.endPoint = service.getConfigValue(configs, "end_point");
-        this.accessKeyId = EncryptionKit.decryptByAES(service.getConfigValue(configs, "access_key_id"));
-        this.accessKeySecret = EncryptionKit.decryptByAES(service.getConfigValue(configs, "access_key_secret"));
-        this.bucketName = service.getConfigValue(configs, "bucket_name");
+        this.endPoint = SysMsg.Config.get("end_point");
+        this.accessKeyId = EncryptionKit.decryptByAES(SysMsg.Config.get("access_key_id"));
+        this.accessKeySecret = EncryptionKit.decryptByAES(SysMsg.Config.get("access_key_secret"));
+        this.bucketName = SysMsg.Config.get("bucket_name");
     }
 
     public static OssKit init()
@@ -116,6 +115,7 @@ public class OssKit
     {
         InputStream thumbInputStream;
         try{
+//            ?x-oss-process=image/resize,m_lfit,h_300,w_300
             ossUrl=ossUrl+"?x-oss-process=image/resize,w_120,h_120,limit_0";
             URL url = new URL(ossUrl);
             HttpURLConnection conn = (HttpURLConnection)url.openConnection();

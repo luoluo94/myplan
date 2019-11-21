@@ -24,7 +24,7 @@ public class UploadController extends BaseController {
     {
         try
         {
-            FilePart file=FileKit.uploadOss(getRequest());
+            FilePart file=FileKit.getFile(getRequest());
             if(FileKit.isAcceptAudio(FileKit.getFileSuffix(file.getFileName()))){
                 doRenderSuccess(FileKit.upload(file));
             }else{
@@ -43,7 +43,7 @@ public class UploadController extends BaseController {
     {
         try
         {
-            FilePart file=FileKit.uploadOss(getRequest());
+            FilePart file=FileKit.getFile(getRequest());
             if(FileKit.isAcceptImg(FileKit.getFileSuffix(file.getFileName()))){
                 doRenderError("图片格式不正确，允许的格式为"+ SysMsg.Config.get("IMAGE_SUFFIX"));
             }

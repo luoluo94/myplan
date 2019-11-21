@@ -7,10 +7,15 @@ import com.jfinal.upload.UploadFile;
 import com.oreilly.servlet.multipart.FilePart;
 import com.oreilly.servlet.multipart.MultipartParser;
 import com.oreilly.servlet.multipart.Part;
+import net.coobird.thumbnailator.Thumbnails;
+
+import javax.imageio.ImageIO;
 import javax.servlet.http.HttpServletRequest;
+import java.awt.image.BufferedImage;
 import java.io.*;
 import java.net.URLDecoder;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Random;
 
@@ -73,7 +78,7 @@ public class FileKit
         fos.close();
     }
 
-    public static FilePart uploadOss(HttpServletRequest r)
+    public static FilePart getFile(HttpServletRequest r)
     {
         MultipartParser mp;
         try {
@@ -96,9 +101,27 @@ public class FileKit
     public static String upload(FilePart file) throws Exception
     {
         String type =getFileSuffix(file.getFileName());
-        String newName= getDictionary(type) + "/" +  DateKit.getSerialNumber() + "_" + new Random().nextInt(10000);
+        String newName= getDictionary(type) + "/" +  DateKit.getSerialNumberDay() + "_" + new Random().nextInt(10000);
         String key = newName + type;
         String cloudPath = OssKit.init().upload(key, file.getInputStream());
+        if (cloudPath.equals("ERROR")){
+            throw new Exception("上传失败！");
+        }
+        return cloudPath;
+    }
+
+    /**
+     * 自定义文件夹名称
+     * @param dictionaryName
+     * @return
+     * @throws Exception
+     */
+    public static String upload(String fileName,InputStream inputStream,String dictionaryName) throws Exception
+    {
+        String type =getFileSuffix(fileName);
+        String newName= dictionaryName + "/" +  DateKit.getSerialNumberDay()+"/" +DateKit.getSerialNumberSecond()+ "_" + new Random().nextInt(100000);
+        String key = newName + type;
+        String cloudPath = OssKit.init().upload(key, inputStream);
         if (cloudPath.equals("ERROR")){
             throw new Exception("上传失败！");
         }
@@ -192,9 +215,10 @@ public class FileKit
 
     public static void main(String[] args){
 //        System.out.println(getResUrl("http://online-songs.oss-cn-beijing.aliyuncs.com/image/201807211501022_5798.png"));
-        for (int i=0;i<1000;i++){
-            System.out.println(new Random().nextInt(78)+1);
-        }
+//        for (int i=0;i<1000;i++){
+//            System.out.println(new Random().nextInt(78)+1);
+//        }
+        getThumbnail(null);
 
     }
 
@@ -219,4 +243,19 @@ public class FileKit
         }
         return true;
     }
+
+    public static InputStream getThumbnail(InputStream inputStream){
+        InputStream in=null;
+        try {
+            BufferedImage bufferedImage=Thumbnails.of(inputStream).scale(1f).outputQuality(0.25f).asBufferedImage();
+            long b=new Date().getTime();
+            ByteArrayOutputStream os = new ByteArrayOutputStream();
+            ImageIO.write(bufferedImage, "png", os);
+            in = new ByteArrayInputStream(os.toByteArray());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return in;
+    }
+
 }
