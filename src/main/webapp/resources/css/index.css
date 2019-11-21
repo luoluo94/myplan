@@ -29,33 +29,39 @@ a:link,a:active{
 	background: url(../images/banner.jpg) no-repeat top center;
 }
 .nav{
-	height: 86px;
+	height: 68px;
 }
 .container{
 	margin: 10px 0px;
 }
-.con-title{
+.con-title p{
 	color: #015d76;
 	font-size: 28px;
 	margin:10px auto;
 	margin-top: 40px;
-	width:400px;
+	width:700px;
 }
 .nav-logo{
 	width: 150px;
 	float: left;
 	margin-left: 40px;
-	margin-top: 36px;
+	margin-top: 22px;
 }
 
 .program-div{
 	float: left;
 	margin-top: 10px;
-	margin-right: 20px;
-	width: 300px;
-	height: 450px;
+	margin-right: 50px;
+	width: 340px;
+	height: 600px;
 }
 .mini-program{
 	width: 1200px;
-	height: 500px;
+	height: 600px;
+	margin-top: 39px;
+}
+.con-code{
+	width: 100%;
+	text-align: center;
+	margin-top: 20px;
 }

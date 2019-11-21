@@ -138,4 +138,12 @@ public abstract class BaseUser<M extends BaseUser<M>> extends BaseModule<M> impl
 		return get("unionid");
 	}
 
+	public void setIsOfficial(java.lang.Integer isOfficial) {
+		set("is_official", isOfficial);
+	}
+
+	public java.lang.Integer getIsOfficial() {
+		return get("is_official");
+	}
+
 }

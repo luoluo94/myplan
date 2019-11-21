@@ -74,9 +74,9 @@ public class AdviceController extends BaseController{
                 map=new HashMap<>();
                 map.put("create_time",advice.getReplyTime());
                 map.put("content",advice.getReply());
-                map.put("creator_header_url","https://yaoplan.oss-cn-beijing.aliyuncs.com/admin_images/flag_official.jpg");
+                map.put("creator_header_url","http://www.rengflag.com/resources/images/reng_flag_official.png");
                 map.put("is_official",true);
-                map.put("creator_name","扔FLAG客服");
+                map.put("creator_name","店小二");
                 data.add(map);
             }
         }
