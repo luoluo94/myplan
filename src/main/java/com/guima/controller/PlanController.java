@@ -190,7 +190,7 @@ public class PlanController extends BaseController{
      * 点赞
      */
     public void doLike(){
-        comment("我为你点赞");
+        comment("为你点赞 \uD83D\uDC4D  \uD83D\uDC4D  \uD83D\uDC4D ");
     }
 
     /**
