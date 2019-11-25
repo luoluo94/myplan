@@ -117,42 +117,5 @@ public class PlanService extends BaseService_<Plan>
         });
     }
 
-    /**
-     * 复制计划
-     * @return
-     */
-    public String copyPlan(Plan plan){
-        PlanDetailService planDetailService=((PlanDetailService)ServiceManager.instance().getService("plandetail"));
-        Plan newPlan=new Plan();
-        newPlan._setAttrs(plan);
-        newPlan.setStatus(ConstantEnum.STATUS_DRAFT.getValue());
-        List<PlanDetail> details=planDetailService.listPlanDetails(plan.getId());
-        boolean isSuccess=Db.tx(()->{
-            if(!newPlan.save())
-                return false;
-
-            PlanDetail planDetail;
-            for (PlanDetail detail : details) {
-                planDetail = new PlanDetail();
-                planDetail.init(newPlan.getId(),detail.getPlanDetail(),detail.getSortIndex());
-                if(!planDetail.save())
-                    return false;
-            }
-            return true;
-        });
-
-        return isSuccess?newPlan.getId():null;
-    }
-
-    /**
-     * 计算每天新增的计划数量
-     */
-    public int countPlanNum(){
-        String startDatetime=DateKit.getDateOfDay(-1);
-        String endDatetime=DateKit.getDaytime();
-        return Db.queryInt("select count(*) as num from plan where create_time>= "+startDatetime+" and create_time<"+endDatetime);
-    }
-
-
 
 }

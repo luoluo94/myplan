@@ -31,5 +31,6 @@ public class User extends BaseUser<User> {
 		this.setStatus(Constant.ACTIVE);
 		this.setBanned(Constant.MARK_ZERO);
 		this.setIsOfficial(Constant.IS_DELETED_NO);
+		this.setLoginNum(1);
 	}
 }

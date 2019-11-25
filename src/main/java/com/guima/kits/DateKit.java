@@ -237,6 +237,10 @@ public class DateKit
         return DateKit.getDate(Calendar.DATE,differenceDays,DATE_PATTERN)+" 00:00:00";
     }
 
+    public static String getIntervalDate(int intervalDays){
+        return DateKit.getDate(Calendar.DATE,intervalDays,DATE_PATTERN);
+    }
+
     /**
      * 获取两个日期中间的日期值，以字符串形式返回
      *

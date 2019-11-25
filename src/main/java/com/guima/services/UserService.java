@@ -64,4 +64,9 @@ public class UserService extends BaseService_<User>
         return findFirst(param);
     }
 
+    public void countLoginNum(User user){
+        user.setLoginNum(user.getLoginNum()+1);
+        user.update();
+    }
+
 }

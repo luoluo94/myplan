@@ -1,6 +1,7 @@
 package com.guima.jobs;
 
 import com.guima.base.service.ServiceManager;
+import com.guima.services.PlanCreateNumService;
 import com.guima.services.PlanService;
 import org.quartz.Job;
 import org.quartz.JobExecutionContext;
@@ -11,16 +12,19 @@ import org.quartz.JobExecutionException;
  */
 public class StatisticsTask implements Job{
 
-    private PlanService planService;
+    private PlanCreateNumService planCreateNumService;
 
     public StatisticsTask(){
-        planService=((PlanService) ServiceManager.instance().getService("plan"));
+        planCreateNumService=((PlanCreateNumService) ServiceManager.instance().getService("plancreatenum"));
     }
 
+    /**
+     * 计算每天的计划创建量
+     * @param jobExecutionContext
+     * @throws JobExecutionException
+     */
     @Override
     public void execute(JobExecutionContext jobExecutionContext) throws JobExecutionException {
-        System.out.println("定时任务正在执行");
-        System.out.println(planService.toString());
-        System.out.println("定时任务正在执行");
+        planCreateNumService.countPlanNum();
     }
 }

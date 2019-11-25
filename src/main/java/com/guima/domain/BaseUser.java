@@ -146,4 +146,12 @@ public abstract class BaseUser<M extends BaseUser<M>> extends BaseModule<M> impl
 		return get("is_official");
 	}
 
+	public void setLoginNum(java.lang.Integer loginNum) {
+		set("login_num", loginNum);
+	}
+
+	public java.lang.Integer getLoginNum() {
+		return get("login_num");
+	}
+
 }
