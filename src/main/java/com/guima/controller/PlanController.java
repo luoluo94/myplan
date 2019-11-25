@@ -48,7 +48,6 @@ public class PlanController extends BaseController{
         String endDate=getPara("endDate");
         String privacy=getPara("privacy");
         String startDate=getPara("startDate");
-        String status=getPara("status");
         //计划的具体事项
         String[] planDetails=getParaValues("details");
         if(planDetails.length==0){
@@ -57,12 +56,12 @@ public class PlanController extends BaseController{
         }
         if(StrKit.isBlank(title)
                 || StrKit.isBlank(endDate)|| StrKit.isBlank(privacy)
-                || StrKit.isBlank(startDate)|| StrKit.isBlank(status)){
+                || StrKit.isBlank(startDate)){
             doRenderParamError();
             return;
         }
         plan.init(title,user.getId(),user.getHeaderUrl(),user.getName(),new Date(),DateKit.stringToDate(endDate),
-                privacy,DateKit.stringToDate(startDate),status);
+                privacy,DateKit.stringToDate(startDate));
         planService.createPlan(plan,planDetails);
         doRender("plan_id",plan.getId(),StrKit.notBlank(plan.getId()));
     }

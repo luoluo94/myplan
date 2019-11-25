@@ -20,8 +20,8 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
-public class LoginController extends BaseController
-{
+public class LoginController extends BaseController {
+
     private final UserService s;
     private final AdminService adminService;
     private final InterfaceConfigService interfaceConfigService;
@@ -33,7 +33,6 @@ public class LoginController extends BaseController
         interfaceConfigService = (InterfaceConfigService) ServiceManager.instance()
                 .getService("interfaceconfig");
     }
-
 
     /**
      * 用户登录
@@ -54,7 +53,7 @@ public class LoginController extends BaseController
     /**
      * 后台用户登录
      */
-    public void adminLogin(){
+    public void adminLogin() {
         String userName = this.getPara("user_name");
         String password = this.getPara("password");
         String ip=Kit.getIpAddress(getRequest());

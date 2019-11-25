@@ -1,6 +1,7 @@
 package com.guima.domain;
 
 import com.guima.domain.BasePlan;
+import com.guima.enums.ConstantEnum;
 import com.guima.kits.Constant;
 
 import java.util.Date;
@@ -24,7 +25,7 @@ public class Plan extends BasePlan<Plan> {
 
 
 	public void init(String title,String creator,String creatorHeaderUrl,String creatorName,Date createTime ,Date endDate,
-			String privacy,Date startDate,String status){
+			String privacy,Date startDate){
 		this.setTitle(title);
 		setCreator(creator);
 		setCreatorHeaderUrl(creatorHeaderUrl);
@@ -34,7 +35,7 @@ public class Plan extends BasePlan<Plan> {
 		setIsDeleted(Constant.IS_DELETED_NO);
 		setPrivacy(privacy);
 		setStartDate(startDate);
-		setStatus(status);
+		setStatus(ConstantEnum.STATUS_ONGOING.getValue());
 	}
 
 	public String getEndDateDesc() {

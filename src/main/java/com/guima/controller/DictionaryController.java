@@ -25,7 +25,6 @@ public class DictionaryController extends BaseController{
         this.s = ((DictionaryService) ServiceManager.instance().getService("dictionary"));
     }
 
-
     public void list(){
         String type=getPara("type");
         if(Kit.isNull(type)){
@@ -34,7 +33,6 @@ public class DictionaryController extends BaseController{
         }
         doRenderSuccess(s.listType(type,null));
     }
-
 
     public void getMusicTheme(){
         doRenderSuccess(s.listBackgroundMusicTheme());
@@ -55,7 +53,5 @@ public class DictionaryController extends BaseController{
         ConstantEnum[] category={ConstantEnum.CATEGORY_DAILY,ConstantEnum.CATEGORY_SPORT,ConstantEnum.CATEGORY_STUDY};
         doRenderJson(ConstantEnum.list(category));
     }
-
-
 
 }

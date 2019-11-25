@@ -74,7 +74,7 @@ public class AdviceController extends BaseController{
                 map=new HashMap<>();
                 map.put("create_time",advice.getReplyTime());
                 map.put("content",advice.getReply());
-                map.put("creator_header_url","http://www.rengflag.com/resources/images/reng_flag_official.png");
+                map.put("creator_header_url","https://www.rengflag.com/resources/images/reng_flag_official.png");
                 map.put("is_official",true);
                 map.put("creator_name","店小二");
                 data.add(map);

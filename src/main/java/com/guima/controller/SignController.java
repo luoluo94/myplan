@@ -63,14 +63,14 @@ public class SignController extends BaseController{
     }
 
     /**
-     * 删除说说
+     * 删除打卡记录
      */
     public void removeSign(){
         User user=getMyUser();
         String signId=getPara("sign_id");
         Sign sign=signService.findById(signId);
         if(sign==null){
-            doRenderError("该条说说不存在");
+            doRenderError("该条打卡记录不存在");
             return;
         }
         if(!sign.getCreator().equals(user.getId())){
