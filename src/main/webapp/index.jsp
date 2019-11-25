@@ -3,7 +3,7 @@
     <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /> <!-- for HTML5 -->
     <title>一起制定计划吧</title>
-    <meta name="keywords" content="制定计划,打卡,立FLAG" />
+    <meta name="keywords" content="扔FLAG,打卡,制定计划,立FLAG" />
 </head>
 <link type="text/css"  rel="stylesheet" href="resources/css/index.css?xx=4">
 <body>

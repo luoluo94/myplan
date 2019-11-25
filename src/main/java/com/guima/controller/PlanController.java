@@ -82,14 +82,6 @@ public class PlanController extends BaseController{
         User user=getMyUser();
         String status=getPara("status");
         Page<Plan> page=planService.listMyPlans(user,status,getPageNumber(),getPageSize());
-//        List<Plan> planList=page.getList();
-//        for (Plan plan:planList){
-//            plan.setEndDateDesc(DateKit.getDateDesc(plan.getEndDate()));
-//            if(plan.getStatus().equals(ConstantEnum.STATUS_ONGOING.getValue())){
-//                plan.setOverdue(DateKit.isOverdueIncludeDay(DateKit.now(),DateKit.dateToString(plan.getEndDate())));
-//            }
-//            plan.setStatusDesc(getStatusDesc(plan.getStatus()));
-//        }
         doRenderPageRecord(page);
     }
 
@@ -208,16 +200,6 @@ public class PlanController extends BaseController{
         }else{
             doRender(planService.markUnFinish(plan));
         }
-    }
-
-    /**
-     * 复制计划
-     */
-    public void copyPlan(){
-        String planId=getPara("plan_id");
-        Plan plan=planService.findById(planId);
-        String newPlanId=planService.copyPlan(plan);
-        doRender("plan_id",newPlanId,StrKit.notBlank(newPlanId));
     }
 
     /**
