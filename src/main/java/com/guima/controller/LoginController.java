@@ -12,6 +12,7 @@ import com.guima.kits.Constant;
 import com.guima.kits.Kit;
 import com.guima.services.AdminService;
 import com.guima.services.InterfaceConfigService;
+import com.guima.services.UserLoginRecordService;
 import com.guima.services.UserService;
 import com.jfinal.kit.LogKit;
 import com.jfinal.kit.StrKit;
@@ -25,6 +26,7 @@ public class LoginController extends BaseController
     private final UserService s;
     private final AdminService adminService;
     private final InterfaceConfigService interfaceConfigService;
+    private final UserLoginRecordService userLoginRecordService;
 
     public LoginController()
     {
@@ -32,6 +34,8 @@ public class LoginController extends BaseController
         adminService=(AdminService) ServiceManager.instance().getService("admin");
         interfaceConfigService = (InterfaceConfigService) ServiceManager.instance()
                 .getService("interfaceconfig");
+        userLoginRecordService=(UserLoginRecordService) ServiceManager.instance()
+                .getService("userloginrecord");
     }
 
 
@@ -123,6 +127,8 @@ public class LoginController extends BaseController
                 user.update();
             }
         }
+        //记录用户登录次数情况
+        userLoginRecordService.userLoginRecord(user.getId());
         Map<String,String> map=new HashMap<>();
         map.put("user_id",user.getId());
         map.put("open_id",openid);
