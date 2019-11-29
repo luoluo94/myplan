@@ -39,7 +39,7 @@ public class PlanService extends BaseService_<Plan>
 
     public Page<Plan> listPublicPlans(String pageNumberStr, String pageSizeStr){
         QueryParam param=QueryParam.Builder();
-        param.gt("create_time", DateKit.getStartTime());
+//        param.gt("create_time", DateKit.getStartTime());
         param.equalsTo("privacy", ConstantEnum.PRIVACY_PUBLIC.getValue());
         param.equalsTo(Constant.IS_DELETED_MARK,Constant.ACTIVE);
         param.descBy("create_time");

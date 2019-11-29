@@ -13,20 +13,20 @@ import com.guima.base.model.BaseModule;
 import com.guima.base.service.SimpleJsonResultProxy;
 import com.guima.domain.Admin;
 import com.guima.domain.User;
-import com.guima.kits.Constant;
-import com.guima.kits.MapKit;
+import com.guima.kits.*;
 import com.jfinal.core.Controller;
 import com.jfinal.kit.*;
+import com.jfinal.kit.FileKit;
 import com.jfinal.log.Log;
 import com.jfinal.plugin.activerecord.Page;
 import com.jfinal.plugin.activerecord.Record;
 import com.guima.base.kits.SysMsg;
 import com.guima.base.service.BaseService_;
-import com.guima.kits.Kit;
-import com.guima.kits.ShowInfoKit;
 import com.jfinal.render.CaptchaRender;
+import com.oreilly.servlet.multipart.FilePart;
 import com.taobao.api.internal.toplink.embedded.websocket.util.StringUtil;
 
+import java.io.InputStream;
 import java.util.*;
 
 public class BaseController<M extends BaseModule<M>> extends Controller
@@ -298,6 +298,31 @@ public class BaseController<M extends BaseModule<M>> extends Controller
         return false;
     }
 
+    /**
+     * 上传速度快
+     */
+    public void uploadImage(String filePath)
+    {
+        try
+        {
+            if(!com.guima.kits.FileKit.checkSize(getRequest())){
+                doRenderError("上传附件不允许超过"+SysMsg.Config.get("UPLOAD_MAX_DESC"));
+                return;
+            }
+            FilePart file= com.guima.kits.FileKit.getFile(getRequest());
+            if(!com.guima.kits.FileKit.isAcceptImg(com.guima.kits.FileKit.getFileSuffix(file.getFileName()))){
+                doRenderError("图片格式不正确，允许的格式为"+ SysMsg.Config.get("IMAGE_SUFFIX"));
+                return;
+            }
+            InputStream inputStream= com.guima.kits.FileKit.getThumbnail(file.getInputStream());
+            String cloudPath= com.guima.kits.FileKit.upload(file.getFileName(),inputStream,filePath);
+            doRenderSuccess(cloudPath);
+        } catch (Exception e)
+        {
+            e.printStackTrace();
+            doRenderError(e);
+        }
+    }
 
 
 

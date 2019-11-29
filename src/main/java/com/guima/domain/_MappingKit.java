@@ -33,6 +33,7 @@ public class _MappingKit {
 		arp.addMapping("plan_create_num", "id", PlanCreateNum.class);
 		arp.addMapping("admin_exception_record", "id", AdminExceptionRecord.class);
 		arp.addMapping("user_record", "id", UserRecord.class);
+		arp.addMapping("custom_user", "id", CustomUser.class);
 	}
 }
 

@@ -57,32 +57,6 @@ public class UploadController extends BaseController {
         }
     }
 
-    /**
-     * 上传速度快
-     */
-    public void uploadImage(String filePath)
-    {
-        try
-        {
-            if(!FileKit.checkSize(getRequest())){
-                doRenderError("上传附件不允许超过"+SysMsg.Config.get("UPLOAD_MAX_DESC"));
-                return;
-            }
-            FilePart file=FileKit.getFile(getRequest());
-            if(!FileKit.isAcceptImg(FileKit.getFileSuffix(file.getFileName()))){
-                doRenderError("图片格式不正确，允许的格式为"+ SysMsg.Config.get("IMAGE_SUFFIX"));
-                return;
-            }
-            InputStream inputStream=FileKit.getThumbnail(file.getInputStream());
-            String cloudPath=FileKit.upload(file.getFileName(),inputStream,filePath);
-            doRenderSuccess(cloudPath);
-        } catch (Exception e)
-        {
-            e.printStackTrace();
-            doRenderError(e);
-        }
-    }
-
     public void uploadAnnexImage(){
         uploadImage("annex_images");
     }

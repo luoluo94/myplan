@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+</head>
+<body>
+<div>
+    <form  role="form" id="edit-form" style="margin-top: 55px;margin-left: 45px;">
+        <input type="hidden" class="form-control" name="my_user_id" id="my_user_id">
+        <label class="inline">
+            打卡内容：<textarea type="text" class="form-control" name="describer" id="describer"/>
+        </label>
+        <label class="inline">
+            图片：<button type="button" class="btn btn-default xiugaibtn">点击上传</button>
+            图片比例为1:1 大小200px
+        </label>
+        <label class="inline">
+            图片地址：<input type="text" class="form-control" name="photoUrl" id="photoUrl" style="width: 650px;">
+        </label>
+        <label class="inline">
+            图片展示：
+            <img src="" width="200px" id="share_image">
+        </label>
+            <button type="button" class="btn btn-default -btn add-btn top20" onclick="save()">保存</button>
+            <button type="button" class="btn btn-default -btn back-btn top20" onclick="back()">返回</button>
+    </form>
+    <form id="file-form">
+        <input type="file" class="files" style="opacity: 0;display: none;" id="file"/>
+    </form>
+</div>
+</body>
+<script type="text/javascript">
+
+    $("#my_user_id").val($("#sign_user_id").val());
+
+    $(".xiugaibtn").click(function () {
+        $(".files").click();
+    });
+
+    $(".files").change(function(){
+        var form = document.getElementById("file-form");//获取到form表单
+        var formData = new FormData(form);//创建一个formData对象,将表单中的数据放进去
+        for(var i=0; i<$('#file')[0].files.length;i++){//使用for循环将选择的文件一个一个添加(append)到formData对象中
+            formData.append('img'+i, $('#file')[0].files[i]);//注意:如果你使用的是jfinal框架这里的key(img)必须是不同的,如果相同的话文件能上传但是拿上传文件名的时候只能拿到一个
+        }
+        $.ajax({
+            url: adminPath+"/upload/uploadSignImage",
+            type: "POST",
+            processData : false,//不处理数据,必须为false
+            contentType : false,//不设置内容类型,必须为false
+            data: formData,
+            success: function(result){
+                if(result.is_success) {
+                    $("#photoUrl").val(result.data);
+                    $("#share_image").attr("src",result.data);
+                }else{
+                    alert("出现错误，请稍后再试！"+result.message);
+                }
+            },
+            dataType:"json",
+            error:function(e){
+                alert("出现错误，请稍后再试！");
+            }
+
+        });
+    });
+
+    function save(){
+        if($("#edit-form").valid()){
+            $.ajax({
+                url: adminPath+"/sign/saveSign",
+                data:$("#edit-form").serialize(),
+                dataType:"json",
+                error:function(){alert("出错了，请稍后再试")},
+                success:function(result){
+                    if(result.is_success) {
+                        back();
+                        alert("操作成功");
+                    }else {
+                        alert("出错了，请稍后再试")
+                    }
+
+                }
+            });
+        }
+    }
+
+
+
+
+    $(function(){
+
+        $("#edit-form").validate({
+            rules: {
+                name: {
+                    required: true,
+                },
+                desc: {
+                    required: true,
+                },
+                header_url: {
+                    required: true,
+                }
+            },
+            messages: {
+                name: {
+                    required: "请填写名称",
+                },
+                singer_name: {
+                    required: "请填写备注",
+                },
+                video_url: {
+                    required: "请上传头像",
+                }
+            }
+        });
+
+    });
+
+
+
+
+</script>
+</html>

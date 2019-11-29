@@ -16,7 +16,7 @@
 <div class="container">
     <div class="con-title">
         <p style="width: 340px;">计划制定、分享，打卡监督</p>
-        <p>微信小程序将于11月底上线,扫描下方小程序码进行下载</p>
+        <p>扫描下方微信小程序码进行下载</p>
         </div>
     <div class="con-code">
         <img src="resources/images/mini_code.jpg" width="250" height="250px">

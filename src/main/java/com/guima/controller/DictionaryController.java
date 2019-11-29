@@ -1,17 +1,11 @@
 package com.guima.controller;
 
-import com.google.gson.JsonArray;
-import com.google.gson.JsonObject;
 import com.guima.base.controller.BaseController;
 import com.guima.base.kits.SysMsg;
 import com.guima.base.service.ServiceManager;
-import com.guima.cache.RedisCacheManager;
 import com.guima.enums.ConstantEnum;
-import com.guima.kits.Constant;
 import com.guima.kits.Kit;
 import com.guima.services.DictionaryService;
-
-import java.util.EnumSet;
 
 /**
  * Created by Ran on 2018/5/19.

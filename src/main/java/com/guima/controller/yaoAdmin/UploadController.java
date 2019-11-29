@@ -54,4 +54,8 @@ public class UploadController extends BaseController {
         }
     }
 
+    public void uploadSignImage(){
+        uploadImage("sign_images");
+    }
+
 }

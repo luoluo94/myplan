@@ -3,10 +3,7 @@ package com.guima.kits;
 import java.sql.Timestamp;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 public class DateKit
 {
@@ -400,14 +397,20 @@ public class DateKit
 //        System.out.println("R"+DateKit.getFormatDate("yyMMdd")+"-"+sNewNum);
 
 //        System.out.println(new java.math.BigDecimal("100000").add(new java.math.BigDecimal("100")).toString());
-        long a=new Date().getTime();
-        System.out.println(a);
-        for (int i=0;i<10000;i++){
-            System.out.println(getDate(Calendar.DATE,-2,DATE_PATTERN));
-        }
-        long b=new Date().getTime();
-        System.out.println(b);
-        System.out.println(b-a);
+//        long a=new Date().getTime();
+//        System.out.println(a);
+//        for (int i=0;i<10000;i++){
+//            System.out.println(getDate(Calendar.DATE,-2,DATE_PATTERN));
+//        }
+//        long b=new Date().getTime();
+//        System.out.println(b);
+//        System.out.println(b-a);
+        String id=UUID.randomUUID().toString();
+        String openId="81C76CDFF28F1A62A462732F048F6B1E";
+        System.out.println(UUID.randomUUID().toString());
+        System.out.println(id);
+        System.out.println(Kit.MD5(id + "" + openId));
+
     }
 
     public static String getFormatDate(String formatStr)

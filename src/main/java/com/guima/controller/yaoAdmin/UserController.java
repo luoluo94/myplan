@@ -1,17 +1,16 @@
 package com.guima.controller.yaoAdmin;
 
 import com.guima.base.controller.BaseController;
+import com.guima.base.kits.QueryParam;
 import com.guima.base.service.ServiceManager;
-import com.guima.domain.Admin;
-import com.guima.domain.AdminExceptionRecord;
-import com.guima.domain.User;
-import com.guima.domain.UserRecord;
+import com.guima.domain.*;
 import com.guima.kits.Constant;
 import com.guima.services.*;
 import com.jfinal.plugin.activerecord.Page;
 
 import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
 /**
  * Created by Ran on 2019/10/26.
@@ -22,6 +21,7 @@ public class UserController extends BaseController {
     private final UserRecordService userRecordService;
     private final UserService userService;
     private final AdminExceptionRecordService exceptionRecordService;
+    private final CustomUserService customUserService;
 
     public UserController()
     {
@@ -29,6 +29,7 @@ public class UserController extends BaseController {
         userService=((UserService) ServiceManager.instance().getService("user"));
         userRecordService = ((UserRecordService) ServiceManager.instance().getService("userrecord"));
         exceptionRecordService = ((AdminExceptionRecordService) ServiceManager.instance().getService("adminexceptionrecord"));
+        customUserService= ((CustomUserService) ServiceManager.instance().getService("customuser"));
     }
 
     public void listUser(){
@@ -80,6 +81,28 @@ public class UserController extends BaseController {
     public void listAdminRecords(){
         Page<AdminExceptionRecord> userRecordList=exceptionRecordService.pageList(getPageNumber(),getPageSize());
         doRenderPageRecord(userRecordList);
+    }
+
+    /**
+     * 创建用户
+     */
+    public void createUser(){
+        String name=getPara("name");
+        String headerUrl=getPara("header_url");
+        String desc=getPara("desc");
+        User user=new User();
+        user.init(UUID.randomUUID().toString(),name,headerUrl,""
+                ,"","","",
+                "",UUID.randomUUID().toString(),UUID.randomUUID().toString());
+        userService.createUser(user);
+        CustomUser customUser=new CustomUser(user.getId(),name,headerUrl,desc,user.getToken());
+        customUser.superSave();
+        doRenderSuccess("");
+    }
+
+    public void listCustomUsers(){
+        Page<CustomUser> page=customUserService.pageList(QueryParam.Builder(),getPageNumber(),getPageSize());
+        doRenderPageRecord(page);
     }
 
 }
