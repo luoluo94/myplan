@@ -17,12 +17,14 @@ public class Sign extends BaseSign<Sign> {
 
 
 	public void init(String creator,String describer,
-					 String privacy, String photoUrl){
+					 String privacy, String photoUrl,String planId,String planDetailId){
 		setCreator(creator);
 		setDescriber(describer);
 		setIsDeleted(Constant.IS_DELETED_NO);
 		setPhotoUrl(photoUrl);
 		setPrivacy(privacy);
 		setCreateTime(new Date());
+		setPlanId(planId);
+		setPlanDetailId(planDetailId);
 	}
 }

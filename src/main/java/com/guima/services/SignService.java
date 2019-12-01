@@ -3,6 +3,7 @@ package com.guima.services;
 import com.guima.base.kits.ModelWrapper;
 import com.guima.base.kits.QueryParam;
 import com.guima.base.service.BaseService_;
+import com.guima.domain.PlanDetail;
 import com.guima.domain.Sign;
 import com.guima.domain.User;
 import com.guima.kits.Constant;
@@ -39,6 +40,7 @@ public class SignService extends BaseService_<Sign>
 
     private Page<Record> list(int pageNumber, int pageSize,StringBuffer conditionSql,List<Object> params){
         StringBuffer sqlSelect=new StringBuffer().append("select m.id,m.describer,m.creator,m.is_deleted,m.photo_url,m.create_time,m.privacy,")
+                .append("m.plan_id,m.plan_detail_id,")
                 .append(" n.name as creator_name,n.header_url as creator_header_url");
 
         return Db.paginate(pageNumber,pageSize,sqlSelect.toString(),conditionSql.toString(),params.toArray());
@@ -68,6 +70,26 @@ public class SignService extends BaseService_<Sign>
         return list(pageNumber,pageSize,sql,params);
     }
 
+    /**
+     * 获取该计划下的打卡情况
+     * @param planId
+     * @param pageNumber
+     * @param pageSize
+     * @return
+     */
+    public Page<Record> listPlanSigns(String planId,int pageNumber, int pageSize){
+        StringBuffer sql=new StringBuffer();
+        sql.append(" from sign m join user n on m.creator=n.id")
+                .append(" where 1=1 ")
+                .append(" and m.plan_id=?")
+                .append(" and m.").append(Constant.IS_DELETED_MARK).append("=?")
+                .append(" order by create_time desc");
+        List<Object> params=new ArrayList<>();
+        params.add(planId);
+        params.add(Constant.ACTIVE);
+        return list(pageNumber,pageSize,sql,params);
+    }
+
     public Page<Record> listAllSigns(int pageNumber, int pageSize){
         StringBuffer sql=new StringBuffer();
         sql.append(" from sign m join user n on m.creator=n.id")
@@ -76,10 +98,15 @@ public class SignService extends BaseService_<Sign>
         return list(pageNumber,pageSize,sql,new ArrayList<>());
     }
 
-    public Page<Sign> listAllSigns(String pageNumberStr, String pageSizeStr){
-        QueryParam param=QueryParam.Builder();
-        param.descBy("create_time");
-        return super.pageList(param,pageNumberStr, pageSizeStr);
+    public boolean sign(Sign sign, PlanDetail planDetail){
+        if(planDetail==null){
+            return sign.save();
+        }else{
+            planDetail.setFinishPercentage(planDetail.getFinishPercentage()+1);
+            return Db.tx(()->{
+                return sign.save() && planDetail.update();
+            });
+        }
     }
 
 }

@@ -23,9 +23,12 @@ public class SignController extends BaseController{
 
     private SignService signService;
 
+    private PlanDetailService planDetailService;
+
     public SignController()
     {
         signService=((SignService)ServiceManager.instance().getService("sign"));
+        planDetailService=((PlanDetailService)ServiceManager.instance().getService("plandetail"));
     }
 
     /**
@@ -38,13 +41,24 @@ public class SignController extends BaseController{
         Sign sign=new Sign();
         String describer=getPara("describer");
         String photoUrl=getPara("photoUrl");
-        if(StrKit.isBlank(describer)){
+        String privacy=getPara("privacy");
+        String planId=getPara("plan_id");
+        String planDetailId=getPara("plan_detail_id");
+        if(StrKit.isBlank(describer) || StrKit.isBlank(privacy)){
             doRenderError(SysMsg.OsMsg.get("PARAM_ERROR"));
             return;
         }
-        sign.init(user.getId(),describer,ConstantEnum.PRIVACY_PUBLIC.getValue(),photoUrl);
-        sign.save();
-        doRender("sign_id",sign.getId(),StrKit.notBlank(sign.getId()));
+        sign.init(user.getId(),describer,privacy,photoUrl,planId,planDetailId);
+        PlanDetail planDetail=null;
+        if(!StrKit.isBlank(planDetailId)){
+            planDetail=planDetailService.findById(planId);
+        }
+        boolean isSuccess=signService.sign(sign,planDetail);
+        if(isSuccess){
+            doRender("sign_id",sign.getId(),true);
+            return;
+        }
+        doRenderError(SysMsg.OsMsg.get("ERROR"));
     }
 
     /**
@@ -52,6 +66,19 @@ public class SignController extends BaseController{
      */
     public void listPublicSigns(){
         Page<Record> page=signService.listPublicSigns(getPageNumberInt(),getPageSizeInt());
+        doRenderPageRecord(page);
+    }
+
+    /**
+     * 获取计划下的打卡记录 时间倒序
+     */
+    public void listPlanSigns(){
+        String planId=getPara("plan_id");
+        if(StrKit.isBlank(planId)){
+            doRenderError(SysMsg.OsMsg.get("PARAM_ERROR"));
+            return;
+        }
+        Page<Record> page=signService.listPlanSigns(planId,getPageNumberInt(),getPageSizeInt());
         doRenderPageRecord(page);
     }
 

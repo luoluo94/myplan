@@ -11,6 +11,7 @@ import com.guima.services.SignService;
 import com.guima.services.UserService;
 import com.jfinal.kit.StrKit;
 import com.jfinal.plugin.activerecord.Page;
+import com.jfinal.plugin.activerecord.Record;
 
 /**
  * Created by Ran on 2019/8/30.
@@ -30,7 +31,7 @@ public class SignController extends BaseController{
      * 获取公开的说说列表 时间倒序
      */
     public void listAllSigns(){
-        Page<Sign> page=signService.listAllSigns(getPageNumber(),getPageSize());
+        Page<Record> page=signService.listAllSigns(getPageNumberInt(),getPageSizeInt());
         doRenderPageRecord(page);
     }
 
@@ -41,12 +42,15 @@ public class SignController extends BaseController{
         User user=userService.findById(getPara("my_user_id"));
         String describer=getPara("describer");
         String photoUrl=getPara("photoUrl");
-        if(StrKit.isBlank(describer)){
+        String privacy=getPara("privacy");
+        String planId=getPara("plan_id");
+        String planDetailId=getPara("plan_detail_id");
+        if(StrKit.isBlank(describer) || StrKit.isBlank(privacy)){
             doRenderError(SysMsg.OsMsg.get("PARAM_ERROR"));
             return;
         }
         Sign sign=new Sign();
-        sign.init(user.getId(),describer, ConstantEnum.PRIVACY_PUBLIC.getValue(),photoUrl);
+        sign.init(user.getId(),describer,privacy,photoUrl,planId,planDetailId);
         sign.save();
         doRender("sign_id",sign.getId(),StrKit.notBlank(sign.getId()));
     }

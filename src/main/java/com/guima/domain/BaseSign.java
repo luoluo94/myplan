@@ -66,4 +66,20 @@ public abstract class BaseSign<M extends BaseSign<M>> extends BaseModule<M> impl
 		return get("privacy");
 	}
 
+	public void setPlanId(java.lang.String planId) {
+		set("plan_id", planId);
+	}
+
+	public java.lang.String getPlanId() {
+		return get("plan_id");
+	}
+
+	public void setPlanDetailId(java.lang.String planDetailId) {
+		set("plan_detail_id", planDetailId);
+	}
+
+	public java.lang.String getPlanDetailId() {
+		return get("plan_detail_id");
+	}
+
 }
