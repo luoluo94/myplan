@@ -42,22 +42,6 @@ public abstract class BasePlanComment<M extends BasePlanComment<M>> extends Base
 		return get("creator_id");
 	}
 
-	public void setCreatorName(java.lang.String creatorName) {
-		set("creator_name", creatorName);
-	}
-
-	public java.lang.String getCreatorName() {
-		return get("creator_name");
-	}
-
-	public void setCreatorHeaderUrl(java.lang.String creatorHeaderUrl) {
-		set("creator_header_url", creatorHeaderUrl);
-	}
-
-	public java.lang.String getCreatorHeaderUrl() {
-		return get("creator_header_url");
-	}
-
 	public void setIsDeleted(java.lang.Integer isDeleted) {
 		set("is_deleted", isDeleted);
 	}

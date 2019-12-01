@@ -82,22 +82,6 @@ public abstract class BasePlan<M extends BasePlan<M>> extends BaseModule<M> impl
 		return get("creator");
 	}
 
-	public void setCreatorName(java.lang.String creatorName) {
-		set("creator_name", creatorName);
-	}
-
-	public java.lang.String getCreatorName() {
-		return get("creator_name");
-	}
-
-	public void setCreatorHeaderUrl(java.lang.String creatorHeaderUrl) {
-		set("creator_header_url", creatorHeaderUrl);
-	}
-
-	public java.lang.String getCreatorHeaderUrl() {
-		return get("creator_header_url");
-	}
-
 	public void setCreateTime(java.util.Date createTime) {
 		set("create_time", createTime);
 	}

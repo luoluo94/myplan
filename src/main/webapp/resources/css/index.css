@@ -39,7 +39,8 @@ a:link,a:active{
 	font-size: 28px;
 	margin:10px auto;
 	margin-top: 40px;
-	width:700px;
+	/*width:700px;*/
+	text-align: center;
 }
 .nav-logo{
 	width: 150px;

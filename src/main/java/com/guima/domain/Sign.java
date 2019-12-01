@@ -16,11 +16,9 @@ public class Sign extends BaseSign<Sign> {
 	}
 
 
-	public void init(String creatorHeaderUrl, String creator, String creatorName, String describer,
+	public void init(String creator,String describer,
 					 String privacy, String photoUrl){
-		setCreatorHeaderUrl(creatorHeaderUrl);
 		setCreator(creator);
-		setCreatorName(creatorName);
 		setDescriber(describer);
 		setIsDeleted(Constant.IS_DELETED_NO);
 		setPhotoUrl(photoUrl);

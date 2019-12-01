@@ -60,7 +60,7 @@ public class PlanController extends BaseController{
             doRenderParamError();
             return;
         }
-        plan.init(title,user.getId(),user.getHeaderUrl(),user.getName(),new Date(),DateKit.stringToDate(endDate),
+        plan.init(title,user.getId(),new Date(),DateKit.stringToDate(endDate),
                 privacy,DateKit.stringToDate(startDate));
         planService.createPlan(plan,planDetails);
         doRender("plan_id",plan.getId(),StrKit.notBlank(plan.getId()));
@@ -70,7 +70,7 @@ public class PlanController extends BaseController{
      * 获取公开的计划列表 时间倒序
      */
     public void listPublicPlan(){
-        Page<Plan> page=planService.listPublicPlans(getPageNumber(),getPageSize());
+        Page<Record> page=planService.listPublicPlans(getPageNumberInt(),getPageSizeInt());
         doRenderPageRecord(page);
     }
 
@@ -80,7 +80,7 @@ public class PlanController extends BaseController{
     public void listMyPlan(){
         User user=getMyUser();
         String status=getPara("status");
-        Page<Plan> page=planService.listMyPlans(user,status,getPageNumber(),getPageSize());
+        Page<Record> page=planService.listMyPlans(user,status,getPageNumberInt(),getPageSizeInt());
         doRenderPageRecord(page);
     }
 
@@ -111,7 +111,7 @@ public class PlanController extends BaseController{
      */
     public void getPlan(){
         String planId=getPara("plan_id");
-        Plan plan=planService.findById(planId);
+        Record plan=planService.findRecordById(planId);
         List<PlanDetail> details=planDetailService.list(planId);
         Map renderData=new HashMap<>();
         renderData.put("plan",plan);
@@ -246,8 +246,6 @@ public class PlanController extends BaseController{
         PlanComment planComment=new PlanComment();
         planComment.setComment(comment);
         planComment.setCreateTime(new Date());
-        planComment.setCreatorHeaderUrl(user.getHeaderUrl());
-        planComment.setCreatorName(user.getName());
         planComment.setCreatorId(user.getId());
         planComment.setIsDeleted(Constant.IS_DELETED_NO);
         planComment.setPlanId(planId);

@@ -46,7 +46,7 @@ public class SignController extends BaseController{
             return;
         }
         Sign sign=new Sign();
-        sign.init(user.getHeaderUrl(),user.getId(),user.getName(),describer, ConstantEnum.PRIVACY_PUBLIC.getValue(),photoUrl);
+        sign.init(user.getId(),describer, ConstantEnum.PRIVACY_PUBLIC.getValue(),photoUrl);
         sign.save();
         doRender("sign_id",sign.getId(),StrKit.notBlank(sign.getId()));
     }

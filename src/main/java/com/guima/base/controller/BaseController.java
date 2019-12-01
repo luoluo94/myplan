@@ -196,6 +196,10 @@ public class BaseController<M extends BaseModule<M>> extends Controller
         return Kit.isNull(getPara("page_num")) ? "" : getPara("page_num");
     }
 
+    public int getPageNumberInt(){
+        return Integer.valueOf(getPageNumber());
+    }
+
     public String getPageSize(){
         String pageSizeStr=getPara("page_size");
         if(Kit.isNotNull(pageSizeStr) && Integer.parseInt(getPara("page_size"))<200){
@@ -204,6 +208,9 @@ public class BaseController<M extends BaseModule<M>> extends Controller
         return "200";
     }
 
+    public int getPageSizeInt(){
+        return Integer.valueOf(getPageSize());
+    }
 
     public void doRender(List<Record> records,int totalPage,int totalRow){
         JSONObject json = new JSONObject();

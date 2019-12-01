@@ -10,14 +10,19 @@ import com.guima.enums.ScoreTypeEnum;
 import com.guima.kits.*;
 import com.jfinal.plugin.activerecord.Db;
 import com.jfinal.plugin.activerecord.Page;
+import com.jfinal.plugin.activerecord.Record;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
 public class PlanService extends BaseService_<Plan>
 {
+
+    private StringBuffer sqlSelect=new StringBuffer().append("select m.id,m.title,m.start_date,m.end_date,m.privacy,m.status,m.creator,m.create_time,")
+            .append(" n.name as creator_name,n.header_url as creator_header_url");
 
     @Override
     protected Plan getConreteObject()
@@ -37,32 +42,52 @@ public class PlanService extends BaseService_<Plan>
         return Plan.dao;
     }
 
-    public Page<Plan> listPublicPlans(String pageNumberStr, String pageSizeStr){
-        QueryParam param=QueryParam.Builder();
-//        param.gt("create_time", DateKit.getStartTime());
-        param.equalsTo("privacy", ConstantEnum.PRIVACY_PUBLIC.getValue());
-        param.equalsTo(Constant.IS_DELETED_MARK,Constant.ACTIVE);
-        param.descBy("create_time");
-        return super.pageList(param,pageNumberStr, pageSizeStr);
+    private Page<Record> listPlans(int pageNum, int pageSize,StringBuffer conditionSql,List<Object> params){
+        StringBuffer sql=new StringBuffer();
+        sql.append(" from plan m join user n on m.creator=n.id")
+                .append(" where 1=1 ")
+                .append(conditionSql);
+        return Db.paginate(pageNum,pageSize,sqlSelect.toString(),sql.toString(),params.toArray());
     }
 
-    public Page<Plan> listAllPlans(String pageNumberStr, String pageSizeStr){
-        QueryParam param=QueryParam.Builder();
-        param.descBy("create_time");
-        return super.pageList(param,pageNumberStr, pageSizeStr);
+    public Record findRecordById(String id){
+        StringBuffer sql=new StringBuffer().append(sqlSelect).append(" from plan m join `user` n on m.creator=n.id where m.id=?");
+        List<Object> params=new ArrayList<>();
+        params.add(id);
+        return Db.findFirst(sql.toString(),params.toArray());
     }
 
-    public Page<Plan> listMyPlans(User user,String status, String pageNumberStr, String pageSizeStr){
-        QueryParam param=QueryParam.Builder();
-        param.equalsTo("creator", user.getId());
+    public Page<Record> listPublicPlans(int pageNum, int pageSize){
+        StringBuffer sql=new StringBuffer();
+                sql.append(" and m.privacy=?")
+                .append(" and m.").append(Constant.IS_DELETED_MARK).append("=?")
+                .append(" order by m.create_time desc");
+        List<Object> params=new ArrayList<>();
+        params.add(ConstantEnum.PRIVACY_PUBLIC.getValue());
+        params.add(Constant.ACTIVE);
+        return listPlans(pageNum,pageSize,sql,params);
+    }
+
+    public Page<Record> listAllPlans(int pageNum, int pageSize){
+        StringBuffer sql=new StringBuffer().append(" order by m.create_time desc");
+        return listPlans(pageNum,pageSize,sql,new ArrayList<>());
+    }
+
+    public Page<Record> listMyPlans(User user,String status, int pageNumber, int pageSize){
+        StringBuffer sql=new StringBuffer();
+        List<Object> params=new ArrayList<>();
+        sql.append("and m.creator=? ");
+        params.add(user.getId());
         if(ConstantEnum.STATUS_END.getValue().equals(status)){
-            param.in("status",new String[]{ConstantEnum.STATUS_FINISH.getValue(),ConstantEnum.STATUS_NOT_FINISH.getValue()});
+            sql.append(" and m.status in (").append(ConstantEnum.STATUS_FINISH.getValue()).append(",").append(ConstantEnum.STATUS_NOT_FINISH.getValue()).append(")");
         }else {
-            param.equalsTo("status",status);
+            sql.append(" and m.status=?");
+            params.add(status);
         }
-        param.equalsTo(Constant.IS_DELETED_MARK,Constant.ACTIVE);
-        param.descBy("create_time");
-        return super.pageList(param,pageNumberStr, pageSizeStr);
+        sql.append(" and m.").append(Constant.IS_DELETED_MARK).append("=?")
+                .append(" order by m.create_time desc");
+        params.add(Constant.ACTIVE);
+        return listPlans(pageNumber,pageSize,sql,params);
     }
 
     /**

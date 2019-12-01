@@ -24,12 +24,10 @@ public class Plan extends BasePlan<Plan> {
 	public static final Plan dao = new Plan();
 
 
-	public void init(String title,String creator,String creatorHeaderUrl,String creatorName,Date createTime ,Date endDate,
+	public void init(String title,String creator,Date createTime ,Date endDate,
 			String privacy,Date startDate){
 		this.setTitle(title);
 		setCreator(creator);
-		setCreatorHeaderUrl(creatorHeaderUrl);
-		setCreatorName(creatorName);
 		setCreateTime(createTime);
 		setEndDate(endDate);
 		setIsDeleted(Constant.IS_DELETED_NO);

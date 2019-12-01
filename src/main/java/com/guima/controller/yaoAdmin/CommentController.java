@@ -5,6 +5,8 @@ import com.guima.base.service.ServiceManager;
 import com.guima.domain.PlanComment;
 import com.guima.services.*;
 import com.jfinal.plugin.activerecord.Page;
+import com.jfinal.plugin.activerecord.Record;
+import com.sun.org.apache.regexp.internal.RE;
 
 /**
  * Created by Ran on 2019/8/30.
@@ -23,7 +25,7 @@ public class CommentController extends BaseController{
      */
     public void listAllComments(){
         String isMarkDeleted=getPara("mark_deleted");
-        Page<PlanComment> page=planCommentService.pageList(null,isMarkDeleted,getPageNumber(),getPageSize());
+        Page<Record> page=planCommentService.pageList(null,isMarkDeleted,getPageNumberInt(),getPageSizeInt());
         doRenderPageRecord(page);
     }
 

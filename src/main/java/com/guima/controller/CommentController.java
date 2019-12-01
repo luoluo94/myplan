@@ -13,6 +13,7 @@ import com.guima.kits.Kit;
 import com.guima.services.*;
 import com.jfinal.kit.StrKit;
 import com.jfinal.plugin.activerecord.Page;
+import com.jfinal.plugin.activerecord.Record;
 import com.taobao.api.internal.toplink.embedded.websocket.util.StringUtil;
 import org.apache.commons.lang3.StringUtils;
 
@@ -43,7 +44,7 @@ public class CommentController extends BaseController{
             doRenderParamError();
             return;
         }
-        Page<PlanComment> page=planCommentService.pageList(planId,null,getPageNumber(),getPageSize());
+        Page<Record> page=planCommentService.pageList(planId,null,getPageNumberInt(),getPageSizeInt());
         doRenderPageRecord(page);
     }
 

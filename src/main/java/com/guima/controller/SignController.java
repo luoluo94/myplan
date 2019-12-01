@@ -11,6 +11,8 @@ import com.guima.kits.Kit;
 import com.guima.services.*;
 import com.jfinal.kit.StrKit;
 import com.jfinal.plugin.activerecord.Page;
+import com.jfinal.plugin.activerecord.Record;
+
 import java.util.Date;
 import java.util.List;
 
@@ -40,7 +42,7 @@ public class SignController extends BaseController{
             doRenderError(SysMsg.OsMsg.get("PARAM_ERROR"));
             return;
         }
-        sign.init(user.getHeaderUrl(),user.getId(),user.getName(),describer,ConstantEnum.PRIVACY_PUBLIC.getValue(),photoUrl);
+        sign.init(user.getId(),describer,ConstantEnum.PRIVACY_PUBLIC.getValue(),photoUrl);
         sign.save();
         doRender("sign_id",sign.getId(),StrKit.notBlank(sign.getId()));
     }
@@ -49,7 +51,7 @@ public class SignController extends BaseController{
      * 获取公开的说说列表 时间倒序
      */
     public void listPublicSigns(){
-        Page<Sign> page=signService.listPublicSigns(getPageNumber(),getPageSize());
+        Page<Record> page=signService.listPublicSigns(getPageNumberInt(),getPageSizeInt());
         doRenderPageRecord(page);
     }
 
@@ -58,7 +60,7 @@ public class SignController extends BaseController{
      */
     public void listMySigns(){
         User user=getMyUser();
-        Page<Sign> page=signService.listMySigns(user,getPageNumber(),getPageSize());
+        Page<Record> page=signService.listMySigns(user,getPageNumberInt(),getPageSizeInt());
         doRenderPageRecord(page);
     }
 
