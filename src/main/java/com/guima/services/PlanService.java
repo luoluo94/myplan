@@ -131,6 +131,25 @@ public class PlanService extends BaseService_<Plan>
     }
 
     /**
+     * 全部标记完成
+     * @param plan
+     * @return
+     */
+    public boolean markFinish2(Plan plan){
+        PlanDetailService planDetailService=((PlanDetailService)ServiceManager.instance().getService("plandetail"));
+        PlanCalendarService planCalendarService=((PlanCalendarService) ServiceManager.instance().getService("plancalendar"));
+        return Db.tx(()->{
+            //将各事项标记为完成
+            boolean isDetailFinish=planDetailService.markFinish2(plan.getId());
+            //将计划标记完成
+            plan.setStatus(ConstantEnum.STATUS_FINISH.getValue());
+            boolean isPlanFinish=plan.update();
+            //增加得分
+            return isDetailFinish && isPlanFinish && planCalendarService.updateFinishPlanNum(plan.getCreator());
+        });
+    }
+
+    /**
      * 标记未完成
      * @return
      */

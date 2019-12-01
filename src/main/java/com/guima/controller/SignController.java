@@ -44,14 +44,17 @@ public class SignController extends BaseController{
         String privacy=getPara("privacy");
         String planId=getPara("plan_id");
         String planDetailId=getPara("plan_detail_id");
-        if(StrKit.isBlank(describer) || StrKit.isBlank(privacy)){
+        if(StrKit.isBlank(privacy)){
+            privacy="2";
+        }
+        if(StrKit.isBlank(describer)){
             doRenderError(SysMsg.OsMsg.get("PARAM_ERROR"));
             return;
         }
         sign.init(user.getId(),describer,privacy,photoUrl,planId,planDetailId);
         PlanDetail planDetail=null;
         if(!StrKit.isBlank(planDetailId)){
-            planDetail=planDetailService.findById(planId);
+            planDetail=planDetailService.findById(planDetailId);
         }
         boolean isSuccess=signService.sign(sign,planDetail);
         if(isSuccess){

@@ -119,6 +119,12 @@ public class PlanController extends BaseController{
         doRenderSuccess(renderData);
     }
 
+    public void getPlanDetail(){
+        String planDetailId=getPara("plan_detail_id");
+        PlanDetail planDetail=planDetailService.findById(planDetailId);
+        doRenderSuccess(planDetail.getPlanDetail());
+    }
+
     /**
      * 删除计划
      */
@@ -196,6 +202,23 @@ public class PlanController extends BaseController{
         Boolean isFinish=isFinishStr.equals(Constant.ACTIVE)?true:false;
         if(isFinish){
             doRender(planService.markFinish(plan));
+        }else{
+            doRender(planService.markUnFinish(plan));
+        }
+    }
+
+    /**
+     * 标记完成／未完成
+     */
+    public void markFinishStatus(){
+        User user=getMyUser();
+        String planId=getPara("plan_id");
+        Plan plan=planService.findById(planId);
+        checkCreator(user,plan.getCreator());
+        String isFinishStr=getPara("is_finish");
+        Boolean isFinish=isFinishStr.equals(Constant.ACTIVE)?true:false;
+        if(isFinish){
+            doRender(planService.markFinish2(plan));
         }else{
             doRender(planService.markUnFinish(plan));
         }

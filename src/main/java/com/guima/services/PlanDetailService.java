@@ -102,6 +102,25 @@ public class PlanDetailService extends BaseService_<PlanDetail>
     }
 
     /**
+     * 标记全部完成
+     * @param planId
+     * @return
+     */
+    public boolean markFinish2(String planId){
+        List<PlanDetail> details=listPlanDetails(planId);
+        Date date=new Date();
+        for (PlanDetail planDetail:details){
+            if(planDetail.getFinishPercentage()== NumberConstant.ZERO){
+                planDetail.setFinishPercentage(NumberConstant.ONE);
+                planDetail.setMarkTime(date);
+                planDetail.update();
+            }
+
+        }
+        return true;
+    }
+
+    /**
      * 给某个计划事项添加附件
      */
     public boolean addPlanAnnex(String planDetailId, PlanDetailAnnex annex){

@@ -6,6 +6,7 @@ import com.guima.base.service.BaseService_;
 import com.guima.domain.PlanDetail;
 import com.guima.domain.Sign;
 import com.guima.domain.User;
+import com.guima.enums.ConstantEnum;
 import com.guima.kits.Constant;
 import com.guima.kits.DateKit;
 import com.jfinal.plugin.activerecord.Db;
@@ -50,9 +51,11 @@ public class SignService extends BaseService_<Sign>
         StringBuffer sql=new StringBuffer();
         sql.append(" from sign m join user n on m.creator=n.id")
                 .append(" where 1=1 ")
+                .append(" and m.privacy=?")
                 .append(" and m.").append(Constant.IS_DELETED_MARK).append("=?")
                 .append(" order by create_time desc");
         List<Object> params=new ArrayList<>();
+        params.add(ConstantEnum.PRIVACY_PUBLIC.getValue());
         params.add(Constant.ACTIVE);
         return list(pageNumber,pageSize,sql,params);
     }
