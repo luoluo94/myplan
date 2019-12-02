@@ -108,7 +108,6 @@ public class SignController extends BaseController{
         if(!sign.getCreator().equals(user.getId())){
             doRenderError();
         }
-        sign.setIsDeleted(Constant.IS_DELETED_YES);
-        doRender(sign.update());
+        doRender(signService.removeSign(sign));
     }
 }

@@ -3,12 +3,14 @@ package com.guima.services;
 import com.guima.base.kits.ModelWrapper;
 import com.guima.base.kits.QueryParam;
 import com.guima.base.service.BaseService_;
+import com.guima.base.service.ServiceManager;
 import com.guima.domain.PlanDetail;
 import com.guima.domain.Sign;
 import com.guima.domain.User;
 import com.guima.enums.ConstantEnum;
 import com.guima.kits.Constant;
 import com.guima.kits.DateKit;
+import com.jfinal.kit.StrKit;
 import com.jfinal.plugin.activerecord.Db;
 import com.jfinal.plugin.activerecord.Page;
 import com.jfinal.plugin.activerecord.Record;
@@ -110,6 +112,21 @@ public class SignService extends BaseService_<Sign>
                 return sign.save() && planDetail.update();
             });
         }
+    }
+
+    public boolean removeSign(Sign sign){
+        sign.setIsDeleted(Constant.IS_DELETED_YES);
+        if(!StrKit.isBlank(sign.getPlanDetailId())){
+            PlanDetailService planDetailService=((PlanDetailService) ServiceManager.instance().getService("plandetail"));
+            PlanDetail planDetail=planDetailService.findById(sign.getPlanDetailId());
+            if(planDetail!=null){
+                planDetail.setFinishPercentage(planDetail.getFinishPercentage()-1);
+                return Db.tx(()->{
+                    return sign.update() && planDetail.update();
+                });
+            }
+        }
+        return sign.update();
     }
 
 }
