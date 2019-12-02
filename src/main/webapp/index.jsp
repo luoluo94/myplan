@@ -21,17 +21,6 @@
     <div class="con-code">
         <img src="resources/images/mini_code.jpg" width="250" height="250px">
         </div>
-    <div class="mini-program">
-        <div class="program-div">
-            <img src="resources/images/mini_1.png" width="340" height="600"/>
-        </div>
-        <div class="program-div">
-            <img src="resources/images/mini_2.png" width="340" height="600"/>
-        </div>
-        <div class="program-div">
-            <img src="resources/images/mini_3.png" width="340" height="600"/>
-        </div>
-    </div>
 </div>
 </body>
 </html>

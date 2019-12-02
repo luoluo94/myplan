@@ -25,6 +25,7 @@ public class PlanController extends BaseController{
     private PlanDetailService planDetailService;
     private PlanCommentService planCommentService;
     private PlanDetailAnnexService planDetailAnnexService;
+    private DoLikeService doLikeService;
 
     public PlanController()
     {
@@ -34,6 +35,7 @@ public class PlanController extends BaseController{
         planDetailService=((PlanDetailService)ServiceManager.instance().getService("plandetail"));
         planCommentService=((PlanCommentService)ServiceManager.instance().getService("plancomment"));
         planDetailAnnexService=((PlanDetailAnnexService) ServiceManager.instance().getService("plandetailannex"));
+        doLikeService=((DoLikeService) ServiceManager.instance().getService("dolike"));
     }
 
     /**
@@ -159,7 +161,11 @@ public class PlanController extends BaseController{
      * 添加评论
      */
     public void addComment(){
-        comment(getPara("comment"));
+        User user=getMyUser();
+        String planId=getPara("plan_id");
+        String comment=getPara("comment");
+        PlanComment planComment=new PlanComment(comment,user.getId(),planId);
+        doRender(planComment.save());
     }
 
     /**
@@ -187,7 +193,12 @@ public class PlanController extends BaseController{
      * 点赞
      */
     public void doLike(){
-        comment(" \uD83D\uDC4D  \uD83D\uDC4D  \uD83D\uDC4D ");
+        User user=getMyUser();
+        String planId=getPara("plan_id");
+        String comment=" \uD83D\uDC4D  \uD83D\uDC4D  \uD83D\uDC4D ";
+        PlanComment planComment=new PlanComment(comment,user.getId(),planId);
+        Plan plan=planService.findById(planComment.getPlanId());
+        doRenderSuccess(planService.doLike(planComment,plan,user));
     }
 
     /**
@@ -263,17 +274,15 @@ public class PlanController extends BaseController{
         doRender(planDetailService.removePlanAnnex(planDetailAnnex));
     }
 
-    private void comment(String comment){
-        User user=getMyUser();
+    /**
+     * 判断该用户是否对该计划进行了点赞
+     * true 为已点赞
+     */
+    public void isDoLike(){
         String planId=getPara("plan_id");
-        PlanComment planComment=new PlanComment();
-        planComment.setComment(comment);
-        planComment.setCreateTime(new Date());
-        planComment.setCreatorId(user.getId());
-        planComment.setIsDeleted(Constant.IS_DELETED_NO);
-        planComment.setPlanId(planId);
-        planComment.setMarkDeleted(Constant.MARK_ZERO);
-        doRender(planComment.save());
+        User user=getMyUser();
+        DoLike doLike=doLikeService.findDoLike(planId,user.getId());
+        doRender(doLike!=null);
     }
 
 }

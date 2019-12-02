@@ -13,15 +13,13 @@ import com.jfinal.plugin.activerecord.Page;
 import com.jfinal.plugin.activerecord.Record;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 public class PlanService extends BaseService_<Plan>
 {
 
     private StringBuffer sqlSelect=new StringBuffer().append("select m.id,m.title,m.start_date,m.end_date,m.privacy,m.status,m.creator,m.create_time,")
+            .append("m.like_num,")
             .append(" n.name as creator_name,n.header_url as creator_header_url");
 
     @Override
@@ -66,6 +64,12 @@ public class PlanService extends BaseService_<Plan>
         params.add(ConstantEnum.PRIVACY_PUBLIC.getValue());
         params.add(Constant.ACTIVE);
         return listPlans(pageNum,pageSize,sql,params);
+    }
+
+    public Page<Record> listCustomPlans(int pageNum, int pageSize){
+        StringBuffer sql=new StringBuffer().append(" and m.status='1' ")
+                .append("and m.creator in( select id from custom_user) ");
+        return listPlans(pageNum,pageSize,sql,new ArrayList<>());
     }
 
     public Page<Record> listAllPlans(int pageNum, int pageSize){
@@ -161,5 +165,31 @@ public class PlanService extends BaseService_<Plan>
         });
     }
 
+    /**
+     * 点赞
+     * @param planComment
+     * @param plan
+     * @param user
+     * @return
+     */
+    public Integer doLike(PlanComment planComment,Plan plan,User user){
+        DoLikeService doLikeService=((DoLikeService) ServiceManager.instance().getService("dolike"));
+        DoLike doLike=doLikeService.findDoLike(plan.getId(),user.getId());
+        planComment.setId(UUID.randomUUID().toString());
+        if(doLike==null){
+            DoLike like=new DoLike();
+            like.setCreateTime(new Date());
+            like.setPlanId(plan.getId());
+            like.setCreatorId(user.getId());
+            like.setId(UUID.randomUUID().toString());
+
+            plan.setLikeNum(plan.getLikeNum()+1);
+            Db.tx(()->{
+                return planComment.save() && plan.update() && like.save();
+            });
+
+        }
+        return plan.getLikeNum();
+    }
 
 }

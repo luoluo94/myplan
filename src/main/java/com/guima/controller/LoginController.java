@@ -116,6 +116,11 @@ public class LoginController extends BaseController {
             s.createUser(user);
         }else{
             s.countLoginNum(user);
+            if(!name.equals(user.getName()) || !headerUrl.equals(user.getHeaderUrl())){
+                user.setName(name);
+                user.setHeaderUrl(headerUrl);
+                user.update();
+            }
         }
         Map<String,String> map=new HashMap<>();
         map.put("user_id",user.getId());

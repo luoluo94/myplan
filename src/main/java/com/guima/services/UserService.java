@@ -6,12 +6,14 @@ import com.guima.base.service.BaseService_;
 import com.guima.base.service.ServiceManager;
 import com.guima.domain.User;
 import com.guima.kits.Constant;
+import com.guima.kits.DateKit;
 import com.guima.kits.Kit;
 import com.jfinal.kit.StrKit;
 import com.jfinal.plugin.activerecord.Db;
 import com.jfinal.plugin.activerecord.Page;
 
 import java.math.BigInteger;
+import java.util.Date;
 import java.util.List;
 
 public class UserService extends BaseService_<User>
@@ -66,6 +68,7 @@ public class UserService extends BaseService_<User>
 
     public void countLoginNum(User user){
         user.setLoginNum(user.getLoginNum()+1);
+        user.setLastChangeTime(new Date());
         user.update();
     }
 

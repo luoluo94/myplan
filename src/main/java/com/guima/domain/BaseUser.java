@@ -66,11 +66,11 @@ public abstract class BaseUser<M extends BaseUser<M>> extends BaseModule<M> impl
 		return get("create_time");
 	}
 
-	public void setLastChangeTime(java.lang.String lastChangeTime) {
+	public void setLastChangeTime(java.util.Date lastChangeTime) {
 		set("last_change_time", lastChangeTime);
 	}
 
-	public java.lang.String getLastChangeTime() {
+	public java.util.Date getLastChangeTime() {
 		return get("last_change_time");
 	}
 

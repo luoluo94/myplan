@@ -9,6 +9,16 @@
     <form  role="form" id="edit-form" style="margin-top: 55px;margin-left: 45px;">
         <input type="hidden" class="form-control" name="my_user_id" id="my_user_id">
         <label class="inline">
+        是否公开在世界列表:  <input type="radio" value="0" name="privacy" checked>否   <input type="radio" value="2" name="privacy">是
+        </label>
+        <label>
+            计划：<select class="form-control" id="plan_id" name="plan_id">
+        </select>
+            </label>
+            <label>
+                计划详情：<select class="form-control" id="plan_detail_id" name="plan_detail_id"></select>
+                </label>
+            <label class="inline">
             打卡内容：<textarea type="text" class="form-control" name="describer" id="describer"/>
         </label>
         <label class="inline">
@@ -31,6 +41,8 @@
 </div>
 </body>
 <script type="text/javascript">
+
+    listPlan('plan_id');
 
     $("#my_user_id").val($("#sign_user_id").val());
 
@@ -66,11 +78,25 @@
         });
     });
 
+    $("#plan_id").change(function(){
+//        alert($("#plan_id").val());
+        listPlanDetail('plan_detail_id',$("#plan_id").val());
+    });
+
     function save(){
         if($("#edit-form").valid()){
             $.ajax({
                 url: adminPath+"/sign/saveSign",
-                data:$("#edit-form").serialize(),
+                type:'POST',
+                data:{
+//                    "isBanned":$('input[name="is_banned"]:checked ').val(),
+                    my_user_id:$("#my_user_id").val(),
+                    describer:$("#describer").val(),
+                    photoUrl:$("#photoUrl").val(),
+                    privacy:$('input[name="privacy"]:checked ').val(),
+                    plan_id:$("#plan_id").val(),
+                    plan_detail_id:$("#plan_detail_id").val()
+                },
                 dataType:"json",
                 error:function(){alert("出错了，请稍后再试")},
                 success:function(result){
@@ -119,6 +145,40 @@
     });
 
 
+    function listPlan(selectName){
+        $.ajax({
+            url: adminPath+"/plan/listCustomPlans",
+            type:"POST",
+            dataType:"json",
+            error:function(){return false},
+            success:function(result){
+                $("#"+selectName).empty();
+                $("#"+selectName).append("<option value=''>未选择</option>");
+                $.each(result.data, function (idx, val) {
+                    $("#"+selectName).append("<option value='" + val["id"] + "'>" + val["title"] + "</option>");
+                });
+            }
+        });
+    }
+
+    function listPlanDetail(selectName,planId){
+        $.ajax({
+            url: adminPath+'/plan/getDetails',
+            type:"POST",
+            data:{
+                plan_id:planId
+            },
+            dataType:"json",
+            error:function(){return false},
+            success:function(result){
+                $("#"+selectName).empty();
+                $("#"+selectName).append("<option value=''>未选择</option>");
+                $.each(result.data, function (idx, val) {
+                    $("#"+selectName).append("<option value='" + val["id"] + "'>" + val["plan_detail"] + "</option>");
+                });
+            }
+        });
+    }
 
 
 </script>

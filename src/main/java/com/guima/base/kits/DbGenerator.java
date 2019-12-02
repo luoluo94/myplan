@@ -39,7 +39,7 @@ public class DbGenerator
         // 添加不需要生成的表名
 		gernerator.addExcludedTable("ad","admin","config","dictionary","interface_config","plan","plan_annex",
                 "plan_comment","plan_detail","plan_detail_annex","score_record","user","sign","advice","plan_calendar"
-        ,"plan_create_num","admin_exception_record","user_record","custom_user");
+        ,"plan_create_num","admin_exception_record","user_record","custom_user","do_like");
         // 设置是否在 Model 中生成 dao 对象
         gernerator.setGenerateDaoInModel(true);
         // 设置是否生成字典文件

@@ -90,4 +90,12 @@ public abstract class BasePlan<M extends BasePlan<M>> extends BaseModule<M> impl
 		return get("create_time");
 	}
 
+	public void setLikeNum(java.lang.Integer likeNum) {
+		set("like_num", likeNum);
+	}
+
+	public java.lang.Integer getLikeNum() {
+		return get("like_num");
+	}
+
 }

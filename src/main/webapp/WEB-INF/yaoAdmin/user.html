@@ -23,6 +23,7 @@
         <th width="150px">用户名称</th>
         <th>头像</th>
         <th>登录次数</th>
+        <th>最后登录时间</th>
         <th>是否禁用</th>
         <th>操作</th>
     </tr>
@@ -80,6 +81,7 @@
                             +"<td width='200px'>"+val["name"]+"</td>"
                             +'<td><img width="40px" height="40px" src="'+val["header_url"]+'"></td>'
                             +"<td width='200px'>"+val["login_num"]+"</td>"
+                            +"<td width='200px'>"+val["last_change_time"]+"</td>"
                             +"<td width='200px'>"+banned+"</td>"
                             +"<td><button type='button' onclick=ban(\'"+val['id']+"\')>禁用</button>"+"</td>"
                     );
