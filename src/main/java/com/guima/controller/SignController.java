@@ -32,36 +32,39 @@ public class SignController extends BaseController{
     }
 
     /**
-     * 创建说说
+     * 创建打卡
+     */
+    public void savePlanSign(){
+        User user=getMyUser();
+        checkUser(user);
+        Sign sign=new Sign();
+        String describer=getPara("describer");
+        String photoUrl=getPara("photoUrl");
+        String planId=getPara("plan_id");
+        String planDetailId=getPara("plan_detail_id");
+        if(StrKit.isBlank(describer) || StrKit.isBlank(planDetailId) || StrKit.isBlank(planId)){
+            doRenderError(SysMsg.OsMsg.get("PARAM_ERROR"));
+            return;
+        }
+        sign.init(user.getId(),describer,ConstantEnum.PRIVACY_SELF.getValue(),photoUrl,planId,planDetailId);
+        doRender(planDetailService.savePlanSign(planId,planDetailId,sign));
+    }
+
+    /**
+     * 记录心情
      */
     public void saveSign(){
         User user=getMyUser();
         checkUser(user);
-        checkBanned(user);
         Sign sign=new Sign();
         String describer=getPara("describer");
         String photoUrl=getPara("photoUrl");
-        String privacy=getPara("privacy");
-        String planId=getPara("plan_id");
-        String planDetailId=getPara("plan_detail_id");
-        if(StrKit.isBlank(privacy)){
-            privacy="2";
-        }
         if(StrKit.isBlank(describer)){
             doRenderError(SysMsg.OsMsg.get("PARAM_ERROR"));
             return;
         }
-        sign.init(user.getId(),describer,privacy,photoUrl,planId,planDetailId);
-        PlanDetail planDetail=null;
-        if(!StrKit.isBlank(planDetailId)){
-            planDetail=planDetailService.findById(planDetailId);
-        }
-        boolean isSuccess=signService.sign(sign,planDetail);
-        if(isSuccess){
-            doRender("sign_id",sign.getId(),true);
-            return;
-        }
-        doRenderError(SysMsg.OsMsg.get("ERROR"));
+        sign.init(user.getId(),describer,ConstantEnum.PRIVACY_SELF.getValue(),photoUrl,null,null);
+        doRender(sign.save());
     }
 
     /**

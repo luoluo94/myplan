@@ -4,6 +4,7 @@ import com.guima.base.kits.ModelWrapper;
 import com.guima.base.kits.QueryParam;
 import com.guima.base.service.BaseService_;
 import com.guima.base.service.ServiceManager;
+import com.guima.domain.Plan;
 import com.guima.domain.PlanDetail;
 import com.guima.domain.Sign;
 import com.guima.domain.User;
@@ -101,17 +102,6 @@ public class SignService extends BaseService_<Sign>
                 .append(" where 1=1 ")
                 .append(" order by create_time desc");
         return list(pageNumber,pageSize,sql,new ArrayList<>());
-    }
-
-    public boolean sign(Sign sign, PlanDetail planDetail){
-        if(planDetail==null){
-            return sign.save();
-        }else{
-            planDetail.setFinishPercentage(planDetail.getFinishPercentage()+1);
-            return Db.tx(()->{
-                return sign.save() && planDetail.update();
-            });
-        }
     }
 
     public boolean removeSign(Sign sign){

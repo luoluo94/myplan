@@ -345,7 +345,7 @@ public class DateKit
         if(intervalDays>0){
             return "剩余"+intervalDays+"天";
         }else{
-            return "已过期"+intervalDays+"天";
+            return "已过期"+Math.abs(intervalDays)+"天";
         }
     }
 
@@ -429,6 +429,10 @@ public class DateKit
             e.printStackTrace();
             return "";
         }
+    }
+
+    public static String dateToDayString(Date date){
+        return dateToString(date,DATE_PATTERN);
     }
 
     public static String dateToString(Date date,String format){

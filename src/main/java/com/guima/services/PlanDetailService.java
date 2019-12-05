@@ -7,11 +7,13 @@ import com.guima.base.service.ServiceManager;
 import com.guima.domain.Plan;
 import com.guima.domain.PlanDetail;
 import com.guima.domain.PlanDetailAnnex;
+import com.guima.domain.Sign;
 import com.guima.enums.ConstantEnum;
 import com.guima.enums.ScoreTypeEnum;
 import com.guima.kits.Constant;
 import com.guima.kits.Kit;
 import com.guima.kits.NumberConstant;
+import com.jfinal.kit.StrKit;
 import com.jfinal.plugin.activerecord.Db;
 import com.jfinal.plugin.activerecord.Page;
 
@@ -142,6 +144,52 @@ public class PlanDetailService extends BaseService_<PlanDetail>
         annex.setIsDeleted(Constant.IS_DELETED_YES);
         return Db.tx(()->{
             return planDetail.update() && annex.update();
+        });
+    }
+
+    /**
+     * 根据PlanId和序号查找PlanDetail
+     * @param planId
+     * @param sortIndex
+     * @return
+     */
+    public PlanDetail find(String planId,int sortIndex){
+        return findFirst(QueryParam.Builder().equalsTo("plan_id",planId).equalsTo("sort_index",sortIndex+""));
+    }
+
+    /**
+     * 关联计划打卡
+     * @param planId
+     * @param planDetailId
+     * @param sign
+     * @return
+     */
+    public boolean savePlanSign(String planId, String planDetailId, Sign sign){
+        PlanService planService=((PlanService) ServiceManager.instance().getService("plan"));
+        return Db.tx(()->{
+            boolean isSuccess=true;
+            PlanDetail planDetail=findById(planDetailId);
+            if(planDetail==null){
+                return false;
+            }
+            //判断打卡次数不允许超过限制
+            if(planDetail.getSignMaxNum()!=null && planDetail.getFinishPercentage()>=planDetail.getSignMaxNum()){
+                return false;
+            }
+            planDetail.setFinishPercentage(planDetail.getFinishPercentage()+1);
+            isSuccess=isSuccess && planDetail.update();
+            //判断是否为官方计划
+            Plan plan=planService.findById(planId);
+            String parentPlanId=plan.getParentId();
+            if(!StrKit.isBlank(parentPlanId)){
+                PlanDetail parentPlanDetail=find(parentPlanId,planDetail.getSortIndex());
+                Sign parentSign=new Sign();
+                parentSign.init(sign.getCreator(),"完成\""+planDetail.getPlanDetail()+"\"+1",ConstantEnum.PRIVACY_SELF.getValue(),null,parentPlanId,parentPlanDetail.getId());
+                isSuccess=isSuccess && parentSign.save();
+                parentPlanDetail.setFinishPercentage(parentPlanDetail.getFinishPercentage()+1);
+                isSuccess=isSuccess && parentPlanDetail.update();
+            }
+            return isSuccess;
         });
     }
 

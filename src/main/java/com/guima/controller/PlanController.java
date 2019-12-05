@@ -95,6 +95,12 @@ public class PlanController extends BaseController{
         checkUser(user);
         String status=getPara("status");
         Page<Record> page=planService.listMyOwenPlans(user,status,getPageNumberInt(),getPageSizeInt());
+        List list=page.getList();
+        String today=DateKit.getToday();
+        for (Object record:list){
+            Record re=((Record)record);
+            re.set("end_date_desc",DateKit.getDateDesc(today,DateKit.dateToDayString(re.get("end_date"))));
+        }
         doRenderPageRecord(page);
     }
 
@@ -119,7 +125,7 @@ public class PlanController extends BaseController{
         String today=DateKit.getToday();
         for (Object record:list){
             Record re=((Record)record);
-            re.set("end_date_desc",DateKit.getDateDesc(today,re.get("end_date")));
+            re.set("end_date_desc",DateKit.getDateDesc(today,DateKit.dateToDayString(re.get("end_date"))));
         }
         doRenderPageRecord(page);
     }
@@ -321,6 +327,17 @@ public class PlanController extends BaseController{
         User user=getMyUser();
         DoLike doLike=doLikeService.findDoLike(planId,user.getId());
         doRender(doLike!=null);
+    }
+
+    /**
+     * 判断该用户是否加入了该计划
+     * true 为已加入
+     */
+    public void isJoinChallenge(){
+        String planId=getPara("plan_id");
+        User user=getMyUser();
+        Plan plan=planService.find(user.getId(),planId);
+        doRender(plan!=null);
     }
 
     /**

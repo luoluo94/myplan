@@ -18,9 +18,9 @@ import java.util.*;
 public class PlanService extends BaseService_<Plan>
 {
 
-    private StringBuffer sqlSelect=new StringBuffer().append("select m.id,m.title,m.status,m.creator,m.create_time,")
-            .append("m.participant_num,")
-            .append(" n.name as creator_name,n.header_url as creator_header_url");
+    private StringBuffer sqlSelect=new StringBuffer().append("select m.id,m.title,m.status,m.creator")
+            .append(",m.create_time,m.end_date,m.participant_num")
+            .append(",n.name as creator_name,n.header_url as creator_header_url");
 
     @Override
     protected Plan getConreteObject()
@@ -121,7 +121,7 @@ public class PlanService extends BaseService_<Plan>
      * @return
      */
     public Page<Record> listMyChallengePlans(User user,String status, int pageNumber, int pageSize){
-        return listMyPlans(false,true,user,status,pageNumber,pageSize);
+        return listMyPlans(true,false,user,status,pageNumber,pageSize);
     }
 
     /**
@@ -298,4 +298,6 @@ public class PlanService extends BaseService_<Plan>
     public Plan find(String userId,String parentId){
         return findFirst(QueryParam.Builder().equalsTo("creator",userId).equalsTo("parent_id",parentId).equalsTo(Constant.IS_DELETED_MARK,Constant.ACTIVE));
     }
+
+
 }
