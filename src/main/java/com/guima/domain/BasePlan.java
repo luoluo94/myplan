@@ -98,4 +98,60 @@ public abstract class BasePlan<M extends BasePlan<M>> extends BaseModule<M> impl
 		return get("like_num");
 	}
 
+	public void setParticipantNum(java.lang.Integer participantNum) {
+		set("participant_num", participantNum);
+	}
+
+	public java.lang.Integer getParticipantNum() {
+		return get("participant_num");
+	}
+
+	public void setFinishNum(java.lang.Integer finishNum) {
+		set("finish_num", finishNum);
+	}
+
+	public java.lang.Integer getFinishNum() {
+		return get("finish_num");
+	}
+
+	public void setUnFinishNum(java.lang.Integer unFinishNum) {
+		set("un_finish_num", unFinishNum);
+	}
+
+	public java.lang.Integer getUnFinishNum() {
+		return get("un_finish_num");
+	}
+
+	public void setRemark(java.lang.String remark) {
+		set("remark", remark);
+	}
+
+	public java.lang.String getRemark() {
+		return get("remark");
+	}
+
+	public void setIsOfficial(java.lang.Integer isOfficial) {
+		set("is_official", isOfficial);
+	}
+
+	public java.lang.Integer getIsOfficial() {
+		return get("is_official");
+	}
+
+	public java.lang.String getParentId() {
+		return get("parent_id");
+	}
+
+	public void setParentId(java.lang.String parentId) {
+		set("parent_id", parentId);
+	}
+
+	public void setExeTimes(java.lang.Integer exeTimes) {
+		set("exe_times", exeTimes);
+	}
+
+	public java.lang.Integer getExeTimes() {
+		return get("exe_times");
+	}
+
 }

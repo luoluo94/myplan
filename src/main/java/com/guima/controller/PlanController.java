@@ -48,7 +48,6 @@ public class PlanController extends BaseController{
         Plan plan=new Plan();
         String title=getPara("title");
         String endDate=getPara("endDate");
-        String privacy=getPara("privacy");
         String startDate=getPara("startDate");
         //计划的具体事项
         String[] planDetails=getParaValues("details");
@@ -57,13 +56,13 @@ public class PlanController extends BaseController{
             return;
         }
         if(StrKit.isBlank(title)
-                || StrKit.isBlank(endDate)|| StrKit.isBlank(privacy)
+                || StrKit.isBlank(endDate)
                 || StrKit.isBlank(startDate)){
             doRenderParamError();
             return;
         }
-        plan.init(title,user.getId(),new Date(),DateKit.stringToDate(endDate),
-                privacy,DateKit.stringToDate(startDate));
+        plan.init(title,user.getId(),DateKit.stringToDate(endDate),
+                ConstantEnum.PRIVACY_SELF.getValue(),DateKit.stringToDate(startDate));
         planService.createPlan(plan,planDetails);
         doRender("plan_id",plan.getId(),StrKit.notBlank(plan.getId()));
     }
@@ -78,11 +77,50 @@ public class PlanController extends BaseController{
 
     /**
      * 获取我的计划列表 时间倒序
+     * 等待删除
      */
     public void listMyPlan(){
         User user=getMyUser();
+        checkUser(user);
         String status=getPara("status");
-        Page<Record> page=planService.listMyPlans(user,status,getPageNumberInt(),getPageSizeInt());
+        Page<Record> page=planService.listMyOwenPlans(user,status,getPageNumberInt(),getPageSizeInt());
+        doRenderPageRecord(page);
+    }
+
+    /**
+     * 获取我的计划列表 时间倒序
+     */
+    public void listMyOwenPlans(){
+        User user=getMyUser();
+        checkUser(user);
+        String status=getPara("status");
+        Page<Record> page=planService.listMyOwenPlans(user,status,getPageNumberInt(),getPageSizeInt());
+        doRenderPageRecord(page);
+    }
+
+    /**
+     * 获取官方挑战列表 时间倒序
+     */
+    public void listOfficialPlans(){
+        String status=getPara("status");
+        Page<Record> page=planService.listOfficialPlans(status,getPageNumberInt(),getPageSizeInt());
+        doRenderPageRecord(page);
+    }
+
+    /**
+     * 获取我的挑战列表
+     */
+    public void listMyChallengePlans(){
+        User user=getMyUser();
+        checkUser(user);
+        String status=getPara("status");
+        Page<Record> page=planService.listMyChallengePlans(user,status,getPageNumberInt(),getPageSizeInt());
+        List list=page.getList();
+        String today=DateKit.getToday();
+        for (Object record:list){
+            Record re=((Record)record);
+            re.set("end_date_desc",DateKit.getDateDesc(today,re.get("end_date")));
+        }
         doRenderPageRecord(page);
     }
 
@@ -283,6 +321,21 @@ public class PlanController extends BaseController{
         User user=getMyUser();
         DoLike doLike=doLikeService.findDoLike(planId,user.getId());
         doRender(doLike!=null);
+    }
+
+    /**
+     * 加入官方计划
+     */
+    public void joinChallenge(){
+        User user=getMyUser();
+        checkUser(user);
+        String planId=getPara("plan_id");
+        Plan plan=planService.findById(planId);
+        if (plan==null){
+            doRenderParamNull();
+            return;
+        }
+        doRender(planService.joinChallenge(user,plan));
     }
 
 }

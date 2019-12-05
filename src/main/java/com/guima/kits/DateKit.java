@@ -72,7 +72,7 @@ public class DateKit
      *
      * @return
      */
-    public static String getDay()
+    public static String getToday()
     {
         Calendar c = Calendar.getInstance();
         Date date = c.getTime();
@@ -337,15 +337,16 @@ public class DateKit
         return now.compareTo(beginDate)<0 || now.compareTo(endDate)>0;
     }
 
-    public static String getDateDesc(Date date){
-       Date now=new Date();
-        if(dateToString(now).equals(dateToString(date))){
+    public static String getDateDesc(String endDate,String today){
+        if(today.equals(endDate)){
             return "今天";
         }
-        if(date.getYear()==now.getYear()){
-            return format(date,"MM-dd");
+        int intervalDays=compareDays(today,endDate);
+        if(intervalDays>0){
+            return "剩余"+intervalDays+"天";
+        }else{
+            return "已过期"+intervalDays+"天";
         }
-        return dateToString(date);
     }
 
     /**
@@ -428,7 +429,15 @@ public class DateKit
             e.printStackTrace();
             return "";
         }
+    }
 
+    public static String dateToString(Date date,String format){
+        try{
+            return new SimpleDateFormat(format).format(date);
+        }catch(Exception e){
+            e.printStackTrace();
+            return "";
+        }
     }
     public static String dateToString(Timestamp date){
         try{

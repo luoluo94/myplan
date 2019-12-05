@@ -18,8 +18,8 @@ import java.util.*;
 public class PlanService extends BaseService_<Plan>
 {
 
-    private StringBuffer sqlSelect=new StringBuffer().append("select m.id,m.title,m.start_date,m.end_date,m.privacy,m.status,m.creator,m.create_time,")
-            .append("m.like_num,")
+    private StringBuffer sqlSelect=new StringBuffer().append("select m.id,m.title,m.status,m.creator,m.create_time,")
+            .append("m.participant_num,")
             .append(" n.name as creator_name,n.header_url as creator_header_url");
 
     @Override
@@ -49,7 +49,10 @@ public class PlanService extends BaseService_<Plan>
     }
 
     public Record findRecordById(String id){
-        StringBuffer sql=new StringBuffer().append(sqlSelect).append(" from plan m join `user` n on m.creator=n.id where m.id=?");
+        StringBuffer sqlFullSelect=new StringBuffer().append("select m.id,m.title,m.start_date,m.end_date,m.privacy,m.status,m.creator,m.create_time,")
+                .append("m.like_num,m.participant_num,m.finish_num,m.un_finish_num,")
+                .append(" n.name as creator_name,n.header_url as creator_header_url");
+        StringBuffer sql=sqlFullSelect.append(" from plan m join `user` n on m.creator=n.id where m.id=?");
         List<Object> params=new ArrayList<>();
         params.add(id);
         return Db.findFirst(sql.toString(),params.toArray());
@@ -66,10 +69,16 @@ public class PlanService extends BaseService_<Plan>
         return listPlans(pageNum,pageSize,sql,params);
     }
 
-    public Page<Record> listCustomPlans(int pageNum, int pageSize){
-        StringBuffer sql=new StringBuffer().append(" and m.status='1' ")
-                .append("and m.creator in( select id from custom_user) ");
-        return listPlans(pageNum,pageSize,sql,new ArrayList<>());
+    public Page<Record> listUnOfficialPlans(String creatorId, int pageNumber, int pageSize){
+        StringBuffer sql=new StringBuffer();
+        List<Object> params=new ArrayList<>();
+        sql.append("and m.creator=? ");
+        params.add(creatorId);
+        sql.append("and m.is_official=? ");
+        params.add(Constant.MARK_ZERO);
+        sql.append(" and m.status=?");
+        params.add(ConstantEnum.STATUS_ONGOING.getValue());
+        return listPlans(pageNumber,pageSize,sql,params);
     }
 
     public Page<Record> listAllPlans(int pageNum, int pageSize){
@@ -77,11 +86,20 @@ public class PlanService extends BaseService_<Plan>
         return listPlans(pageNum,pageSize,sql,new ArrayList<>());
     }
 
-    public Page<Record> listMyPlans(User user,String status, int pageNumber, int pageSize){
+    public Page<Record> listMyPlans(boolean isChallenge,boolean isOfficial,User user,String status, int pageNumber, int pageSize){
         StringBuffer sql=new StringBuffer();
         List<Object> params=new ArrayList<>();
-        sql.append("and m.creator=? ");
-        params.add(user.getId());
+        if(user!=null){
+            sql.append(" and m.creator=? ");
+            params.add(user.getId());
+        }
+        if(isOfficial){
+            sql.append(" and m.is_official=? ");
+            params.add(Constant.MARK_ONE);
+        }
+        if(isChallenge){
+            sql.append(" and m.parent_id is not null ");
+        }
         if(ConstantEnum.STATUS_END.getValue().equals(status)){
             sql.append(" and m.status in (").append(ConstantEnum.STATUS_FINISH.getValue()).append(",").append(ConstantEnum.STATUS_NOT_FINISH.getValue()).append(")");
         }else {
@@ -92,6 +110,41 @@ public class PlanService extends BaseService_<Plan>
                 .append(" order by m.create_time desc");
         params.add(Constant.ACTIVE);
         return listPlans(pageNumber,pageSize,sql,params);
+    }
+
+    /**
+     * 获取我挑战的计划
+     * @param user
+     * @param status
+     * @param pageNumber
+     * @param pageSize
+     * @return
+     */
+    public Page<Record> listMyChallengePlans(User user,String status, int pageNumber, int pageSize){
+        return listMyPlans(false,true,user,status,pageNumber,pageSize);
+    }
+
+    /**
+     * 获取我自己创建的计划
+     * @param user
+     * @param status
+     * @param pageNumber
+     * @param pageSize
+     * @return
+     */
+    public Page<Record> listMyOwenPlans(User user,String status, int pageNumber, int pageSize){
+        return listMyPlans(false,false,user,status,pageNumber,pageSize);
+    }
+
+    /**
+     * 获取官方创建的计划
+     * @param status
+     * @param pageNumber
+     * @param pageSize
+     * @return
+     */
+    public Page<Record> listOfficialPlans(String status, int pageNumber, int pageSize){
+        return listMyPlans(false,true,null,status,pageNumber,pageSize);
     }
 
     /**
@@ -192,4 +245,57 @@ public class PlanService extends BaseService_<Plan>
         return plan.getLikeNum();
     }
 
+    /**
+     * 复制计划
+     * @return
+     */
+    public boolean copyPlan(Plan plan,User user){
+        PlanDetailService planDetailService=((PlanDetailService)ServiceManager.instance().getService("plandetail"));
+        Plan newPlan=new Plan();
+        newPlan.init(plan.getTitle(),user.getId(),plan.getEndDate(),ConstantEnum.PRIVACY_SELF.getValue(),plan.getStartDate());
+        newPlan.setId(UUID.randomUUID().toString());
+        newPlan.setParentId(plan.getId());
+        newPlan.setExeTimes(plan.getExeTimes());
+        List<PlanDetail> details=planDetailService.listPlanDetails(plan.getId());
+        return Db.tx(()->{
+            if(!newPlan.save())
+                return false;
+
+            PlanDetail planDetail;
+            for (PlanDetail detail : details) {
+                planDetail = new PlanDetail();
+                planDetail.init(newPlan.getId(),detail.getPlanDetail(),detail.getSortIndex());
+                if(!planDetail.save())
+                    return false;
+            }
+            return true;
+        });
+    }
+
+    /**
+     * 加入官方挑战
+     * 原计划上增加挑战人数、生成新的属于该用户的计划 并且parentId为原计划
+     * @param user
+     * @param plan
+     */
+    public boolean joinChallenge(User user,Plan plan){
+        if(find(user.getId(),plan.getId())!=null){
+            return true;
+        }
+        synchronized(plan){
+            plan.setParticipantNum(plan.getParticipantNum()+1);
+            plan.update();
+        }
+        return copyPlan(plan,user);
+    }
+
+    /**
+     * 查找是否已经加入计划
+     * @param userId
+     * @param parentId
+     * @return
+     */
+    public Plan find(String userId,String parentId){
+        return findFirst(QueryParam.Builder().equalsTo("creator",userId).equalsTo("parent_id",parentId).equalsTo(Constant.IS_DELETED_MARK,Constant.ACTIVE));
+    }
 }

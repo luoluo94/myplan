@@ -66,4 +66,20 @@ public abstract class BasePlanDetail<M extends BasePlanDetail<M>> extends BaseMo
 		return get("has_annex");
 	}
 
+	public void setSignNum(java.lang.Integer signNum) {
+		set("sign_num", signNum);
+	}
+
+	public java.lang.Integer getSignNum() {
+		return get("sign_num");
+	}
+
+	public void setSignMaxNum(java.lang.Integer signMaxNum) {
+		set("sign_max_num", signMaxNum);
+	}
+
+	public java.lang.Integer getSignMaxNum() {
+		return get("sign_max_num");
+	}
+
 }

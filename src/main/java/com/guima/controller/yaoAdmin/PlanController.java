@@ -4,6 +4,8 @@ import com.guima.base.controller.BaseController;
 import com.guima.base.service.ServiceManager;
 import com.guima.domain.Plan;
 import com.guima.domain.PlanDetail;
+import com.guima.enums.ConstantEnum;
+import com.guima.kits.Constant;
 import com.guima.services.*;
 import com.jfinal.plugin.activerecord.Page;
 import com.jfinal.plugin.activerecord.Record;
@@ -34,10 +36,11 @@ public class PlanController extends BaseController {
 
 
     /**
-     * 获取自定义的计划
+     * 获取官方计划
+     * is_official为false
      */
-    public void listCustomPlans(){
-        Page<Record> page=planService.listCustomPlans(1,200);
+    public void listUnOfficialPlans(){
+        Page<Record> page=planService.listUnOfficialPlans(getPara("admin_id"),1,200);
         doRenderPageRecord(page);
     }
 
@@ -49,5 +52,15 @@ public class PlanController extends BaseController {
         doRenderSuccess(list);
     }
 
-
+    /**
+     * 设置某计划为官方计划
+     */
+    public void setPlanOfficial(){
+        String planId=getPara("plan_id");
+        Plan plan=planService.findById(planId);
+        plan.setIsOfficial(Constant.MARK_ONE);
+        plan.setPrivacy(ConstantEnum.PRIVACY_PUBLIC.getValue());
+        plan.setParticipantNum(Constant.MARK_ZERO);
+        doRender(plan.update());
+    }
 }
