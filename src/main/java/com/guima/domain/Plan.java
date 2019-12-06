@@ -28,5 +28,6 @@ public class Plan extends BasePlan<Plan> {
 		setFinishNum(NumberConstant.ZERO);
 		setUnFinishNum(NumberConstant.ZERO);
 		setIsOfficial(NumberConstant.ZERO);
+		setCreateTime(new Date());
 	}
 }

@@ -2,6 +2,7 @@ package com.guima.kits;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.util.regex.Pattern;
 
 public class NumberKit
 {
@@ -31,6 +32,15 @@ public class NumberKit
     public static void main(String[] args)
     {
         System.out.println(getIntPercent(1,3));
+    }
 
+    /**
+     * 判断某个字符串能否转为数字
+     * @param str
+     * @return
+     */
+    public static boolean isInteger(String str) {
+        Pattern pattern = Pattern.compile("^[-\\+]?[\\d]*$");
+        return pattern.matcher(str).matches();
     }
 }

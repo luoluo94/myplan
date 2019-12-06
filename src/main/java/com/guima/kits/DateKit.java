@@ -296,6 +296,19 @@ public class DateKit
         return format.format(date);
     }
 
+    /**
+     * 获取当前时间，格式为yyyyMM作为流水号
+     *
+     * @return
+     */
+    public static String getSerialNumberMonth()
+    {
+        Calendar c = Calendar.getInstance();
+        Date date = c.getTime();
+        SimpleDateFormat format = new SimpleDateFormat("yyyyMM");
+        return format.format(date);
+    }
+
     public static String getSerialNumber()
     {
         Calendar c = Calendar.getInstance();

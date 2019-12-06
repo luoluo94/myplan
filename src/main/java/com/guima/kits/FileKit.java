@@ -119,7 +119,7 @@ public class FileKit
     public static String upload(String fileName,InputStream inputStream,String dictionaryName) throws Exception
     {
         String type =getFileSuffix(fileName);
-        String newName= dictionaryName + "/" +  DateKit.getSerialNumberDay()+"/" +DateKit.getSerialNumberSecond()+ "_" + new Random().nextInt(100000);
+        String newName= dictionaryName + "/" +  DateKit.getSerialNumberMonth()+"/" +DateKit.getSerialNumberSecond()+ "_" + new Random().nextInt(100000);
         String key = newName + type;
         String cloudPath = OssKit.init().upload(key, inputStream);
         if (cloudPath.equals("ERROR")){

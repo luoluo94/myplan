@@ -13,9 +13,11 @@ import com.guima.enums.ScoreTypeEnum;
 import com.guima.kits.Constant;
 import com.guima.kits.Kit;
 import com.guima.kits.NumberConstant;
+import com.guima.kits.NumberKit;
 import com.jfinal.kit.StrKit;
 import com.jfinal.plugin.activerecord.Db;
 import com.jfinal.plugin.activerecord.Page;
+import com.sun.javafx.binding.IntegerConstant;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -64,7 +66,15 @@ public class PlanDetailService extends BaseService_<PlanDetail>
         int index = 0;
         for (String detail : details) {
             planDetail = new PlanDetail();
-            planDetail.init(plan.getId(),detail,index++);
+            String[] detailsSplit=detail.split("#");
+            int maxSignNum=0;
+            if(detailsSplit.length==3){
+                detail=detailsSplit[0]+"x"+detailsSplit[1]+detailsSplit[2];
+                if(NumberKit.isInteger(detailsSplit[1])){
+                    maxSignNum=Integer.valueOf(detailsSplit[1]);
+                }
+            }
+            planDetail.init(plan.getId(),detail,index++,maxSignNum);
             planDetail.save();
         }
         return true;
@@ -194,7 +204,7 @@ public class PlanDetailService extends BaseService_<PlanDetail>
                 return false;
             }
             //判断打卡次数不允许超过限制
-            if(planDetail.getSignMaxNum()!=null && planDetail.getFinishPercentage()>=planDetail.getSignMaxNum()){
+            if(planDetail.getSignMaxNum()!=null && planDetail.getSignMaxNum()!= 0 && planDetail.getFinishPercentage()>=planDetail.getSignMaxNum()){
                 return false;
             }
             planDetail.setFinishPercentage(planDetail.getFinishPercentage()+1);

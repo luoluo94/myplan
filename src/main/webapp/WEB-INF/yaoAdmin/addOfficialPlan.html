@@ -17,12 +17,13 @@
             计划：<select class="form-control" id="plan_id" name="plan_id">
         </select>
         </label>
-        <label>
-        选取头像：<select class="form-control" id="plan_detail_id" name="plan_detail_id"></select>
-        </label>
         <div class="details" id="details">
 
         </div>
+
+        <label>
+            选取头像：<select class="form-control" id="plan_detail_id" name="plan_detail_id"></select>
+        </label>
 
             <button type="button" class="btn btn-default -btn add-btn top20" onclick="save()">保存</button>
             <button type="button" class="btn btn-default -btn back-btn top20" onclick="back()">返回</button>
@@ -129,7 +130,7 @@
                 var innerHtml='';
                 $.each(result.data, function (idx, val) {
                     console.log(val["plan_detail"]);
-                    innerHtml+='<div><label class="detail">'+val["sort_index"]+'.'+val["plan_detail"]+'<input  id="name_' + val["id"] + '"/></label></div>';
+                    innerHtml+='<div><label class="detail">'+val["sort_index"]+'.'+val["plan_detail"]+'</label></div>';
                 });
                 console.log(innerHtml);
                 $("#details").html(innerHtml);

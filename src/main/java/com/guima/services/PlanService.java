@@ -86,20 +86,25 @@ public class PlanService extends BaseService_<Plan>
         return listPlans(pageNum,pageSize,sql,new ArrayList<>());
     }
 
-    public Page<Record> listMyPlans(boolean isChallenge,boolean isOfficial,User user,String status, int pageNumber, int pageSize){
+    public Page<Record> listMyPlans(boolean isChallenge,User user,String status, int pageNumber, int pageSize){
         StringBuffer sql=new StringBuffer();
         List<Object> params=new ArrayList<>();
         if(user!=null){
             sql.append(" and m.creator=? ");
             params.add(user.getId());
         }
-        if(isOfficial){
-            sql.append(" and m.is_official=? ");
-            params.add(Constant.MARK_ONE);
-        }
+        sql.append(" and m.is_official=? ");
+        params.add(Constant.MARK_ZERO);
         if(isChallenge){
             sql.append(" and m.parent_id is not null ");
+        }else{
+            sql.append(" and m.parent_id is null ");
         }
+        listByStatus(status, sql, params);
+        return listPlans(pageNumber,pageSize,sql,params);
+    }
+
+    private void listByStatus(String status, StringBuffer sql, List<Object> params) {
         if(ConstantEnum.STATUS_END.getValue().equals(status)){
             sql.append(" and m.status in (").append(ConstantEnum.STATUS_FINISH.getValue()).append(",")
                     .append(ConstantEnum.STATUS_NOT_FINISH.getValue()).append(",")
@@ -111,7 +116,6 @@ public class PlanService extends BaseService_<Plan>
         sql.append(" and m.").append(Constant.IS_DELETED_MARK).append("=?")
                 .append(" order by m.create_time desc");
         params.add(Constant.ACTIVE);
-        return listPlans(pageNumber,pageSize,sql,params);
     }
 
     /**
@@ -123,7 +127,7 @@ public class PlanService extends BaseService_<Plan>
      * @return
      */
     public Page<Record> listMyChallengePlans(User user,String status, int pageNumber, int pageSize){
-        return listMyPlans(true,false,user,status,pageNumber,pageSize);
+        return listMyPlans(true,user,status,pageNumber,pageSize);
     }
 
     /**
@@ -135,7 +139,7 @@ public class PlanService extends BaseService_<Plan>
      * @return
      */
     public Page<Record> listMyOwenPlans(User user,String status, int pageNumber, int pageSize){
-        return listMyPlans(false,false,user,status,pageNumber,pageSize);
+        return listMyPlans(false,user,status,pageNumber,pageSize);
     }
 
     /**
@@ -146,7 +150,12 @@ public class PlanService extends BaseService_<Plan>
      * @return
      */
     public Page<Record> listOfficialPlans(String status, int pageNumber, int pageSize){
-        return listMyPlans(false,true,null,status,pageNumber,pageSize);
+        StringBuffer sql=new StringBuffer();
+        List<Object> params=new ArrayList<>();
+        sql.append(" and m.is_official=? ");
+        params.add(Constant.MARK_ONE);
+        listByStatus(status, sql, params);
+        return listPlans(pageNumber,pageSize,sql,params);
     }
 
     /**
@@ -266,7 +275,7 @@ public class PlanService extends BaseService_<Plan>
             PlanDetail planDetail;
             for (PlanDetail detail : details) {
                 planDetail = new PlanDetail();
-                planDetail.init(newPlan.getId(),detail.getPlanDetail(),detail.getSortIndex());
+                planDetail.init(newPlan.getId(),detail.getPlanDetail(),detail.getSortIndex(),detail.getSignMaxNum());
                 if(!planDetail.save())
                     return false;
             }
@@ -321,9 +330,9 @@ public class PlanService extends BaseService_<Plan>
             PlanDetailService planDetailService=((PlanDetailService)ServiceManager.instance().getService("plandetail"));
             for (Plan plan:unFinishOfficialPlans){
                 plan.setStatus(ConstantEnum.STATUS_END.getValue());
+                plan.setUnFinishNum(plan.getParticipantNum()-plan.getFinishNum());
                 plan.update();
-
-//                修改所有该计划下的未完成的子级计划的状态为未完成
+                //修改所有该计划下的未完成的子级计划的状态为未完成
                 List<PlanDetail> details=planDetailService.listUnFinishPlanDetails(plan.getId());
                 for (PlanDetail detail:details){
                     detail.setStatus(ConstantEnum.STATUS_NOT_FINISH.getValue());
