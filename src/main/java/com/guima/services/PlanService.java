@@ -61,10 +61,12 @@ public class PlanService extends BaseService_<Plan>
     public Page<Record> listPublicPlans(int pageNum, int pageSize){
         StringBuffer sql=new StringBuffer();
                 sql.append(" and m.privacy=?")
+                        .append(" and m.is_official=?")
                 .append(" and m.").append(Constant.IS_DELETED_MARK).append("=?")
                 .append(" order by m.create_time desc");
         List<Object> params=new ArrayList<>();
         params.add(ConstantEnum.PRIVACY_PUBLIC.getValue());
+        params.add(Constant.ACTIVE);
         params.add(Constant.ACTIVE);
         return listPlans(pageNum,pageSize,sql,params);
     }
