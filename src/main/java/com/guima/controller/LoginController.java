@@ -135,6 +135,6 @@ public class LoginController extends BaseController {
         User user=getMyUser();
         String beginDate= DateKit.format(user.getCreateTime(),DateKit.DATE_PATTERN);
         int loginDays=DateKit.compareDays(beginDate,DateKit.getToday());
-        doRenderSuccess(Math.abs(loginDays));
+        doRenderSuccess(Math.abs(loginDays)+1);
     }
 }
