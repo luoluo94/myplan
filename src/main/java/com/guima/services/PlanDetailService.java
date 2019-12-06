@@ -48,6 +48,14 @@ public class PlanDetailService extends BaseService_<PlanDetail>
         return super.list(param);
     }
 
+    public List<PlanDetail> listUnFinishPlanDetails(String planId){
+        QueryParam param=QueryParam.Builder();
+        param.equalsTo("plan_id", planId);
+        param.equalsTo("status",ConstantEnum.STATUS_ONGOING.getValue());
+        param.equalsTo("is_deleted",Constant.MARK_ZERO_STR);
+        return super.list(param);
+    }
+
     public boolean createPlanDetail(Plan plan ,String[] details){
         boolean removeOldDetails = removePlanDetail(plan);
         if (!removeOldDetails)
@@ -158,6 +166,19 @@ public class PlanDetailService extends BaseService_<PlanDetail>
     }
 
     /**
+     * 判断是否已经全部完成
+     * @param planId
+     * @param planDetailId
+     * @return
+     */
+    public boolean isAllFinish(String planId,String planDetailId){
+        PlanDetail planDetail= findFirst(QueryParam.Builder().equalsTo("plan_id",planId).equalsTo("is_finish",Constant.ACTIVE).notEquals("id",planDetailId));
+        return planDetail==null;
+    }
+
+
+
+    /**
      * 关联计划打卡
      * @param planId
      * @param planDetailId
@@ -177,17 +198,34 @@ public class PlanDetailService extends BaseService_<PlanDetail>
                 return false;
             }
             planDetail.setFinishPercentage(planDetail.getFinishPercentage()+1);
-            isSuccess=isSuccess && planDetail.update();
+            isSuccess=sign.save() && planDetail.update();
             //判断是否为官方计划
             Plan plan=planService.findById(planId);
             String parentPlanId=plan.getParentId();
             if(!StrKit.isBlank(parentPlanId)){
                 PlanDetail parentPlanDetail=find(parentPlanId,planDetail.getSortIndex());
                 Sign parentSign=new Sign();
-                parentSign.init(sign.getCreator(),"完成\""+planDetail.getPlanDetail()+"\"+1",ConstantEnum.PRIVACY_SELF.getValue(),null,parentPlanId,parentPlanDetail.getId());
+                parentSign.init(sign.getCreator(),"\""+planDetail.getPlanDetail()+"\" +1",ConstantEnum.PRIVACY_SELF.getValue(),null,parentPlanId,parentPlanDetail.getId());
                 isSuccess=isSuccess && parentSign.save();
                 parentPlanDetail.setFinishPercentage(parentPlanDetail.getFinishPercentage()+1);
                 isSuccess=isSuccess && parentPlanDetail.update();
+
+                //判断是否已经全部完成打卡 变更该计划状态 及父级计划的完成数目
+                //判断该详情是否完成
+                if(planDetail.getFinishPercentage()>=planDetail.getSignMaxNum()){
+                    planDetail.setIsFinish(Constant.MARK_ONE);
+                    isSuccess=isSuccess && planDetail.update();
+                    //判断该计划外的其他事项是否全部完成
+                    if(isAllFinish(planId,planDetailId)){
+                        //变更该计划的状态
+                        plan.setStatus(ConstantEnum.STATUS_FINISH.getValue());
+
+                        Plan parentPlan=planService.findById(parentPlanId);
+                        parentPlan.setFinishNum(parentPlan.getFinishNum()+1);
+
+                        isSuccess=isSuccess && plan.update()&& parentPlan.update();
+                    }
+                }
             }
             return isSuccess;
         });

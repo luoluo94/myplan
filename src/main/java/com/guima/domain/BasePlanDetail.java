@@ -82,4 +82,12 @@ public abstract class BasePlanDetail<M extends BasePlanDetail<M>> extends BaseMo
 		return get("sign_max_num");
 	}
 
+	public void setIsFinish(java.lang.Integer isFinish) {
+		set("is_finish", isFinish);
+	}
+
+	public java.lang.Integer getIsFinish() {
+		return get("is_finish");
+	}
+
 }

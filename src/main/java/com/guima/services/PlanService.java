@@ -101,7 +101,9 @@ public class PlanService extends BaseService_<Plan>
             sql.append(" and m.parent_id is not null ");
         }
         if(ConstantEnum.STATUS_END.getValue().equals(status)){
-            sql.append(" and m.status in (").append(ConstantEnum.STATUS_FINISH.getValue()).append(",").append(ConstantEnum.STATUS_NOT_FINISH.getValue()).append(")");
+            sql.append(" and m.status in (").append(ConstantEnum.STATUS_FINISH.getValue()).append(",")
+                    .append(ConstantEnum.STATUS_NOT_FINISH.getValue()).append(",")
+                    .append(ConstantEnum.STATUS_END.getValue()).append(")");
         }else {
             sql.append(" and m.status=?");
             params.add(status);
@@ -297,6 +299,38 @@ public class PlanService extends BaseService_<Plan>
      */
     public Plan find(String userId,String parentId){
         return findFirst(QueryParam.Builder().equalsTo("creator",userId).equalsTo("parent_id",parentId).equalsTo(Constant.IS_DELETED_MARK,Constant.ACTIVE));
+    }
+
+    /**
+     * 获取所有未结束的官方计划
+     * @return
+     */
+    public List<Plan> getUnFinishOfficialPlans(){
+        return list(QueryParam.Builder().equalsTo("is_official",Constant.MARK_ONE_STR)
+                .equalsTo("status",ConstantEnum.STATUS_ONGOING.getValue())
+                .equalsTo(Constant.IS_DELETED_MARK,Constant.ACTIVE).lte("end_date",DateKit.getToday()));
+    }
+
+    /**
+     * 定时修改官方计划的状态
+     */
+    public void officialPlanTask(){
+        //查找所有 进行中 的 指定结束日期小于等于今天 官方计划 ，修改状态为已结束
+        List<Plan> unFinishOfficialPlans=getUnFinishOfficialPlans();
+        if(unFinishOfficialPlans!=null && unFinishOfficialPlans.size()>0){
+            PlanDetailService planDetailService=((PlanDetailService)ServiceManager.instance().getService("plandetail"));
+            for (Plan plan:unFinishOfficialPlans){
+                plan.setStatus(ConstantEnum.STATUS_END.getValue());
+                plan.update();
+
+//                修改所有该计划下的未完成的子级计划的状态为未完成
+                List<PlanDetail> details=planDetailService.listUnFinishPlanDetails(plan.getId());
+                for (PlanDetail detail:details){
+                    detail.setStatus(ConstantEnum.STATUS_NOT_FINISH.getValue());
+                    detail.update();
+                }
+            }
+        }
     }
 
 

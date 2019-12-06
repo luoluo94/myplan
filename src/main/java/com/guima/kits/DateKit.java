@@ -42,19 +42,6 @@ public class DateKit
     }
 
     /**
-     * 获取当前日期，格式为yyyy-MM-dd
-     *
-     * @return
-     */
-    public static String curDate()
-    {
-        Calendar c = Calendar.getInstance();
-        Date date = c.getTime();
-        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-        return format.format(date);
-    }
-
-    /**
      * 获取当前时间，格式为yyyy-MM-dd HH:mm:ss
      *
      * @return

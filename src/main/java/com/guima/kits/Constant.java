@@ -32,6 +32,10 @@ public class Constant {
 
     public static Integer MARK_ONE=1;
 
+    public static String MARK_ZERO_STR="0";
+
+    public static String MARK_ONE_STR="1";
+
     //未删除
     public static String IS_DELETED_MARK="is_deleted";
 

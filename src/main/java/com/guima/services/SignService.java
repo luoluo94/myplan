@@ -68,6 +68,7 @@ public class SignService extends BaseService_<Sign>
         sql.append(" from sign m join user n on m.creator=n.id")
                 .append(" where 1=1 ")
                 .append(" and m.creator=?")
+                .append(" and m.plan_id is null ")
                 .append(" and m.").append(Constant.IS_DELETED_MARK).append("=?")
                 .append(" order by create_time desc");
         List<Object> params=new ArrayList<>();

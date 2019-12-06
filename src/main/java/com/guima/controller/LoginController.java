@@ -9,6 +9,7 @@ import com.guima.domain.Admin;
 import com.guima.domain.AdminExceptionRecord;
 import com.guima.domain.User;
 import com.guima.kits.Constant;
+import com.guima.kits.DateKit;
 import com.guima.kits.Kit;
 import com.guima.services.AdminService;
 import com.guima.services.InterfaceConfigService;
@@ -125,5 +126,15 @@ public class LoginController extends BaseController {
             map.put("token",user.getToken());
         }
         doRenderSuccess(map);
+    }
+
+    /**
+     * 获取用户的登录天数
+     */
+    public void getUserLoginDays(){
+        User user=getMyUser();
+        String beginDate= DateKit.format(user.getCreateTime(),DateKit.DATE_PATTERN);
+        int loginDays=DateKit.compareDays(beginDate,DateKit.getToday());
+        doRenderSuccess(Math.abs(loginDays));
     }
 }
