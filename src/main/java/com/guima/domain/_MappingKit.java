@@ -35,6 +35,7 @@ public class _MappingKit {
 		arp.addMapping("user_record", "id", UserRecord.class);
 		arp.addMapping("custom_user", "id", CustomUser.class);
 		arp.addMapping("do_like", "id", DoLike.class);
+		arp.addMapping("yes_or_no_question", "id", YesOrNoQuestion.class);
 	}
 }
 

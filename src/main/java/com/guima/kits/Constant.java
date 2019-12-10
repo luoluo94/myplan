@@ -58,4 +58,6 @@ public class Constant {
     //打卡附件文件夹
     public static String FILE_DICTIONARY_SIGN="sign_images";
 
+    public static int QUESTION_TOTAL=5;
+
 }

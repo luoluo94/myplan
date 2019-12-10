@@ -59,9 +59,7 @@ public class PlanCreateNumService extends BaseService_<PlanCreateNum>
     public void countPlanNum(){
         try{
             String startDate=DateKit.getIntervalDate(-1);
-            System.out.println(startDate);
             Long num=countPlanNum(startDate+" 00:00:00");
-            System.out.println(num);
             PlanCreateNum planCreateNum=new PlanCreateNum();
             planCreateNum.setId(UUID.randomUUID().toString());
             planCreateNum.setCreateTime(new Date());
