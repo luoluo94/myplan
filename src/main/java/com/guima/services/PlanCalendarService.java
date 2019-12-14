@@ -39,6 +39,10 @@ public class PlanCalendarService extends BaseService_<PlanCalendar>
         return PlanCalendar.dao;
     }
 
+    public boolean updateActiveDays(String creator){
+        return updatePlanNum("activeDays",creator);
+    }
+
     public boolean updateCreatePlanNum(String creator){
         return updatePlanNum("createNum",creator);
     }
@@ -62,6 +66,8 @@ public class PlanCalendarService extends BaseService_<PlanCalendar>
                 planCalendar.setFinishRate(NumberKit.getIntPercent(planCalendar.getFinishedNum(),planCalendar.getCreateNum()));
             }else if(type.equals("unFinishNum")){
                 planCalendar.setUnfinishedNum(planCalendar.getUnfinishedNum()+1);
+            }else if(type.equals("activeDays")){
+                planCalendar.setActiveDays(planCalendar.getActiveDays()+1);
             }
         }
         planCalendar.setUpdateTime(new Date());
@@ -87,6 +93,7 @@ public class PlanCalendarService extends BaseService_<PlanCalendar>
         planCalendar.setUpdateTime(new Date());
         planCalendar.setId(UUID.randomUUID().toString());
         planCalendar.setFinishRate(0);
+        planCalendar.setActiveDays(0);
         return planCalendar.save();
     }
 
@@ -94,8 +101,8 @@ public class PlanCalendarService extends BaseService_<PlanCalendar>
         return Db.queryLong("SELECT COUNT(*) from plan_calendar WHERE finish_rate < ?",new Object[]{rate});
     }
 
-    public Long getMyFinishNum(Integer num){
-        return Db.queryLong("SELECT COUNT(*) from plan_calendar WHERE finished_num < ?",new Object[]{num});
+    public Long getActiveDaysRate(Integer num){
+        return Db.queryLong("SELECT COUNT(*) from plan_calendar WHERE active_days < ?",new Object[]{num});
     }
 
     public Long getTotalNum(){
@@ -107,17 +114,19 @@ public class PlanCalendarService extends BaseService_<PlanCalendar>
     public Map getStatics(String creator){
         PlanCalendar planCalendar=findByCreator(creator);
         Integer total=getTotalNum().intValue();
+        Integer activeDaysRate=NumberKit.getIntPercent(getActiveDaysRate(planCalendar.getActiveDays()),total);
         Integer totalFinishRate=NumberKit.getIntPercent(getFinishRate(planCalendar.getFinishRate()),total);
-        Integer totalFinishNumRate=NumberKit.getIntPercent(getMyFinishNum(planCalendar.getFinishRate()),total);
         Map<String,Object> data=new HashMap<>();
+        //创建数
+        data.put("create_num",planCalendar.getCreateNum());
         //完成数
         data.put("finish_num",planCalendar.getFinishedNum());
         //个人完成率
-        data.put("personal_finish_rate",planCalendar.getFinishRate());
+        data.put("active_days",planCalendar.getActiveDays());
+        //活跃天数占比
+        data.put("active_days_rate",activeDaysRate);
         //完成率占比
         data.put("total_finish_rate",totalFinishRate);
-        //个人完成数占比
-        data.put("personal_finish_num_rate",totalFinishNumRate);
         return data;
     }
 

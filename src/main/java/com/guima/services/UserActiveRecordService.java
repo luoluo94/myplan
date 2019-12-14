@@ -3,6 +3,7 @@ package com.guima.services;
 import com.guima.base.kits.ModelWrapper;
 import com.guima.base.kits.QueryParam;
 import com.guima.base.service.BaseService_;
+import com.guima.base.service.ServiceManager;
 import com.guima.domain.User;
 import com.guima.domain.UserActiveRecord;
 import com.guima.domain.UserActiveRecord;
@@ -54,7 +55,8 @@ public class UserActiveRecordService extends BaseService_<UserActiveRecord>
         String today=DateKit.getToday();
         UserActiveRecord userActiveRecord=get(userId,today);
         if(userActiveRecord==null){
-            return new UserActiveRecord(userId,today).save();
+            PlanCalendarService planCalendarService=((PlanCalendarService)ServiceManager.instance().getService("plancalendar"));;
+            return new UserActiveRecord(userId,today).save() && planCalendarService.updateActiveDays(userId);
         }
         return true;
     }

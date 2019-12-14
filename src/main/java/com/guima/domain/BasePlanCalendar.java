@@ -73,5 +73,13 @@ public abstract class BasePlanCalendar<M extends BasePlanCalendar<M>> extends Mo
 		return get("finish_rate");
 	}
 
+	public void setActiveDays(java.lang.Integer activeDays) {
+		set("active_days", activeDays);
+	}
+
+	public java.lang.Integer getActiveDays() {
+		return get("active_days");
+	}
+
 
 }

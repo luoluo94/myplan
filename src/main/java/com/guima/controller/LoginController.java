@@ -128,13 +128,4 @@ public class LoginController extends BaseController {
         doRenderSuccess(map);
     }
 
-    /**
-     * 获取用户的登录天数
-     */
-    public void getUserLoginDays(){
-        User user=getMyUser();
-        String beginDate= DateKit.format(user.getCreateTime(),DateKit.DATE_PATTERN);
-        int loginDays=DateKit.compareDays(beginDate,DateKit.getToday());
-        doRenderSuccess(Math.abs(loginDays)+1);
-    }
 }

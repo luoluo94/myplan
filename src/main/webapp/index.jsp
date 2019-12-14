@@ -15,7 +15,7 @@
 <div class="banner"></div>
 <div class="container">
     <div class="con-title">
-        <p>计划制定、分享，打卡监督</p>
+        <p>个人计划制定，记录，无社交，纯工具</p>
         <p>扫描下方微信小程序码进行下载</p>
         </div>
     <div class="con-code">
