@@ -197,6 +197,7 @@ public class PlanDetailService extends BaseService_<PlanDetail>
      */
     public boolean savePlanSign(String planId, String planDetailId, Sign sign){
         PlanService planService=((PlanService) ServiceManager.instance().getService("plan"));
+        UserActiveRecordService userActiveRecordService=((UserActiveRecordService)ServiceManager.instance().getService("useractiverecord"));
         return Db.tx(()->{
             boolean isSuccess=true;
             PlanDetail planDetail=findById(planDetailId);
@@ -208,9 +209,9 @@ public class PlanDetailService extends BaseService_<PlanDetail>
                 return false;
             }
             planDetail.setFinishPercentage(planDetail.getFinishPercentage()+1);
-            isSuccess=sign.save() && planDetail.update();
-            //判断是否为官方计划
             Plan plan=planService.findById(planId);
+            isSuccess=sign.save() && planDetail.update() && userActiveRecordService.create(plan.getCreator());
+            //判断是否为官方计划
             String parentPlanId=plan.getParentId();
             if(!StrKit.isBlank(parentPlanId)){
                 PlanDetail parentPlanDetail=find(parentPlanId,planDetail.getSortIndex());

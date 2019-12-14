@@ -407,10 +407,10 @@ public class DateKit
 //        System.out.println(b);
 //        System.out.println(b-a);
         String id=UUID.randomUUID().toString();
-        String openId="81C76CDFF28F1A62A462732F048F6B1E";
-        System.out.println(UUID.randomUUID().toString());
+//        String openId="81C76CDFF28F1A62A462732F048F6B1E";
+//        System.out.println(UUID.randomUUID().toString());
         System.out.println(id);
-        System.out.println(Kit.MD5(id + "" + openId));
+//        System.out.println(Kit.MD5(id + "" + openId));
 
     }
 

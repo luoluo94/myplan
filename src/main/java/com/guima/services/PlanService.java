@@ -168,11 +168,12 @@ public class PlanService extends BaseService_<Plan>
     public boolean createPlan(Plan plan,String[] details){
         PlanDetailService planDetailService=((PlanDetailService)ServiceManager.instance().getService("plandetail"));
         PlanCalendarService planCalendarService=((PlanCalendarService)ServiceManager.instance().getService("plancalendar"));
+        UserActiveRecordService userActiveRecordService=((UserActiveRecordService)ServiceManager.instance().getService("useractiverecord"));
         return Db.tx(()->{
             boolean isSuccess=false;
             //创建计划
             if(Kit.isNull(plan.getId())){
-                isSuccess=plan.save() && planCalendarService.updateCreatePlanNum(plan.getCreator());
+                isSuccess=plan.save() && planCalendarService.updateCreatePlanNum(plan.getCreator()) && userActiveRecordService.create(plan.getCreator());
             }else {
                 isSuccess=plan.update();
             }
@@ -189,6 +190,7 @@ public class PlanService extends BaseService_<Plan>
     public boolean markFinish(Plan plan){
         PlanDetailService planDetailService=((PlanDetailService)ServiceManager.instance().getService("plandetail"));
         PlanCalendarService planCalendarService=((PlanCalendarService) ServiceManager.instance().getService("plancalendar"));
+        UserActiveRecordService userActiveRecordService=((UserActiveRecordService) ServiceManager.instance().getService("useractiverecord"));
         return Db.tx(()->{
             //将各事项标记为完成
             boolean isDetailFinish=planDetailService.markFinish(plan.getId());
@@ -196,7 +198,7 @@ public class PlanService extends BaseService_<Plan>
             plan.setStatus(ConstantEnum.STATUS_FINISH.getValue());
             boolean isPlanFinish=plan.update();
             //增加得分
-            return isDetailFinish && isPlanFinish && planCalendarService.updateFinishPlanNum(plan.getCreator());
+            return isDetailFinish && isPlanFinish && planCalendarService.updateFinishPlanNum(plan.getCreator()) && userActiveRecordService.create(plan.getCreator());
         });
     }
 
@@ -208,6 +210,7 @@ public class PlanService extends BaseService_<Plan>
     public boolean markFinish2(Plan plan){
         PlanDetailService planDetailService=((PlanDetailService)ServiceManager.instance().getService("plandetail"));
         PlanCalendarService planCalendarService=((PlanCalendarService) ServiceManager.instance().getService("plancalendar"));
+        UserActiveRecordService userActiveRecordService=((UserActiveRecordService) ServiceManager.instance().getService("useractiverecord"));
         return Db.tx(()->{
             //将各事项标记为完成
             boolean isDetailFinish=planDetailService.markFinish2(plan.getId());
@@ -215,7 +218,7 @@ public class PlanService extends BaseService_<Plan>
             plan.setStatus(ConstantEnum.STATUS_FINISH.getValue());
             boolean isPlanFinish=plan.update();
             //增加得分
-            return isDetailFinish && isPlanFinish && planCalendarService.updateFinishPlanNum(plan.getCreator());
+            return isDetailFinish && isPlanFinish && planCalendarService.updateFinishPlanNum(plan.getCreator()) && userActiveRecordService.create(plan.getCreator());
         });
     }
 
@@ -225,9 +228,10 @@ public class PlanService extends BaseService_<Plan>
      */
     public boolean markUnFinish(Plan plan){
         PlanCalendarService planCalendarService=((PlanCalendarService) ServiceManager.instance().getService("plancalendar"));
+        UserActiveRecordService userActiveRecordService=((UserActiveRecordService) ServiceManager.instance().getService("useractiverecord"));
         return Db.tx(()->{
             plan.setStatus(ConstantEnum.STATUS_NOT_FINISH.getValue());
-            return plan.update() && planCalendarService.updateUnFinishPlanNum(plan.getCreator());
+            return plan.update() && planCalendarService.updateUnFinishPlanNum(plan.getCreator()) && userActiveRecordService.create(plan.getCreator());
         });
     }
 
