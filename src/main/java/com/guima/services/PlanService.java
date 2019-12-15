@@ -19,7 +19,7 @@ public class PlanService extends BaseService_<Plan>
 {
 
     private StringBuffer sqlSelect=new StringBuffer().append("select m.id,m.title,m.status,m.creator")
-            .append(",m.create_time,m.end_date,m.participant_num")
+            .append(",m.create_time,m.start_date,m.end_date,m.participant_num")
             .append(",n.name as creator_name,n.header_url as creator_header_url");
 
     @Override
