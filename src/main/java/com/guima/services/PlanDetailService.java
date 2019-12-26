@@ -59,25 +59,57 @@ public class PlanDetailService extends BaseService_<PlanDetail>
     }
 
     public boolean createPlanDetail(Plan plan ,String[] details){
-        boolean removeOldDetails = removePlanDetail(plan);
-        if (!removeOldDetails)
-            return false;
-        PlanDetail planDetail;
         int index = 0;
         for (String detail : details) {
-            planDetail = new PlanDetail();
-            String[] detailsSplit=detail.split("#");
-            int maxSignNum=0;
-            if(detailsSplit.length==3){
-                detail=detailsSplit[0]+"x"+detailsSplit[1]+detailsSplit[2];
-                if(NumberKit.isInteger(detailsSplit[1])){
-                    maxSignNum=Integer.valueOf(detailsSplit[1]);
-                }
-            }
-            planDetail.init(plan.getId(),detail,index++,maxSignNum);
-            planDetail.save();
+            index=createPlanDetail(plan, index, detail);
         }
         return true;
+    }
+
+    public boolean editPlanDetail(Plan plan ,String[] details,String[] detailIds){
+        PlanDetail planDetail;
+        String detailStr;
+        int index = 0;
+        String planDetailId;
+        for(int i=0;i<details.length;i++){
+            planDetailId=detailIds[i];
+            detailStr=details[i];
+            //新增加的事项
+            if(StrKit.isBlank(planDetailId)){
+                index=createPlanDetail(plan, index, detailStr);
+            }else{
+                //修改原事项
+                int maxSignNum=0;
+                String[] detailsSplit=detailStr.split("#");
+                if(detailsSplit.length==3){
+                    detailStr=detailsSplit[0]+"x"+detailsSplit[1]+detailsSplit[2];
+                    if(NumberKit.isInteger(detailsSplit[1])){
+                        maxSignNum=Integer.valueOf(detailsSplit[1]);
+                    }
+                }
+                planDetail=findById(planDetailId);
+                planDetail.setSortIndex(index++);
+                planDetail.setSignMaxNum(maxSignNum);
+                planDetail.setPlanDetail(detailStr);
+                planDetail.update();
+            }
+        }
+        return true;
+    }
+
+    private int createPlanDetail(Plan plan, int index, String detail) {
+        PlanDetail planDetail=new PlanDetail();
+        String[] detailsSplit=detail.split("#");
+        int maxSignNum=0;
+        if(detailsSplit.length==3){
+            detail=detailsSplit[0]+"x"+detailsSplit[1]+detailsSplit[2];
+            if(NumberKit.isInteger(detailsSplit[1])){
+                maxSignNum=Integer.valueOf(detailsSplit[1]);
+            }
+        }
+        planDetail.init(plan.getId(),detail,index++,maxSignNum);
+        planDetail.save();
+        return index;
     }
 
     public boolean removePlanDetail(Plan plan){
@@ -242,6 +274,25 @@ public class PlanDetailService extends BaseService_<PlanDetail>
         });
     }
 
+    /**
+     * 删除某个计划详情
+     * @return
+     */
+    public boolean removeDetail(String userId,String planId,String detailId){
+        SignService signService=((SignService) ServiceManager.instance().getService("sign"));
+        List<Sign> signs=signService.listSigns(userId,planId,detailId);
+
+        return Db.tx(()->{
+            boolean isSuccess=true;
+            //删除该计划详情下关联的打卡记录
+            for (Sign sign:signs){
+                sign.setIsDeleted(Constant.IS_DELETED_YES);
+                isSuccess=isSuccess && sign.update();
+            }
+            PlanDetail planDetail=findById(detailId);
+            return isSuccess && planDetail.delete();
+        });
+    }
 
 
 }

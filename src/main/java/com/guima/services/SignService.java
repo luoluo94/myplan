@@ -120,4 +120,28 @@ public class SignService extends BaseService_<Sign>
         return sign.update();
     }
 
+    public List<Sign> listSigns(String userId,String planId,String detailId){
+        QueryParam param=QueryParam.Builder().equalsTo("creator",userId)
+                .equalsTo("plan_id",planId)
+                .equalsTo("plan_detail_id",detailId)
+                .equalsTo("is_deleted",Constant.MARK_ZERO_STR);
+        return list(param);
+    }
+
+    /**
+     * 该计划事项下是否有打卡记录
+     * @param userId
+     * @param planId
+     * @param detailId
+     * @return
+     */
+    public boolean hasSign(String userId,String planId,String detailId){
+        QueryParam param=QueryParam.Builder().equalsTo("creator",userId)
+                .equalsTo("plan_id",planId)
+                .equalsTo("plan_detail_id",detailId)
+                .equalsTo("is_deleted",Constant.MARK_ZERO_STR);
+        Sign sign=findFirst(param);
+        return sign!=null;
+    }
+
 }

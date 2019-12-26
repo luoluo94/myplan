@@ -165,7 +165,7 @@ public class PlanService extends BaseService_<Plan>
      * @param plan
      * @return
      */
-    public boolean createPlan(Plan plan,String[] details){
+    public boolean createPlan(Plan plan,String[] details,String[] planDetailIds){
         PlanDetailService planDetailService=((PlanDetailService)ServiceManager.instance().getService("plandetail"));
         PlanCalendarService planCalendarService=((PlanCalendarService)ServiceManager.instance().getService("plancalendar"));
         UserActiveRecordService userActiveRecordService=((UserActiveRecordService)ServiceManager.instance().getService("useractiverecord"));
@@ -173,12 +173,14 @@ public class PlanService extends BaseService_<Plan>
             boolean isSuccess=false;
             //创建计划
             if(Kit.isNull(plan.getId())){
-                isSuccess=plan.save() && planCalendarService.updateCreatePlanNum(plan.getCreator()) && userActiveRecordService.create(plan.getCreator());
+                isSuccess=plan.save() && planCalendarService.updateCreatePlanNum(plan.getCreator()) && userActiveRecordService.create(plan.getCreator())
+                && planDetailService.createPlanDetail(plan,details);
             }else {
-                isSuccess=plan.update();
+                //编辑计划
+                isSuccess=plan.update() && planDetailService.editPlanDetail(plan,details,planDetailIds);
             }
             //创建计划的具体事项
-            return isSuccess && planDetailService.createPlanDetail(plan,details);
+            return isSuccess;
         });
     }
 

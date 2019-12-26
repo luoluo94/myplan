@@ -26,6 +26,7 @@ public class PlanController extends BaseController{
     private PlanCommentService planCommentService;
     private PlanDetailAnnexService planDetailAnnexService;
     private DoLikeService doLikeService;
+    private SignService signService;
 
     public PlanController()
     {
@@ -36,10 +37,11 @@ public class PlanController extends BaseController{
         planCommentService=((PlanCommentService)ServiceManager.instance().getService("plancomment"));
         planDetailAnnexService=((PlanDetailAnnexService) ServiceManager.instance().getService("plandetailannex"));
         doLikeService=((DoLikeService) ServiceManager.instance().getService("dolike"));
+        signService=((SignService) ServiceManager.instance().getService("sign"));
     }
 
     /**
-     * 创建/编辑计划
+     * 创建／编辑计划
      */
     public void savePlan(){
         User user=getMyUser();
@@ -49,8 +51,10 @@ public class PlanController extends BaseController{
         String title=getPara("title");
         String endDate=getPara("endDate");
         String startDate=getPara("startDate");
+        String planId=getPara("id");
         //计划的具体事项
         String[] planDetails=getParaValues("details");
+        String[] planDetailIds=getParaValues("detailIds");
         if(planDetails.length==0){
             doRenderParamError();
             return;
@@ -61,9 +65,17 @@ public class PlanController extends BaseController{
             doRenderParamError();
             return;
         }
+        //判断编辑计划的必填项
+        if(StrKit.notBlank(planId)){
+            plan=planService.findById(planId);
+            if(planDetailIds==null || planDetails.length!=planDetailIds.length){
+                doRenderParamError();
+                return;
+            }
+        }
         plan.init(title,user.getId(),DateKit.stringToDate(endDate),
                 ConstantEnum.PRIVACY_SELF.getValue(),DateKit.stringToDate(startDate));
-        planService.createPlan(plan,planDetails);
+        planService.createPlan(plan,planDetails,planDetailIds);
         doRender("plan_id",plan.getId(),StrKit.notBlank(plan.getId()));
     }
 
@@ -187,6 +199,29 @@ public class PlanController extends BaseController{
         }
         plan.setIsDeleted(Constant.IS_DELETED_YES);
         doRender(plan.update());
+    }
+
+    /**
+     * 判断编辑计划时能否删除某个计划详情
+     * 该计划详情下如果含有打卡记录则进行提示
+     */
+    public void canRemoveDetail(){
+        User user=getMyUser();
+        String detailId=getPara("detail_id");
+        String planId=getPara("plan_id");
+        boolean hasSign=signService.hasSign(user.getId(),planId,detailId);
+        doRenderSuccess(!hasSign);
+    }
+
+    /**
+     * 编辑计划时删除某个计划详情
+     */
+    public void removeDetail(){
+        User user=getMyUser();
+        String detailId=getPara("detail_id");
+        String planId=getPara("plan_id");
+        boolean isSuccess=planDetailService.removeDetail(user.getId(),planId,detailId);
+        doRenderSuccess(isSuccess);
     }
 
     /**
