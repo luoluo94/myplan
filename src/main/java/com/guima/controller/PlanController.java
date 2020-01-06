@@ -170,6 +170,9 @@ public class PlanController extends BaseController{
     public void getPlan(){
         String planId=getPara("plan_id");
         Record plan=planService.findRecordById(planId);
+        if(plan.get("is_deleted").equals(Constant.DELETED)){
+            doRenderError("该计划已删除");
+        }
         List<PlanDetail> details=planDetailService.list(planId);
         Map renderData=new HashMap<>();
         renderData.put("plan",plan);
