@@ -6,7 +6,7 @@ package com.guima.kits;
  */
 public class Constant {
 
-    public static String  SONG="song";
+    public static String  PLAN="plan";
     //分隔符号
     public static String SEPARATE_SIGN=",";
 

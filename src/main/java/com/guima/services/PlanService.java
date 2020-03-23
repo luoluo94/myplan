@@ -50,7 +50,7 @@ public class PlanService extends BaseService_<Plan>
 
     public Record findRecordById(String id){
         StringBuffer sqlFullSelect=new StringBuffer().append("select m.id,m.title,m.start_date,m.end_date,m.privacy,m.status,m.creator,m.create_time,")
-                .append("m.like_num,m.participant_num,m.finish_num,m.un_finish_num,")
+                .append("m.like_num,m.participant_num,m.finish_num,m.un_finish_num,m.is_deleted,")
                 .append(" n.name as creator_name,n.header_url as creator_header_url");
         StringBuffer sql=sqlFullSelect.append(" from plan m join `user` n on m.creator=n.id where m.id=?");
         List<Object> params=new ArrayList<>();

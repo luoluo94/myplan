@@ -22,5 +22,8 @@
         <img src="resources/images/mini_code.jpg" width="250" height="250px">
         </div>
 </div>
+<div class="footer">
+    <a href="http://www.beian.miit.gov.cn" target="_blank">网站备案/许可证号：皖ICP备19021517号-1 </a>
+</div>
 </body>
 </html>

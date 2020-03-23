@@ -80,10 +80,10 @@
                             +"<td width='200px'>"+val["create_time"]+"</td>"
                             +"<td width='200px'>"+val["name"]+"</td>"
                             +'<td><img width="40px" height="40px" src="'+val["header_url"]+'"></td>'
-                            +"<td width='200px'>"+val["login_num"]+"</td>"
+                            +"<td width='70px'>"+val["login_num"]+"</td>"
                             +"<td width='200px'>"+val["last_change_time"]+"</td>"
-                            +"<td width='200px'>"+banned+"</td>"
-                            +"<td><button type='button' onclick=ban(\'"+val['id']+"\')>禁用</button>"+"</td>"
+                            +"<td width='70px'>"+banned+"</td>"
+                            +"<td width='200px'><button class='operate-btn' type='button' onclick=ban(\'"+val['id']+"\')>禁用</button>"+"</td>"
                     );
                 });
                 if(result.data.length==0){

@@ -20,7 +20,7 @@ import java.io.File;
 
 public class OsConfig extends JFinalConfig
 {
-    public static String domainName = Constant.SONG;
+    public static String domainName = Constant.PLAN;
 
     @Override
     public void configConstant(Constants me)

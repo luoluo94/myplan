@@ -108,3 +108,16 @@ a{ text-decoration: none; }
 .error{
 	color: red;
 }
+.margin-left20{
+	margin-left: 20px;
+}
+
+.operate-btn{
+	margin-left: 20px;
+	border: 1px solid #2F96B4;
+}
+.new-btn{
+	margin-left: 30px;
+	border: 2px solid #EE0000;
+	width: 60px;
+}

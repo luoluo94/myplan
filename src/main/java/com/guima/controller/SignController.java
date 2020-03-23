@@ -42,11 +42,15 @@ public class SignController extends BaseController{
         String photoUrl=getPara("photoUrl");
         String planId=getPara("plan_id");
         String planDetailId=getPara("plan_detail_id");
+        String privacy=getPara("privacy");
+        if(StrKit.isBlank(privacy)){
+            privacy=ConstantEnum.PRIVACY_SELF.getValue();
+        }
         if(StrKit.isBlank(describer) || StrKit.isBlank(planDetailId) || StrKit.isBlank(planId)){
             doRenderError(SysMsg.OsMsg.get("PARAM_ERROR"));
             return;
         }
-        sign.init(user.getId(),describer,ConstantEnum.PRIVACY_SELF.getValue(),photoUrl,planId,planDetailId);
+        sign.init(user.getId(),describer,privacy,photoUrl,planId,planDetailId);
         doRender(planDetailService.savePlanSign(planId,planDetailId,sign));
     }
 

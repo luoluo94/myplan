@@ -3,6 +3,7 @@ var pageSize=20;
 var pageNum=1;
 var totalPage=1;
 var page='?page_size='+pageSize+'&page_num=';
+var current_edit_id=null;
 
 function goto(page){
     $.get("/yaoAdmin/v?p="+page+'&ran='+Math.random(),function(data){

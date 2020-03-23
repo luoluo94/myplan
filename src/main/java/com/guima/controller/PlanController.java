@@ -12,6 +12,7 @@ import com.guima.services.*;
 import com.jfinal.kit.StrKit;
 import com.jfinal.plugin.activerecord.Page;
 import com.jfinal.plugin.activerecord.Record;
+import com.taobao.api.internal.util.StringUtils;
 
 import java.util.*;
 
@@ -55,6 +56,7 @@ public class PlanController extends BaseController{
         //计划的具体事项
         String[] planDetails=getParaValues("details");
         String[] planDetailIds=getParaValues("detailIds");
+        String privacy=getPara("privacy");
         if(planDetails.length==0){
             doRenderParamError();
             return;
@@ -74,7 +76,7 @@ public class PlanController extends BaseController{
             }
         }
         plan.init(title,user.getId(),DateKit.stringToDate(endDate),
-                ConstantEnum.PRIVACY_SELF.getValue(),DateKit.stringToDate(startDate));
+                StringUtils.isEmpty(privacy)?ConstantEnum.PRIVACY_SELF.getValue():privacy,DateKit.stringToDate(startDate));
         planService.createPlan(plan,planDetails,planDetailIds);
         doRender("plan_id",plan.getId(),StrKit.notBlank(plan.getId()));
     }

@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>添加通知</title>
+    <link rel="stylesheet" type="text/css" href="/resources/yaoAdmin/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="/resources/yaoAdmin/css/main.css?aae=iiuu">
+    <link rel="stylesheet" type="text/css" href="/resources/yaoAdmin/bootstrap/css/bootstrap-datetimepicker.min.css">
+</head>
+<body>
+<div>
+    <form  role="form" id="edit-form" style="margin-top: 55px;margin-left: 45px;">
+        <input type="hidden" class="form-control" name="id" id="id">
+        <label class="inline">
+            消息标题：<input type="text" class="form-control" name="title" id="title">
+        </label>
+        <label class="inline">
+            类型：<select class="form-control" id="type" name="type">
+            <option value="">未选择</option>
+            <option value="0">一般</option>
+            <option value="1">活动</option>
+            <option value="2">注意</option>
+            <option value="3">红包</option>
+        </select>
+            </label>
+        <label class="inline">
+            接收者类型：<select class="form-control" id="receiver_type" name="receiver_type">
+            <option value="">未选择</option>
+            <option value="2">公共</option>
+            <option value="0">私有</option>
+        </select>
+            </label>
+        <label class="inline">
+            创建日期：
+            <div class="controls input-append date form_date create_date" data-date="" data-date-format="yyyy MM dd" data-link-field="create_date" data-link-format="yyyy-mm-dd">
+                <input size="16" type="text" value="" readonly>
+                <span class="add-on"><i class="icon-remove"></i></span>
+                <span class="add-on"><i class="icon-th"></i></span>
+            </div>
+            <input type="hidden" id="create_date" value="" />
+        </label>
+            <label class="inline">
+                结束日期：
+                <div class="controls input-append date form_date end_date" data-date="" data-date-format="yyyy MM dd" data-link-field="end_date" data-link-format="yyyy-mm-dd">
+                    <input size="16" type="text" value="" readonly>
+                    <span class="add-on"><i class="icon-remove"></i></span>
+                    <span class="add-on"><i class="icon-th"></i></span>
+                </div>
+                <input type="hidden" id="end_date" value="" />
+            </label>
+        <label class="inline">
+            通知内容：
+            <textarea cols="100" id="content" rows="10" required maxlength="500"></textarea>
+        </label>
+        <button type="button" class="btn btn-default -btn add-btn top20" onclick="save()">保存</button>
+    </form>
+    <form id="file-form">
+        <input type="file" class="files" style="opacity: 0;display: none;" accept="image/jpeg,image/png" id="file"/>
+    </form>
+</div>
+</body>
+<script type="text/javascript" src="/resources/yaoAdmin/bootstrap/js/bootstrap-datetimepicker.min.js"></script>
+<script type="text/javascript" src="/resources/yaoAdmin/bootstrap/js/bootstrap-datetimepicker.zh-CN.js"></script>
+<script type="text/javascript">
+
+    var id=current_edit_id;
+    if(id!=null){
+        $("#id").val(id);
+        current_edit_id=null;
+        get();
+    }
+
+    $('.create_date').datetimepicker({
+        language:  'zh-CN',
+        weekStart: 1,
+        todayBtn:  true,
+        autoclose: 1,
+        todayHighlight: 1,
+        startView: 2,
+        minView: 2,
+        forceParse: 0,
+        startDate:new Date(),
+        format: 'yyyy-mm-dd'
+    });
+
+    $('.end_date').datetimepicker({
+        language:  'zh-CN',
+        weekStart: 1,
+        todayBtn:  false,
+        autoclose: 1,
+        todayHighlight: 1,
+        startView: 2,
+        minView: 2,
+        forceParse: 0,
+        format: 'yyyy-mm-dd'
+    });
+
+    function get(){
+        $.ajax({
+            url: adminPath+"/notice/getNotice",
+            data:{
+                notice_id:$("#id").val()
+            },
+            dataType:"json",
+            error:function(){alert("出错了，请稍后再试")},
+            success:function(result){
+                if(result.is_success) {
+                    $("#title").val(result.data.title);
+                    $("#create_date").val(result.data.create_date);
+                    $("#end_date").val(result.data.end_date);
+                    $("#content").val(result.data.content);
+                    $("#type").val(result.data.type);
+                    $("#receiver_type").val(result.data.receiver_type);
+                    $(".create_date").datetimepicker("update", new Date(result.data.create_date));
+                    $(".end_date").datetimepicker("update", new Date(result.data.end_date));
+                }else{
+                    alert(result.message);
+                }
+            }
+        });
+    }
+
+    function save(){
+        $.ajax({
+            url: adminPath+"/notice/saveNotice",
+            data:{
+                id:$("#id").val(),
+                title:$("#title").val(),
+                create_date:$("#create_date").val(),
+                end_date:$("#end_date").val(),
+                content:$("#content").val(),
+                type:$("#type").val(),
+                receiver_type:$("#receiver_type").val()
+            },
+            type:'POST',
+            dataType:"json",
+            error:function(){alert("出错了，请稍后再试")},
+            success:function(result){
+                if(result.is_success) {
+                    alert("操作成功");
+                    goto("notice");
+                }else {
+                    alert("出错了，请稍后再试");
+                }
+            }
+        });
+    }
+</script>
+</html>
