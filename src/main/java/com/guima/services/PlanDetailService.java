@@ -236,10 +236,10 @@ public class PlanDetailService extends BaseService_<PlanDetail>
             if(planDetail==null){
                 return false;
             }
-            //判断打卡次数不允许超过限制
-            if(planDetail.getSignMaxNum()!=null && planDetail.getSignMaxNum()!= 0 && planDetail.getFinishPercentage()>=planDetail.getSignMaxNum()){
-                return false;
-            }
+//            //判断打卡次数不允许超过限制
+//            if(planDetail.getSignMaxNum()!=null && planDetail.getSignMaxNum()!= 0 && planDetail.getFinishPercentage()>=planDetail.getSignMaxNum()){
+//                return false;
+//            }
             planDetail.setFinishPercentage(planDetail.getFinishPercentage()+1);
             Plan plan=planService.findById(planId);
             isSuccess=sign.save() && planDetail.update() && userActiveRecordService.create(plan.getCreator());
