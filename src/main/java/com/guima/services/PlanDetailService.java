@@ -75,7 +75,7 @@ public class PlanDetailService extends BaseService_<PlanDetail>
             planDetailId=detailIds[i];
             detailStr=details[i];
             //新增加的事项
-            if(StrKit.isBlank(planDetailId)){
+            if(StrKit.isBlank(planDetailId) || "#".equals(planDetailId)){
                 index=createPlanDetail(plan, index, detailStr);
             }else{
                 //修改原事项
