@@ -255,20 +255,20 @@ public class PlanDetailService extends BaseService_<PlanDetail>
 
                 //判断是否已经全部完成打卡 变更该计划状态 及父级计划的完成数目
                 //判断该详情是否完成
-                if(planDetail.getFinishPercentage()>=planDetail.getSignMaxNum()){
-                    planDetail.setIsFinish(Constant.MARK_ONE);
-                    isSuccess=isSuccess && planDetail.update();
-                    //判断该计划外的其他事项是否全部完成
-                    if(isAllFinish(planId,planDetailId)){
-                        //变更该计划的状态
-                        plan.setStatus(ConstantEnum.STATUS_FINISH.getValue());
-
-                        Plan parentPlan=planService.findById(parentPlanId);
-                        parentPlan.setFinishNum(parentPlan.getFinishNum()+1);
-
-                        isSuccess=isSuccess && plan.update()&& parentPlan.update();
-                    }
-                }
+//                if(planDetail.getFinishPercentage()>=planDetail.getSignMaxNum()){
+//                    planDetail.setIsFinish(Constant.MARK_ONE);
+//                    isSuccess=isSuccess && planDetail.update();
+//                    //判断该计划外的其他事项是否全部完成
+//                    if(isAllFinish(planId,planDetailId)){
+//                        //变更该计划的状态
+//                        plan.setStatus(ConstantEnum.STATUS_FINISH.getValue());
+//
+//                        Plan parentPlan=planService.findById(parentPlanId);
+//                        parentPlan.setFinishNum(parentPlan.getFinishNum()+1);
+//
+//                        isSuccess=isSuccess && plan.update()&& parentPlan.update();
+//                    }
+//                }
             }
             return isSuccess;
         });
