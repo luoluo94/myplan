@@ -82,4 +82,13 @@ public abstract class BaseSign<M extends BaseSign<M>> extends BaseModule<M> impl
 		return get("plan_detail_id");
 	}
 
+	public void setParentSign(java.lang.String parentSign) {
+		set("parent_sign", parentSign);
+	}
+
+	public java.lang.String getParentSign() {
+		return get("parent_sign");
+	}
+
+
 }

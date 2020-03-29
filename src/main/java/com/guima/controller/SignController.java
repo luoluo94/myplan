@@ -115,6 +115,13 @@ public class SignController extends BaseController{
         if(!sign.getCreator().equals(user.getId())){
             doRenderError();
         }
+        if(!StrKit.isBlank(sign.getParentSign())){
+            Sign parentSign=signService.findById(sign.getParentSign());
+            if(parentSign!=null){
+                doRender(signService.removeSign(sign,parentSign));
+                return;
+            }
+        }
         doRender(signService.removeSign(sign));
     }
 }

@@ -117,7 +117,20 @@ public class SignService extends BaseService_<Sign>
                 });
             }
         }
+
         return sign.update();
+    }
+
+    /**
+     * 删除打卡记录及父级的打卡记录
+     * @param sign
+     * @param parentSign
+     * @return
+     */
+    public boolean removeSign(Sign sign,Sign parentSign){
+        return Db.tx(()->{
+            return removeSign(sign) && removeSign(parentSign);
+        });
     }
 
     public List<Sign> listSigns(String userId,String planId,String detailId){

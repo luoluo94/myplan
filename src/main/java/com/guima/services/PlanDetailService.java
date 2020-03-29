@@ -251,7 +251,9 @@ public class PlanDetailService extends BaseService_<PlanDetail>
                 parentSign.init(sign.getCreator(),"\""+planDetail.getPlanDetail()+"\" +1",ConstantEnum.PRIVACY_SELF.getValue(),null,parentPlanId,parentPlanDetail.getId());
                 isSuccess=isSuccess && parentSign.save();
                 parentPlanDetail.setFinishPercentage(parentPlanDetail.getFinishPercentage()+1);
-                isSuccess=isSuccess && parentPlanDetail.update();
+                //设置父级的sign
+                sign.setParentSign(parentSign.getId());
+                isSuccess=isSuccess && parentPlanDetail.update() && sign.update();
 
                 //判断是否已经全部完成打卡 变更该计划状态 及父级计划的完成数目
                 //判断该详情是否完成
