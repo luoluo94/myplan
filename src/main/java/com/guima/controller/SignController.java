@@ -97,7 +97,7 @@ public class SignController extends BaseController{
      */
     public void listMySigns(){
         User user=getMyUser();
-        Page<Record> page=signService.listMySigns(user,getPageNumberInt(),getPageSizeInt());
+        Page<Record> page=signService.listMySigns(user,getPageNumberInt(),getPageSizeInt(),getPara("currentMonth"));
         doRenderPageRecord(page);
     }
 

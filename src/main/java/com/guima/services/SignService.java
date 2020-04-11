@@ -63,17 +63,22 @@ public class SignService extends BaseService_<Sign>
         return list(pageNumber,pageSize,sql,params);
     }
 
-    public Page<Record> listMySigns(User user,int pageNumber, int pageSize){
+    public Page<Record> listMySigns(User user,int pageNumber, int pageSize,String currentMonth){
         StringBuffer sql=new StringBuffer();
+        List<Object> params=new ArrayList<>();
         sql.append(" from sign m join user n on m.creator=n.id")
                 .append(" where 1=1 ")
                 .append(" and m.creator=?")
                 .append(" and m.plan_id is null ")
-                .append(" and m.").append(Constant.IS_DELETED_MARK).append("=?")
-                .append(" order by create_time desc");
-        List<Object> params=new ArrayList<>();
+                .append(" and m.").append(Constant.IS_DELETED_MARK).append("=?");
         params.add(user.getId());
         params.add(Constant.ACTIVE);
+        //获取指定年月的打卡记录
+        if(StringUtils.isNotBlank(currentMonth)){
+            sql.append(" and m.create_time like ?");
+            params.add(currentMonth+"%");
+        }
+        sql.append(" order by create_time asc");
         return list(pageNumber,pageSize,sql,params);
     }
 
