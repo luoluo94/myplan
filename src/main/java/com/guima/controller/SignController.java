@@ -35,7 +35,7 @@ public class SignController extends BaseController{
      * 创建打卡
      */
     public void savePlanSign(){
-        //feature_test1
+        //feature_test1 test2
         User user=getMyUser();
         checkUser(user);
         Sign sign=new Sign();
