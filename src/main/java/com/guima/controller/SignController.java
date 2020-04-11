@@ -43,6 +43,7 @@ public class SignController extends BaseController{
         String planId=getPara("plan_id");
         String planDetailId=getPara("plan_detail_id");
         String privacy=getPara("privacy");
+        //test
         if(StrKit.isBlank(privacy)){
             privacy=ConstantEnum.PRIVACY_SELF.getValue();
         }
