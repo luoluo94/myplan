@@ -59,26 +59,26 @@ public class LoginController extends BaseController {
         String password = this.getPara("password");
         String ip=Kit.getIpAddress(getRequest());
         String[] configIps=interfaceConfigService.getAdminSpecifiedIp().split(Constant.SEPARATE_SIGN);
-        if(!Kit.validateArray(configIps,ip)){
-            AdminExceptionRecord adminExceptionRecord=new AdminExceptionRecord();
-            adminExceptionRecord.setCreateTime(new Date());
-            adminExceptionRecord.setLoginIp(ip);
-            adminExceptionRecord.save();
-            doRenderError("无效的登录ip!");
-            return;
-        }
-        if (Kit.isNotNull(userName) && Kit.isNotNull(password)&& validateCaptcha("captcha"))
-        {
+//        if(!Kit.validateArray(configIps,ip)){
+//            AdminExceptionRecord adminExceptionRecord=new AdminExceptionRecord();
+//            adminExceptionRecord.setCreateTime(new Date());
+//            adminExceptionRecord.setLoginIp(ip);
+//            adminExceptionRecord.save();
+//            doRenderError("无效的登录ip!");
+//            return;
+//        }
+//        if (Kit.isNotNull(userName) && Kit.isNotNull(password)&& validateCaptcha("captcha"))
+//        {
             Admin admin = adminService.get(userName,Kit.MD5(password));
             if (admin != null)
             {
                 setSessionAttr(SysMsg.OsMsg.get("SESSION_KEY_ADMIN"), admin);
                 setDomainName();
                 doRenderSuccess("");
-            }
-        }else{
-            doRenderError("请检查账户名、密码、验证码！");
-        }
+           }
+//        }else{
+//            doRenderError("请检查账户名、密码、验证码！");
+//        }
     }
 
     public void captcha()

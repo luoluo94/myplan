@@ -20,6 +20,17 @@
     </properties>
 
     <dependencies>
+    <dependency>
+            <groupId>net.sf.json-lib</groupId>
+            <artifactId>json-lib</artifactId>
+            <version>2.4</version>
+            <classifier>jdk15</classifier>
+        </dependency>
+     <dependency>  
+            <groupId>org.bouncycastle</groupId>  
+            <artifactId>bcprov-jdk16</artifactId>  
+            <version>1.46</version>  
+     </dependency> 
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
@@ -58,7 +69,7 @@
         <dependency>
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-java</artifactId>
-            <version>5.1.20</version>
+            <version>8.0.11</version>
         </dependency>
         <!-- https://mvnrepository.com/artifact/org.apache.poi/poi -->
         <dependency>
@@ -166,6 +177,22 @@
             <artifactId>javaee-web-api</artifactId>
             <version>7.0</version>
         </dependency>
+        <dependency>
+  		<groupId>com.baidu</groupId>
+  		<artifactId>ueditor</artifactId>
+  		<version>1.1.2</version>
+  		</dependency>
+  		<dependency>
+    		<groupId>commons-io</groupId>
+   			 <artifactId>commons-io</artifactId>
+    		<version>2.4</version>
+		</dependency>
+		
+		<dependency>
+   			 <groupId>commons-fileupload</groupId>
+    		<artifactId>commons-fileupload</artifactId>
+    		<version>1.3.1</version>
+		</dependency>
     </dependencies>
 
     <build>
